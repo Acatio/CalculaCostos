@@ -1,0 +1,56 @@
+package modelo;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Receta extends Producto
+{
+
+    private Map<Producto, Double> ingredientes = new HashMap<>();
+
+    public Receta()
+    {
+         ingredientes = new HashMap<>();
+    }
+
+    public Receta(int id, String nombre, double masaDrenada, String unidadDeMedida)
+    {
+        super(id, nombre, masaDrenada, unidadDeMedida);
+        ingredientes = new HashMap<>();
+    }
+
+    public Receta(String nombre, double masaDrenada, String unidadDeMedida)
+    {
+        super(nombre, masaDrenada, unidadDeMedida);
+        ingredientes = new HashMap<>();
+    }
+
+    @Override
+    public double calcularCostoTotal()
+    {
+        double total = 0;
+        for (Map.Entry<Producto, Double> entry : ingredientes.entrySet())
+        {
+            Producto prod = entry.getKey();
+            double cantidad = entry.getValue();
+            total += prod.getCostoPorUnidad() * cantidad;
+        }
+        return total;
+    }
+
+    public void agregarIngrediente(Producto producto, double cantidadUsada)
+    {
+        ingredientes.put(producto, cantidadUsada);
+    }
+
+    public void mostrarReceta()
+    {
+        System.out.println("++++ RECETA: " + super.getNombre() + " ++++");
+        for (Map.Entry<Producto, Double> entry : ingredientes.entrySet())
+        {
+            Producto prod = entry.getKey();
+            System.out.println("- " + entry.getValue() + " " + prod.getUnidadDeMedida() + ": " + prod.getNombre());
+        }
+    }
+
+}
