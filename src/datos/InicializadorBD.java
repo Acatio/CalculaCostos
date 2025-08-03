@@ -4,29 +4,73 @@
  */
 package datos;
 
-/**
- *
- * @author jose
- */
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.*;
+
 public class InicializadorBD
 {
 
-    public static void inicializarBD()
-    {
-        crearTablaMateriaPrima();
-        crearTablaReceta();
+    private static final Logger LOGGER = Logger.getLogger(InicializadorBD.class.getName());
 
+    public static void inicializarBD() throws SQLException
+    {
+        try
+        {
+            crearTablaMateriaPrima();
+            crearTablaRecetas();
+            LOGGER.info("Base de datos inicializada correctamente.");
+        } catch (SQLException e)
+        {
+            LOGGER.log(Level.SEVERE, "Error al inicializar la base de datos", e);
+            throw new SQLException("Error técnico en la base de datos. Consulta el log para más detalles.", e);
+        }
     }
 
-    private static void crearTablaMateriaPrima()
+    private static void crearTablaMateriaPrima() throws SQLException
     {
         final String SQL = """
-                           CREATE TABLE IF NOT EXISTS materiaPrima (id INTEGER, )
-                        
-                        """;
+            CREATE TABLE IF NOT EXISTS materia_prima (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT NOT NULL,
+                cantidad REAL NOT NULL,
+                unidad_medida TEXT NOT NULL,
+                costo REAL NOT NULL
+            );
+        """;
+
+        try (Connection conn = conexion.Conexion.getConnection(); Statement stmt = conn.createStatement())
+        {
+            stmt.execute(SQL);
+            LOGGER.log(Level.INFO, "Tabla materia_prima creada con \u00e9xito.");
+        } catch (SQLException e)
+        {
+            LOGGER.log(Level.SEVERE, "Fallo al crear la tabla materia_prima", e);
+            throw new SQLException("Ocurrio un error al crear la tabla Materia Prima en la base de datos.", e);
+        }
     }
 
-    private static void crearTablaReceta()
+    private static void crearTablaRecetas() throws SQLException
     {
+        final String SQL = """
+            CREATE TABLE IF NOT EXISTS recetas (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT NOT NULL,
+                cantidad REAL NOT NULL,
+                unidad_medida TEXT NOT NULL
+            );
+        """;
+
+        try (Connection conn = conexion.Conexion.getConnection(); Statement stmt = conn.createStatement())
+        {
+            stmt.execute(SQL);
+            LOGGER.log(Level.INFO, "Tabla recetas creada con \u00e9xito.");
+        } catch (SQLException e)
+        {
+            LOGGER.log(Level.SEVERE, "Fallo al crear la tabla recetas", e);
+            throw new SQLException("Ocurrio un error al crear la tabla Recetas en la base de datos.", e);
+        }
     }
+
 }

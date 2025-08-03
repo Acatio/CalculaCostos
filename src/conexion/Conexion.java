@@ -4,9 +4,11 @@
  */
 package conexion;
 
-import com.sun.jdi.connect.spi.Connection;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,21 +17,19 @@ import java.sql.SQLException;
 public class Conexion
 {
 
-    public class DBConnection
+    private static final Logger LOG = Logger.getLogger(Conexion.class.getName());
+
+    public static Connection getConnection() throws SQLException
     {
-
-        public static Connection getConnection() throws SQLException
+        String url = "jdbc:sqlite:calculaCostosDB.db";
+        try
         {
-            String url = "jdbc:sqlite:calculaCostosDB.db";
-            try
-            {
-                return (Connection) DriverManager.getConnection(url);
-            } catch (SQLException e)
-            {
-                throw new SQLException("Error al conectar con la base de datos", e);
-            }
+            return DriverManager.getConnection(url);
+        } catch (SQLException e)
+        {
+            LOG.log(Level.SEVERE, "Error al conectar la base de datos: ", e);
+            throw new SQLException("Error al conectar con la base de datos", e);
         }
-
     }
 
 }

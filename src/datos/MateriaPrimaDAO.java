@@ -12,7 +12,7 @@ import modelo.Producto;
  *
  * @author jose
  */
-public class ProductoDAO implements IProductoDAO
+public class MateriaPrimaDAO implements IProductoDAO
 {
 
     @Override
