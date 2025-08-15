@@ -16,7 +16,6 @@ import java.util.logging.Logger;
  */
 public class Conexion
 {
-
     private static final Logger LOG = Logger.getLogger(Conexion.class.getName());
 
     public static Connection getConnection() throws SQLException
@@ -31,5 +30,4 @@ public class Conexion
             throw new SQLException("Error al conectar con la base de datos", e);
         }
     }
-
 }

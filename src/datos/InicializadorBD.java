@@ -11,7 +11,6 @@ import java.util.logging.*;
 
 public class InicializadorBD
 {
-
     private static final Logger LOGGER = Logger.getLogger(InicializadorBD.class.getName());
 
     public static void inicializarBD() throws SQLException
