@@ -1,6 +1,6 @@
-package modelo;
+package modelo.producto;
 
-public class MateriaPrima extends Producto
+public class MateriaPrima extends Insumo
 {
 
     double costo;
@@ -9,13 +9,13 @@ public class MateriaPrima extends Producto
     {
     }
 
-    public MateriaPrima(int id, String nombre, double cantidad, String unidadDeMedida, double costo)
+    public MateriaPrima(int id, String nombre, double cantidad, UnidadDeMedida unidadDeMedida, double costo)
     {
         super(id, nombre, cantidad, unidadDeMedida);
         this.costo = costo;
     }
 
-    public MateriaPrima(String nombre, double cantidad, String unidadDeMedida, double costo)
+    public MateriaPrima(String nombre, double cantidad, UnidadDeMedida unidadDeMedida, double costo)
     {
         super(nombre, cantidad, unidadDeMedida);
         this.costo = costo;

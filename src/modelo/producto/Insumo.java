@@ -2,21 +2,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package modelo;
+package modelo.producto;
 
-public abstract class Producto
+public abstract class Insumo
 {
 
     private int id;
     private String nombre;
     private double cantidad;
-    private String unidadDeMedida;
+    private UnidadDeMedida unidadDeMedida;
 
-    public Producto()
+    public Insumo()
     {
     }
 
-    public Producto(int id, String nombre, double cantidad, String unidadDeMedida)
+    public Insumo(int id, String nombre, double cantidad, UnidadDeMedida unidadDeMedida)
     {
         this.id = id;
         this.nombre = nombre;
@@ -24,7 +24,7 @@ public abstract class Producto
         this.unidadDeMedida = unidadDeMedida;
     }
 
-    public Producto(String nombre, double cantidad, String unidadDeMedida)
+    public Insumo(String nombre, double cantidad, UnidadDeMedida unidadDeMedida)
     {
         this.nombre = nombre;
         this.cantidad = cantidad;
@@ -82,7 +82,7 @@ public abstract class Producto
     /**
      * @return the unidadDeMedida
      */
-    public String getUnidadDeMedida()
+    public UnidadDeMedida getUnidadDeMedida()
     {
         return unidadDeMedida;
     }
@@ -90,7 +90,7 @@ public abstract class Producto
     /**
      * @param unidadDeMedida the unidadDeMedida to set
      */
-    public void setUnidadDeMedida(String unidadDeMedida)
+    public void setUnidadDeMedida(UnidadDeMedida unidadDeMedida)
     {
         this.unidadDeMedida = unidadDeMedida;
     }

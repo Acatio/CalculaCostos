@@ -1,25 +1,25 @@
-package modelo;
+package modelo.producto;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Receta extends Producto
+public class Receta extends Insumo
 {
 
-    private Map<Producto, Double> ingredientes = new HashMap<>();
+    private Map<Insumo, Double> ingredientes = new HashMap<>();
 
     public Receta()
     {
          ingredientes = new HashMap<>();
     }
 
-    public Receta(int id, String nombre, double masaDrenada, String unidadDeMedida)
+    public Receta(int id, String nombre, double masaDrenada, UnidadDeMedida unidadDeMedida)
     {
         super(id, nombre, masaDrenada, unidadDeMedida);
         ingredientes = new HashMap<>();
     }
 
-    public Receta(String nombre, double masaDrenada, String unidadDeMedida)
+    public Receta(String nombre, double masaDrenada, UnidadDeMedida unidadDeMedida)
     {
         super(nombre, masaDrenada, unidadDeMedida);
         ingredientes = new HashMap<>();
@@ -29,16 +29,16 @@ public class Receta extends Producto
     public double calcularCostoTotal()
     {
         double total = 0;
-        for (Map.Entry<Producto, Double> entry : ingredientes.entrySet())
+        for (Map.Entry<Insumo, Double> entry : ingredientes.entrySet())
         {
-            Producto prod = entry.getKey();
+            Insumo prod = entry.getKey();
             double cantidad = entry.getValue();
             total += prod.getCostoPorUnidad() * cantidad;
         }
         return total;
     }
 
-    public void agregarIngrediente(Producto producto, double cantidadUsada)
+    public void agregarIngrediente(Insumo producto, double cantidadUsada)
     {
         ingredientes.put(producto, cantidadUsada);
     }
@@ -46,9 +46,9 @@ public class Receta extends Producto
     public void mostrarReceta()
     {
         System.out.println("++++ RECETA: " + super.getNombre() + " ++++");
-        for (Map.Entry<Producto, Double> entry : ingredientes.entrySet())
+        for (Map.Entry<Insumo, Double> entry : ingredientes.entrySet())
         {
-            Producto prod = entry.getKey();
+            Insumo prod = entry.getKey();
             System.out.println("- " + entry.getValue() + " " + prod.getUnidadDeMedida() + ": " + prod.getNombre());
         }
     }

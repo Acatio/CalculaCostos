@@ -6,7 +6,7 @@ package datos;
 
 import java.util.List;
 import java.util.Optional;
-import modelo.Producto;
+import modelo.producto.Insumo;
 
 /**
  *
@@ -16,13 +16,13 @@ public class MateriaPrimaDAO implements IProductoDAO
 {
 
     @Override
-    public void guardarProducto(Producto producto)
+    public void guardarProducto(Insumo producto)
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public boolean modificarProducto(Producto producto)
+    public boolean modificarProducto(Insumo producto)
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
@@ -34,13 +34,13 @@ public class MateriaPrimaDAO implements IProductoDAO
     }
 
     @Override
-    public Optional<Producto> buscarProductoPorId(int id)
+    public Optional<Insumo> buscarProductoPorId(int id)
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public List<Producto> ListarProductos()
+    public List<Insumo> ListarProductos()
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

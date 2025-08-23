@@ -6,7 +6,7 @@ package vista;
 
 import java.util.List;
 import java.util.Optional;
-import modelo.Producto;
+import modelo.producto.Insumo;
 
 /**
  *
@@ -15,8 +15,8 @@ import modelo.Producto;
 public interface IVistaProductos
 {
 
-    public void mostrarProductos(List<Producto> productos);
-    public Optional<Producto> getProductoSeleccionado();
+    public void mostrarProductos(List<Insumo> productos);
+    public Optional<Insumo> getProductoSeleccionado();
 
     public void mostrarMensaje(String mensaje);
     public void mostrarMensajeError(String mensajeError);

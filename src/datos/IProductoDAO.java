@@ -6,7 +6,7 @@ package datos;
 
 import java.util.List;
 import java.util.Optional;
-import modelo.Producto;
+import modelo.producto.Insumo;
 
 /**
  *
@@ -14,10 +14,10 @@ import modelo.Producto;
  */
 public interface IProductoDAO
 {
-    public void guardarProducto(Producto producto);
-    public boolean modificarProducto(Producto producto);
+    public void guardarProducto(Insumo producto);
+    public boolean modificarProducto(Insumo producto);
     public void eliminarProducto(int id);
-    public Optional<Producto> buscarProductoPorId(int id);
-    public List<Producto>ListarProductos();
+    public Optional<Insumo> buscarProductoPorId(int id);
+    public List<Insumo>ListarProductos();
     
 }
