@@ -5,19 +5,19 @@
 package vista;
 
 import java.util.List;
-import modelo.producto.MateriaPrima;
+import modelo.producto.Insumo;
 
 
 /**
  *
  * @author jose
  */
-public interface IvistaMateriasPrimas
+public interface IvistaInsumos
 {
     public void mostrarMenu();
     public int leerOpcion();
-    public void mostrarMateriasP(List<MateriaPrima> insumos);
-    public int getIDmateriaPrimaSeleccionada();
+    public void mostrarInsumos(List<Insumo> insumos);
+    public int getIDInsumoSeleccionado();
     public String leerNombre();
     public double leerCosto();
     public double leerCantidad();

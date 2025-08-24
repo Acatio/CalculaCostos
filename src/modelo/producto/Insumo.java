@@ -11,25 +11,29 @@ public abstract class Insumo
     private String nombre;
     private double cantidad;
     private UnidadDeMedida unidadDeMedida;
+    private TipoInsumo tipoInsumo;
+
 
     public Insumo()
     {
     }
 
-    public Insumo(int id, String nombre, double cantidad, UnidadDeMedida unidadDeMedida)
+    public Insumo(int id, String nombre, double cantidad, UnidadDeMedida unidadDeMedida, TipoInsumo tipoInsumo)
     {
         this.id = id;
         this.nombre = nombre;
         this.cantidad = cantidad;
         this.unidadDeMedida = unidadDeMedida;
+        this.tipoInsumo = tipoInsumo;
     }
-
-    public Insumo(String nombre, double cantidad, UnidadDeMedida unidadDeMedida)
+    public Insumo(String nombre, double cantidad, UnidadDeMedida unidadDeMedida, TipoInsumo tipoInsumo)
     {
         this.nombre = nombre;
         this.cantidad = cantidad;
         this.unidadDeMedida = unidadDeMedida;
+        this.tipoInsumo = tipoInsumo;
     }
+
 
     /**
      * @return the id
@@ -105,6 +109,16 @@ public abstract class Insumo
     public String toString()
     {
         return "Insumo{" + "id=" + id + ", nombre=" + nombre + ", cantidad=" + cantidad + ", unidadDeMedida=" + unidadDeMedida + ",costo "+calcularCostoTotal()+'}';
+    }
+
+    public TipoInsumo getTipoInsumo()
+    {
+        return tipoInsumo;
+    }
+
+    public void setTipoInsumo(TipoInsumo tipoInsumo)
+    {
+        this.tipoInsumo = tipoInsumo;
     }
     
 }

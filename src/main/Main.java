@@ -5,11 +5,11 @@
 package main;
 
 import conexion.ConexionSQL;
-import controller.ControladorMateriaPrima;
-import datos.materiaPDAO.IMateriaPrimaDAO;
-import datos.materiaPDAO.MateriaPrimaDAO;
-import vista.IvistaMateriasPrimas;
+import controller.ControladorInsumo;
+import datos.insumoDao.InsumoDaoImpl;
 import vista.vistaConsola.VistaConsola;
+import datos.insumoDao.IInsumoDAO;
+import vista.IvistaInsumos;
 
 /**
  *
@@ -19,15 +19,15 @@ public class Main
 {
     public static void main(String[] args)
     {
-        IMateriaPrimaDAO materiaPrimaDAO = new MateriaPrimaDAO(new ConexionSQL());
-        IvistaMateriasPrimas vistaMP =new VistaConsola();
-        ControladorMateriaPrima controladorMP=new ControladorMateriaPrima(materiaPrimaDAO, vistaMP);
+        IInsumoDAO insumoDao = new InsumoDaoImpl(new ConexionSQL());
+        IvistaInsumos vistaInsumos =new VistaConsola();
+        ControladorInsumo controladorMP=new ControladorInsumo(insumoDao, vistaInsumos);
         try
         {
             controladorMP.iniciarApp();
         } catch (Exception ex)
         {
-           vistaMP.mostrarMensajeError(ex.getMessage());
+           vistaInsumos.mostrarMensajeError(ex.getMessage());
         }
     }
     

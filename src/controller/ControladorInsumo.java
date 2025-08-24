@@ -4,27 +4,28 @@
  */
 package controller;
 
-import datos.materiaPDAO.IMateriaPrimaDAO;
 import java.util.List;
 import modelo.producto.MateriaPrima;
 import modelo.producto.UnidadDeMedida;
-import vista.IvistaMateriasPrimas;
+import datos.insumoDao.IInsumoDAO;
+import modelo.producto.Insumo;
+import vista.IvistaInsumos;
 
 /**
  *
  * @author jose
  */
-public class ControladorMateriaPrima
+public class ControladorInsumo
 {
 
-    IMateriaPrimaDAO materiaDao;
-    IvistaMateriasPrimas vista;
+    IInsumoDAO insumoDAO;
+    IvistaInsumos vista;
     boolean appFinalizada = false;
-    final int NUEVA_MATERIA_PRIMA = 1, MOSTRAR_MATERIAS_PRIMAS = 2, ELIMINAR_MATERIA_PRIMA = 3, SALIR = 4;
+    final int NUEVO_INSUMO = 1, MOSTRAR_INSUMOS = 2, ELIMINAR_INSUMO = 3, SALIR = 4;
 
-    public ControladorMateriaPrima(IMateriaPrimaDAO materiaDao, IvistaMateriasPrimas vista)
+    public ControladorInsumo(IInsumoDAO materiaDao, IvistaInsumos vista)
     {
-        this.materiaDao = materiaDao;
+        this.insumoDAO = materiaDao;
         this.vista = vista;
     }
 
@@ -42,15 +43,19 @@ public class ControladorMateriaPrima
     {
         switch (opc)
         {
-            case NUEVA_MATERIA_PRIMA -> nuevoInsumo();
-            case MOSTRAR_MATERIAS_PRIMAS -> mostrarMateriasPrimas();
-            case ELIMINAR_MATERIA_PRIMA -> vista.mostrarMensaje("Funcion no soportada aun!!");
+            case NUEVO_INSUMO ->
+                nuevoInsumo();
+            case MOSTRAR_INSUMOS ->
+                mostrarInsumos();
+            case ELIMINAR_INSUMO ->
+                vista.mostrarMensaje("Funcion no soportada aun!!");
             case SALIR ->
             {
                 appFinalizada = true;
                 vista.mostrarMensaje("Prograna finalizado!!");
             }
-            default -> vista.mostrarMensajeError("Opcion invalida!!");
+            default ->
+                vista.mostrarMensajeError("Opcion invalida!!");
         }
     }
 
@@ -61,7 +66,7 @@ public class ControladorMateriaPrima
         var costo = vista.leerCosto();
         if (datosInsumoValidos(nombre, cantidad, costo))
         {
-            materiaDao.guardarMateriaP(new MateriaPrima(nombre, cantidad, new UnidadDeMedida("kilo", "kg"), costo));
+            insumoDAO.guardarInsumo(new MateriaPrima(nombre, cantidad, new UnidadDeMedida("kilo", "kg"), costo));
             vista.mostrarMensaje("Producto guardado con exito!!");
         } else
         {
@@ -90,12 +95,12 @@ public class ControladorMateriaPrima
         return true;
     }
 
-    public void mostrarMateriasPrimas() throws Exception
+    public void mostrarInsumos() throws Exception
     {
-        List<MateriaPrima> materiasPrimas = materiaDao.ListarMateriaPrima();
-        if (materiasPrimas != null)
+        List<Insumo> insumos = insumoDAO.ListarInsumos();
+        if (insumos != null)
         {
-            vista.mostrarMateriasP(materiasPrimas);
+            vista.mostrarInsumos(insumos);
         }
 
     }

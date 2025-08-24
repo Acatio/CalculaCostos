@@ -11,13 +11,13 @@ public class MateriaPrima extends Insumo
 
     public MateriaPrima(int id, String nombre, double cantidad, UnidadDeMedida unidadDeMedida, double costo)
     {
-        super(id, nombre, cantidad, unidadDeMedida);
+        super(id, nombre, cantidad, unidadDeMedida,TipoInsumo.MATERIA_PRIMA);
         this.costo = costo;
     }
 
     public MateriaPrima(String nombre, double cantidad, UnidadDeMedida unidadDeMedida, double costo)
     {
-        super(nombre, cantidad, unidadDeMedida);
+        super(nombre, cantidad, unidadDeMedida,TipoInsumo.MATERIA_PRIMA);
         this.costo = costo;
     }
 

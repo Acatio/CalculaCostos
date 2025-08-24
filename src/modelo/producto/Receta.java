@@ -10,18 +10,18 @@ public class Receta extends Insumo
 
     public Receta()
     {
-         ingredientes = new HashMap<>();
+        ingredientes = new HashMap<>();
     }
 
     public Receta(int id, String nombre, double masaDrenada, UnidadDeMedida unidadDeMedida)
     {
-        super(id, nombre, masaDrenada, unidadDeMedida);
+        super(id, nombre, masaDrenada, unidadDeMedida, TipoInsumo.RECETA);
         ingredientes = new HashMap<>();
     }
 
     public Receta(String nombre, double masaDrenada, UnidadDeMedida unidadDeMedida)
     {
-        super(nombre, masaDrenada, unidadDeMedida);
+        super(nombre, masaDrenada, unidadDeMedida, TipoInsumo.RECETA);
         ingredientes = new HashMap<>();
     }
 
@@ -52,5 +52,6 @@ public class Receta extends Insumo
             System.out.println("- " + entry.getValue() + " " + prod.getUnidadDeMedida() + ": " + prod.getNombre());
         }
     }
+    
 
 }

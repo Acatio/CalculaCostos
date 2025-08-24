@@ -6,14 +6,14 @@ package vista.vistaConsola;
 
 import java.util.List;
 import java.util.Scanner;
-import modelo.producto.MateriaPrima;
-import vista.IvistaMateriasPrimas;
+import modelo.producto.Insumo;
+import vista.IvistaInsumos;
 
 /**
  *
  * @author jose
  */
-public class VistaConsola implements IvistaMateriasPrimas
+public class VistaConsola implements IvistaInsumos
 {
 
     @Override
@@ -46,13 +46,13 @@ public class VistaConsola implements IvistaMateriasPrimas
     }
 
     @Override
-    public void mostrarMateriasP(List<MateriaPrima> insumos)
+    public void mostrarInsumos(List<Insumo> insumos)
     {
         insumos.forEach(System.out::println);
     }
 
     @Override
-    public int getIDmateriaPrimaSeleccionada()
+    public int getIDInsumoSeleccionado()
     {
         mostrarMensaje("Digite el id del insumo: ");
         return leerOpcion();
