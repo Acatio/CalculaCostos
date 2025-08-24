@@ -9,7 +9,8 @@
             <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/Insumo.java</file>
             <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/Producto.java</file>
             <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/UnidadDeMedida.java</file>
-            <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/cos.java</file>
+            <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/TipoCosto.java</file>
+            <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/CostoDetalle.java</file>
         </group>
     </open-files>
 </project-private>

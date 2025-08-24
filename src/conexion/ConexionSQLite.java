@@ -14,11 +14,12 @@ import java.util.logging.Logger;
  *
  * @author jose
  */
-public class Conexion
+public class ConexionSQLite implements IConexion
 {
-    private static final Logger LOG = Logger.getLogger(Conexion.class.getName());
+    private static final Logger LOG = Logger.getLogger(ConexionSQLite.class.getName());
 
-    public static Connection getConnection() throws SQLException
+    @Override
+    public Connection getConnection() throws SQLException
     {
         String url = "jdbc:sqlite:calculaCostosDB.db";
         try

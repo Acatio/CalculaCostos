@@ -100,4 +100,11 @@ public abstract class Insumo
         return calcularCostoTotal() / cantidad;
     }
     public abstract double calcularCostoTotal();
+
+    @Override
+    public String toString()
+    {
+        return "Insumo{" + "id=" + id + ", nombre=" + nombre + ", cantidad=" + cantidad + ", unidadDeMedida=" + unidadDeMedida + ",costo "+calcularCostoTotal()+'}';
+    }
+    
 }

@@ -3,7 +3,7 @@ package modelo.producto;
 public class MateriaPrima extends Insumo
 {
 
-    double costo;
+    private double costo;
 
     public MateriaPrima()
     {
@@ -26,5 +26,16 @@ public class MateriaPrima extends Insumo
     {
         return costo;
     }
+
+    public double getCosto()
+    {
+        return costo;
+    }
+
+    public void setCosto(double costo)
+    {
+        this.costo = costo;
+    }
+    
 
 }

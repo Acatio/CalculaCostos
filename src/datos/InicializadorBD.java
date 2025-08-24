@@ -4,6 +4,7 @@
  */
 package datos;
 
+import conexion.IConexion;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,9 +12,17 @@ import java.util.logging.*;
 
 public class InicializadorBD
 {
+
+    IConexion conexion;
+
+    public InicializadorBD(IConexion conexion)
+    {
+        this.conexion = conexion;
+    }
+    
     private static final Logger LOGGER = Logger.getLogger(InicializadorBD.class.getName());
 
-    public static void inicializarBD() throws SQLException
+    public void inicializarBD() throws SQLException
     {
         try
         {
@@ -27,7 +36,7 @@ public class InicializadorBD
         }
     }
 
-    private static void crearTablaMateriaPrima() throws SQLException
+    private void crearTablaMateriaPrima() throws SQLException
     {
         final String SQL = """
             CREATE TABLE IF NOT EXISTS materia_prima (
@@ -39,7 +48,7 @@ public class InicializadorBD
             );
         """;
 
-        try (Connection conn = conexion.Conexion.getConnection(); Statement stmt = conn.createStatement())
+        try (Connection conn = conexion.getConnection(); Statement stmt = conn.createStatement())
         {
             stmt.execute(SQL);
             LOGGER.log(Level.INFO, "Tabla materia_prima creada con \u00e9xito.");
@@ -50,8 +59,9 @@ public class InicializadorBD
         }
     }
 
-    private static void crearTablaRecetas() throws SQLException
+    private void crearTablaRecetas() throws SQLException
     {
+
         final String SQL = """
             CREATE TABLE IF NOT EXISTS recetas (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -61,7 +71,7 @@ public class InicializadorBD
             );
         """;
 
-        try (Connection conn = conexion.Conexion.getConnection(); Statement stmt = conn.createStatement())
+        try (Connection conn = conexion.getConnection(); Statement stmt = conn.createStatement())
         {
             stmt.execute(SQL);
             LOGGER.log(Level.INFO, "Tabla recetas creada con \u00e9xito.");

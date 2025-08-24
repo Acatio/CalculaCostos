@@ -10,9 +10,9 @@ package modelo.producto;
  */
 public class UnidadDeMedida
 {
-    int id;
-    String nombre;
-    String simbolo;
+    private int id;
+    private String nombre;
+    private String simbolo;
 
     public UnidadDeMedida()
     {
@@ -29,6 +29,42 @@ public class UnidadDeMedida
     {
         this.nombre = nombre;
         this.simbolo = simbolo;
+    }
+
+    public String getSimbolo()
+    {
+        return simbolo;
+    }
+
+    public void setSimbolo(String simbolo)
+    {
+        this.simbolo = simbolo;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public String getNombre()
+    {
+        return nombre;
+    }
+
+    public void setNombre(String nombre)
+    {
+        this.nombre = nombre;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.valueOf(id);
     }
     
 }
