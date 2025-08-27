@@ -1,107 +1,138 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
-import java.util.List;
+import datos.insumoDao.IInsumoDAO;
+import datos.insumoDao.UnidadDeMedidaDAO;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import modelo.producto.MateriaPrima;
 import modelo.producto.UnidadDeMedida;
-import datos.insumoDao.IInsumoDAO;
-import modelo.producto.Insumo;
-import vista.IvistaInsumos;
+import conexion.Conexion;
+import datos.insumoDao.InsumoDaoImpl;
 
-/**
- *
- * @author jose
- */
+
 public class ControladorInsumo
 {
 
-    IInsumoDAO insumoDAO;
-    IvistaInsumos vista;
-    boolean appFinalizada = false;
-    final int NUEVO_INSUMO = 1, MOSTRAR_INSUMOS = 2, ELIMINAR_INSUMO = 3, SALIR = 4;
-
-    public ControladorInsumo(IInsumoDAO materiaDao, IvistaInsumos vista)
+    public ControladorInsumo()
     {
-        this.insumoDAO = materiaDao;
-        this.vista = vista;
     }
 
-    public void iniciarApp() throws Exception
-    {
-        do
-        {
-            vista.mostrarMenu();
-            var opc = vista.leerOpcion();
-            manejarOpciones(opc);
-        } while (!appFinalizada);
-    }
+    @FXML
+    private TextField txtNombre;
 
-    public void manejarOpciones(int opc) throws Exception
+    @FXML
+    private TextField txtCosto;
+
+    @FXML
+    private TextField txtCantidad;
+
+    @FXML
+    private Button btnAceptar;
+
+    private IInsumoDAO insumoDAO;
+
+    @FXML
+    public void initialize()
     {
-        switch (opc)
+        try
         {
-            case NUEVO_INSUMO ->
-                nuevoInsumo();
-            case MOSTRAR_INSUMOS ->
-                mostrarInsumos();
-            case ELIMINAR_INSUMO ->
-                vista.mostrarMensaje("Funcion no soportada aun!!");
-            case SALIR ->
+            insumoDAO = new InsumoDaoImpl();
+
+            btnAceptar.setOnAction(e ->
             {
-                appFinalizada = true;
-                vista.mostrarMensaje("Prograna finalizado!!");
-            }
-            default ->
-                vista.mostrarMensajeError("Opcion invalida!!");
+                try
+                {
+                    nuevoInsumo();
+                } catch (Exception ex)
+                {
+                    mostrarError("Error al guardar el insumo: " + ex.getMessage());
+                }
+            });
+
+        } catch (Exception e)
+        {
+            mostrarError("Error al inicializar DAO: " + e.getMessage());
         }
     }
 
+    @FXML
     public void nuevoInsumo() throws Exception
     {
-        var nombre = vista.leerNombre();
-        var cantidad = vista.leerCantidad();
-        var costo = vista.leerCosto();
-        if (datosInsumoValidos(nombre, cantidad, costo))
+        String nombre = txtNombre.getText().trim();
+        double cantidad;
+        double costo;
+
+        try
         {
-            insumoDAO.guardarInsumo(new MateriaPrima(nombre, cantidad, new UnidadDeMedida("kilo", "kg"), costo));
-            vista.mostrarMensaje("Producto guardado con exito!!");
-        } else
+            cantidad = Double.parseDouble(txtCantidad.getText().trim());
+        } catch (NumberFormatException e)
         {
-            vista.mostrarMensajeError("El producto no fue guardado!!");
+            mostrarError("Ingrese una cantidad válida");
+            return;
         }
 
+        try
+        {
+            costo = Double.parseDouble(txtCosto.getText().trim());
+        } catch (NumberFormatException e)
+        {
+            mostrarError("Ingrese un costo válido");
+            return;
+        }
+
+        if (datosInsumoValidos(nombre, cantidad, costo))
+        {
+            UnidadDeMedidaDAO unidadDAO = new UnidadDeMedidaDAO();
+            UnidadDeMedida unidad = unidadDAO.buscarPorNombre("Kilogramo");
+
+            MateriaPrima insumo = new MateriaPrima(nombre, cantidad, unidad, costo);
+
+            insumoDAO.guardarInsumo(insumo);
+            mostrarMensaje("Producto guardado con éxito!!");
+
+            txtNombre.clear();
+            txtCantidad.clear();
+            txtCosto.clear();
+        }
     }
 
-    public boolean datosInsumoValidos(String nombre, double cantidad, double costo)
+    private boolean datosInsumoValidos(String nombre, double cantidad, double costo)
     {
         if (nombre.isEmpty())
         {
-            vista.mostrarMensajeError("Ingrese un nombre valido...");
+            mostrarError("Ingrese un nombre válido");
             return false;
         }
         if (cantidad < 0)
         {
-            vista.mostrarMensajeError("Ingrese una cantidad mayor o igual a cero...");
+            mostrarError("Ingrese una cantidad mayor o igual a cero");
             return false;
         }
         if (costo < 0)
         {
-            vista.mostrarMensajeError("Ingrese un costo mayor o igual a cero...");
+            mostrarError("Ingrese un costo mayor o igual a cero");
             return false;
         }
         return true;
     }
 
-    public void mostrarInsumos() throws Exception
+    private void mostrarMensaje(String mensaje)
     {
-        List<Insumo> insumos = insumoDAO.ListarInsumos();
-        if (insumos != null)
-        {
-            vista.mostrarInsumos(insumos);
-        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Información");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
 
+    private void mostrarError(String mensaje)
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }

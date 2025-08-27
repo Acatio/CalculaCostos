@@ -4,6 +4,7 @@
  */
 package datos.insumoDao;
 
+import conexion.Conexion;
 import conexion.IConexion;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javafx.fxml.FXML;
 import modelo.producto.Receta;
 import modelo.producto.TipoInsumo;
 import modelo.producto.UnidadDeMedida;
@@ -25,22 +27,16 @@ import modelo.producto.UnidadDeMedida;
 public class InsumoDaoImpl implements IInsumoDAO
 {
 
-    IConexion conexion;
-
-    public InsumoDaoImpl(IConexion conexion)
-    {
-        this.conexion = conexion;
-    }
 
     @Override
     public void guardarInsumo(Insumo insumo) throws Exception
     {
-        final String SQL = """
+        final String sql = """
             INSERT INTO insumos (nombre, tipo, unidad_medida, cantidad, costo)
             VALUES (?, ?, ?, ?, ?);
             """;
 
-        try (Connection conn = conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(SQL))
+        try (java.sql.Connection conn = Conexion.conectar(); PreparedStatement ps = conn.prepareStatement(sql))
         {
             ps.setString(1, insumo.getNombre());
             ps.setString(2, TipoInsumo.MATERIA_PRIMA.name());
@@ -51,6 +47,7 @@ public class InsumoDaoImpl implements IInsumoDAO
 
         } catch (Exception e)
         {
+            System.out.println(e);
             throw new Exception("Ocurrio un error al guardar la materia prima comuniquese con el tecnico", e);
         }
     }
@@ -73,31 +70,31 @@ public class InsumoDaoImpl implements IInsumoDAO
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
-    public List<Insumo> ListarInsumos() throws Exception
-    {
-        List<Insumo> lista = new ArrayList<>();
-
-        final String SQL = """
-        SELECT id, nombre, tipo, unidad_medida, cantidad, costo
-        FROM insumos;
-        """;
-
-        try (Connection conn = conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(SQL); ResultSet rs = ps.executeQuery())
-        {
-
-            while (rs.next())
-            {
-                lista.add(mapearInsumo(rs));
-            }
-
-        } catch (Exception e)
-        {
-            throw new Exception("Ocurrió un error al listar los insumos. Comuníquese con el técnico.", e);
-        }
-
-        return lista;
-    }
+//    @Override
+//    public List<Insumo> ListarInsumos() throws Exception
+//    {
+//        List<Insumo> lista = new ArrayList<>();
+//
+//        final String SQL = """
+//        SELECT id, nombre, tipo, unidad_medida, cantidad, costo
+//        FROM insumos;
+//        """;
+//
+//        try (Connection conn = conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(SQL); ResultSet rs = ps.executeQuery())
+//        {
+//
+//            while (rs.next())
+//            {
+//                lista.add(mapearInsumo(rs));
+//            }
+//
+//        } catch (Exception e)
+//        {
+//            throw new Exception("Ocurrió un error al listar los insumos. Comuníquese con el técnico.", e);
+//        }
+//
+//        return lista;
+//    }
 
     /**
      * Mapea un ResultSet a un objeto Insumo (MateriaPrima o Receta)
@@ -119,15 +116,22 @@ public class InsumoDaoImpl implements IInsumoDAO
                     rs.getDouble("costo")
             );
         } else
-        { // Asumimos que es Receta, se puede ampliar para más tipos
+        {
             return new Receta(
                     rs.getInt("id"),
                     rs.getString("nombre"),
                     rs.getDouble("cantidad"),
                     unidad
-                    
             );
         }
     }
+
+    @Override
+    public List<Insumo> ListarInsumos() throws Exception
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    
 
 }

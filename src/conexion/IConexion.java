@@ -6,13 +6,14 @@ package conexion;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+
 /**
  *
  * @author jose
  */
 public interface IConexion
 {
-        public abstract Connection getConnection() throws SQLException;
 
-    
+    public abstract Connection getConnection() throws SQLException;
+
 }

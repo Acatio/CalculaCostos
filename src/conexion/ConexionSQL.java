@@ -13,7 +13,7 @@ public class ConexionSQL implements IConexion
 
     // Datos de conexión
     private static final String USER = "root";
-    private static final String PASSWORD = "120512";
+    private static final String PASSWORD = "";
     private static final String DB = "bd_costos";
     private static final String URL = "jdbc:mysql://localhost:3306/" + DB + "?useSSL=false&serverTimezone=UTC";
 
@@ -27,6 +27,21 @@ public class ConexionSQL implements IConexion
         {
             LOG.log(Level.SEVERE, "Error al conectar la base de datos: ", e);
             throw new SQLException("Error al conectar con la base de datos", e);
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        ConexionSQL conexion = new ConexionSQL();
+        try (Connection conn = conexion.getConnection())
+        {
+            if (conn != null && !conn.isClosed())
+            {
+                System.out.println("Conexion exitosa " + conn.getCatalog());
+            }
+        } catch (Exception e)
+        {
+            System.out.println(e.getMessage());
         }
     }
 

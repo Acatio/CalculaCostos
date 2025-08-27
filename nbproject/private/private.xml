@@ -3,14 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/CostoMateriaPrima.java</file>
-            <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/Receta.java</file>
-            <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/MateriaPrima.java</file>
-            <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/Insumo.java</file>
-            <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/Producto.java</file>
-            <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/UnidadDeMedida.java</file>
-            <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/TipoCosto.java</file>
-            <file>file:/C:/Users/jose/Documents/NetBeansProjects/calculaCostos/src/modelo/producto/CostoDetalle.java</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/conexion/ConexionSQL.java</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/controller/ControladorInsumo.java</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/modelo/producto/Insumo.java</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/datos/insumoDao/InsumoDaoImpl.java</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/main/Main.java</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/datos/insumoDao/UnidadDeMedidaDAO.java</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/modelo/producto/Receta.java</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/conexion/IConexion.java</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/conexion/Conexion.java</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/datos/insumoDao/IInsumoDAO.java</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/styles/formulario.css</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/configuracionLog/LoggConfiguration.java</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/datos/IProductoDAO.java</file>
+            <file>file:/C:/Users/chemo/OneDrive/Documentos/CalculaCostos/src/datos/InicializadorBD.java</file>
         </group>
     </open-files>
 </project-private>

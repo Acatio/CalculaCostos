@@ -6,13 +6,11 @@ package modelo.producto;
 
 public abstract class Insumo
 {
-
     private int id;
     private String nombre;
     private double cantidad;
     private UnidadDeMedida unidadDeMedida;
     private TipoInsumo tipoInsumo;
-
 
     public Insumo()
     {
