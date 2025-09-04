@@ -5,16 +5,16 @@
 package main;
 
 import conexion.ConexionSQL;
-import controller.ControladorInsumo;
-import datos.insumoDao.InsumoDaoImpl;
-import vista.vistaConsola.VistaConsola;
-import datos.insumoDao.IInsumoDAO;
+import appCalculaCostos.costosMateriaPrima.vista.controladorVista.ControladorInsumo;
+import appCalculaCostos.costosMateriaPrima.modelo.daos.InsumoDaoImpl;
+import appCalculaCostos.costosMateriaPrima.vista.controladorVista.VistaConsola;
+import appCalculaCostos.costosMateriaPrima.modelo.interfacesLogicas.IInsumoDAO;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import vista.IvistaInsumos;
+import appCalculaCostos.costosMateriaPrima.vista.interfacesLogicas.IvistaInsumos;
 
 /**
  *
