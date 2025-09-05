@@ -2,17 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package main;
+package conexion.interfacesLogicas;
+
+import conexion.Exepciones.InicializacionExeption;
 
 /**
  *
  * @author jose
  */
-public class Main
+public interface IInicializacionBd
 {
-
-    public static void main(String[] args)
-    {
-   
-    }
+    public void inicializarBD() throws InicializacionExeption;
 }

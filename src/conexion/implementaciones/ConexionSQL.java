@@ -1,5 +1,7 @@
-package conexion;
+package conexion.implementaciones;
 
+import conexion.Exepciones.ConexionException;
+import conexion.interfacesLogicas.IConexion;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -18,7 +20,7 @@ public class ConexionSQL implements IConexion
     private static final String URL = "jdbc:mysql://localhost:3306/" + DB + "?useSSL=false&serverTimezone=UTC";
 
     @Override
-    public Connection getConnection() throws SQLException
+    public Connection getConnection() throws ConexionException
     {
         try
         {
@@ -26,7 +28,7 @@ public class ConexionSQL implements IConexion
         } catch (SQLException e)
         {
             LOG.log(Level.SEVERE, "Error al conectar la base de datos: ", e);
-            throw new SQLException("Error al conectar con la base de datos", e);
+            throw new ConexionException("Error al conectar con la base de datos", e);
         }
     }
 
