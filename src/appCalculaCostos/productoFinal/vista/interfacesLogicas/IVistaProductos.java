@@ -2,11 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package appCalculaCostos.costosMateriaPrima.vista.interfacesLogicas;
+package appCalculaCostos.productoFinal.vista.interfacesLogicas;
 
 import java.util.List;
 import java.util.Optional;
-import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.Producto;
 
 /**
