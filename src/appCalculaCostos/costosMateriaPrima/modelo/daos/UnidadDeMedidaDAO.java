@@ -5,9 +5,9 @@
 package appCalculaCostos.costosMateriaPrima.modelo.daos;
 
 import com.sun.jdi.connect.spi.Connection;
-import conexion.Conexion;
-import conexion.ConexionSQL;
-import conexion.IConexion;
+import conexion.implementaciones.Conexion;
+import conexion.implementaciones.ConexionSQL;
+import conexion.interfacesLogicas.IConexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.UnidadDeMedida;

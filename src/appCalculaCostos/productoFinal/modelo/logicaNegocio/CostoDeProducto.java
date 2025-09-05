@@ -10,25 +10,24 @@ import appCalculaCostos.productoFinal.modelo.interfacesLogicas.ICosteable;
  *
  * @author jose
  */
-public class CostoDetalle
+public class CostoDeProducto
 {
-
     private TipoCosto tipoCosto;
-    private ICosteable costo;
+    private ICosteable costeable;
 
-    public CostoDetalle()
+    public CostoDeProducto()
     {
     }
 
-    public CostoDetalle(TipoCosto tipoCosto, ICosteable costo)
+    public CostoDeProducto(TipoCosto tipoCosto, ICosteable costo)
     {
         this.tipoCosto = tipoCosto;
-        this.costo = costo;
+        this.costeable = costo;
     }
 
     public double getCostoTotal()
     {
-        return costo.getCosto();
+        return costeable.getMonto();
     }
 
     public TipoCosto getTipoCosto()
@@ -41,14 +40,14 @@ public class CostoDetalle
         this.tipoCosto = tipoCosto;
     }
 
-    public ICosteable getCosto()
+    public ICosteable getCosteable()
     {
-        return costo;
+        return costeable;
     }
 
-    public void setCosto(ICosteable costo)
+    public void setCosteable(ICosteable costo)
     {
-        this.costo = costo;
+        this.costeable = costo;
     }
 
 }

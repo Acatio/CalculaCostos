@@ -11,19 +11,19 @@ import java.util.List;
  *
  * @author jose
  */
-public class Producto
+public class ProductoFinal
 {
 
     private int id;
     private String nombre;
-    private List<CostoDetalle> costos;
+    private List<CostoDeProducto> costos;
     private double porcentajeGanancia;
 
-    public Producto()
+    public ProductoFinal()
     {
     }
 
-    public Producto(int id, String nombre, double porcentajeGanancia)
+    public ProductoFinal(int id, String nombre, double porcentajeGanancia)
     {
         this.id = id;
         this.nombre = nombre;
@@ -31,7 +31,7 @@ public class Producto
         this.porcentajeGanancia = porcentajeGanancia;
     }
 
-    public Producto(String nombre, double porcentajeGanancia)
+    public ProductoFinal(String nombre, double porcentajeGanancia)
     {
         this.nombre = nombre;
         this.costos = new ArrayList<>();
@@ -73,7 +73,7 @@ public class Producto
     /**
      * @return the costos
      */
-    public List<CostoDetalle> getCostos()
+    public List<CostoDeProducto> getCostos()
     {
         return costos;
     }
@@ -81,7 +81,7 @@ public class Producto
     /**
      * @param costos the costos to set
      */
-    public void setCostos(List<CostoDetalle> costos)
+    public void setCostos(List<CostoDeProducto> costos)
     {
         this.costos = costos;
     }
@@ -105,7 +105,7 @@ public class Producto
     public double calcularCostoTotal()
     {
         return costos.stream()
-                .mapToDouble(CostoDetalle::getCostoTotal)
+                .mapToDouble(CostoDeProducto::getCostoTotal)
                 .sum();
     }
 

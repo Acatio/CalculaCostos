@@ -23,7 +23,7 @@ public class CostoMateriaPrima implements ICosteable
     }
 
     @Override
-    public double getCosto()
+    public double getMonto()
     {
         double total = 0;
         for (Map.Entry<Insumo, Double> entry : insumosUsados.entrySet())

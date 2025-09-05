@@ -11,6 +11,6 @@ package appCalculaCostos.productoFinal.modelo.interfacesLogicas;
 public interface ICosteable
 {
   //  public String getNombre();
-    public double getCosto();
+    public double getMonto();
     
 }
