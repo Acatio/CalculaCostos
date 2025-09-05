@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package conexion;
+package conexion.interfacesLogicas;
 
+import conexion.Exepciones.ConexionException;
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  *
@@ -14,6 +14,6 @@ import java.sql.SQLException;
 public interface IConexion
 {
 
-    public abstract Connection getConnection() throws SQLException;
+    public abstract Connection getConnection() throws ConexionException;
 
 }
