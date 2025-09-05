@@ -15,7 +15,7 @@ public class ConexionSQL implements IConexion
 
     // Datos de conexión
     private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "120512";
     private static final String DB = "bd_costos";
     private static final String URL = "jdbc:mysql://localhost:3306/" + DB + "?useSSL=false&serverTimezone=UTC";
 
