@@ -5,8 +5,7 @@
 package appCalculaCostos.costosMateriaPrima.modelo.daos;
 
 import appCalculaCostos.costosMateriaPrima.modelo.interfacesLogicas.IInsumoDAO;
-import conexion.Conexion;
-import conexion.IConexion;
+import conexion.interfacesLogicas.IConexion;
 import java.util.List;
 import java.util.Optional;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
@@ -15,8 +14,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import javafx.fxml.FXML;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Receta;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoInsumo;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.UnidadDeMedida;
@@ -28,6 +25,12 @@ import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.UnidadDeMedida;
 public class InsumoDaoImpl implements IInsumoDAO
 {
 
+    final private IConexion conexion;
+
+    public InsumoDaoImpl(IConexion conexion)
+    {
+        this.conexion = conexion;
+    }
 
     @Override
     public void guardarInsumo(Insumo insumo) throws Exception
@@ -37,7 +40,7 @@ public class InsumoDaoImpl implements IInsumoDAO
             VALUES (?, ?, ?, ?, ?);
             """;
 
-        try (java.sql.Connection conn = Conexion.conectar(); PreparedStatement ps = conn.prepareStatement(sql))
+        try (Connection conn = conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(sql))
         {
             ps.setString(1, insumo.getNombre());
             ps.setString(2, TipoInsumo.MATERIA_PRIMA.name());
@@ -96,7 +99,6 @@ public class InsumoDaoImpl implements IInsumoDAO
 //
 //        return lista;
 //    }
-
     /**
      * Mapea un ResultSet a un objeto Insumo (MateriaPrima o Receta)
      */
@@ -132,7 +134,5 @@ public class InsumoDaoImpl implements IInsumoDAO
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-    
 
 }

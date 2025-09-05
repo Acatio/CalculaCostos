@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.MateriaPrima;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.UnidadDeMedida;
-import conexion.Conexion;
+import conexion.implementaciones.Conexion;
 import appCalculaCostos.costosMateriaPrima.modelo.daos.InsumoDaoImpl;
 
 
@@ -38,18 +38,18 @@ public class ControladorInsumo
     {
         try
         {
-            insumoDAO = new InsumoDaoImpl();
-
-            btnAceptar.setOnAction(e ->
-            {
-                try
-                {
-                    nuevoInsumo();
-                } catch (Exception ex)
-                {
-                    mostrarError("Error al guardar el insumo: " + ex.getMessage());
-                }
-            });
+//            insumoDAO = new InsumoDaoImpl();
+//
+//            btnAceptar.setOnAction(e ->
+//            {
+//                try
+//                {
+//                    nuevoInsumo();
+//                } catch (Exception ex)
+//                {
+//                    mostrarError("Error al guardar el insumo: " + ex.getMessage());
+//                }
+//            });
 
         } catch (Exception e)
         {

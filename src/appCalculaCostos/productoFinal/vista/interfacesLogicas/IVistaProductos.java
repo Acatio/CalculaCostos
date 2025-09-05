@@ -6,7 +6,7 @@ package appCalculaCostos.productoFinal.vista.interfacesLogicas;
 
 import java.util.List;
 import java.util.Optional;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.Producto;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.ProductoFinal;
 
 /**
  *
@@ -14,8 +14,8 @@ import appCalculaCostos.productoFinal.modelo.logicaNegocio.Producto;
  */
 public interface IVistaProductos
 {
-    public void mostrarProductos(List<Producto> productos);
-    public Optional<Producto> getProductoSeleccionado();
+    public void mostrarProductos(List<ProductoFinal> productos);
+    public Optional<ProductoFinal> getProductoSeleccionado();
     public void mostrarMensaje(String mensaje);
     public void mostrarMensajeError(String mensajeError);
     public int getIDProductoSeleccionado();
