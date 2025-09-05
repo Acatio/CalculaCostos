@@ -6,7 +6,7 @@ package appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio;
 
 import java.util.HashMap;
 import java.util.Map;
-import appCalculaCostos.costosMateriaPrima.modelo.interfacesLogicas.ICosteable;
+import appCalculaCostos.productoFinal.modelo.interfacesLogicas.ICosteable;
 
 /**
  *
@@ -15,7 +15,7 @@ import appCalculaCostos.costosMateriaPrima.modelo.interfacesLogicas.ICosteable;
 public class CostoMateriaPrima implements ICosteable
 {
 
-    private Map<Insumo, Double> insumosUsados = new HashMap<>();
+    private final Map<Insumo, Double> insumosUsados = new HashMap<>();
     
     public void agregarInsumo(Insumo insumo, double cantidad)
     {

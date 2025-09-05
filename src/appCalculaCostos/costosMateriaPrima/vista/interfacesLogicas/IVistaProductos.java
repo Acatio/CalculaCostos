@@ -7,7 +7,7 @@ package appCalculaCostos.costosMateriaPrima.vista.interfacesLogicas;
 import java.util.List;
 import java.util.Optional;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
-import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Producto;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.Producto;
 
 /**
  *
