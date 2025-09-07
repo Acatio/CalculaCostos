@@ -18,24 +18,27 @@ public class ProductoFinal
     private String nombre;
     private List<CostoDeProducto> costos;
     private double porcentajeGanancia;
+    private double costoTotal;
 
     public ProductoFinal()
     {
     }
 
-    public ProductoFinal(int id, String nombre, double porcentajeGanancia)
+    public ProductoFinal(int id, String nombre, double porcentajeGanancia, double costoTotal)
     {
         this.id = id;
         this.nombre = nombre;
         this.costos = new ArrayList<>();
         this.porcentajeGanancia = porcentajeGanancia;
+        this.costoTotal = costoTotal;
     }
 
-    public ProductoFinal(String nombre, double porcentajeGanancia)
+    public ProductoFinal(String nombre, double porcentajeGanancia, double costoTotal)
     {
         this.nombre = nombre;
         this.costos = new ArrayList<>();
         this.porcentajeGanancia = porcentajeGanancia;
+        this.costoTotal = costoTotal;
     }
 
     /**
@@ -104,9 +107,36 @@ public class ProductoFinal
 
     public double calcularCostoTotal()
     {
-        return costos.stream()
+        return getCostos().stream()
                 .mapToDouble(CostoDeProducto::getCostoTotal)
                 .sum();
+    }
+
+    @Override
+    public String toString()
+    {
+        var s = "Id: " + getId() + " Nombre: " + getNombre() + " Porcentaje de Ganancia: " + getPorcentajeGanancia() + " Costo total: "+costoTotal+"\n";
+        for (CostoDeProducto c : costos)
+        {
+            s += c.getTipoCosto().getNombre() + " " + c.getCostoTotal() + "\n";
+        }
+        return s;
+    }
+
+    /**
+     * @return the costoTotal
+     */
+    public double getCostoTotal()
+    {
+        return costoTotal;
+    }
+
+    /**
+     * @param costoTotal the costoTotal to set
+     */
+    public void setCostoTotal(double costoTotal)
+    {
+        this.costoTotal = costoTotal;
     }
 
 }

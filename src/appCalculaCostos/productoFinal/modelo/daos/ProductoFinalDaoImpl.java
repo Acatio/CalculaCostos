@@ -17,6 +17,8 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,14 +28,14 @@ import java.util.Optional;
  */
 public class ProductoFinalDaoImpl implements IProductoFinalDao
 {
-
+    
     final IConexion conexion;
-
+    
     public ProductoFinalDaoImpl(IConexion conexion)
     {
         this.conexion = conexion;
     }
-
+    
     @Override
     public void guardarProductoFinal(ProductoFinal productoFinal) throws PersistenciaException
     {
@@ -41,9 +43,8 @@ public class ProductoFinalDaoImpl implements IProductoFinalDao
         {
             ValidadorProductoFinal.validar(productoFinal);
             conn.setAutoCommit(false);
-            final double COSTO_INICIAL = 0;
             // 1. Insertar producto y obtener ID usando método privado
-            int idProductoFinal = guardarProducto(conn, productoFinal.getNombre(), COSTO_INICIAL);
+            int idProductoFinal = guardarProducto(conn, productoFinal.getNombre(), productoFinal.getCostoTotal(), productoFinal.getPorcentajeGanancia());
 
             // 2. Guardar costos asociados
             productoFinal.setId(idProductoFinal);
@@ -54,28 +55,29 @@ public class ProductoFinalDaoImpl implements IProductoFinalDao
 
             // 4. Confirmar transacción
             conn.commit();
-
+            
         } catch (SQLException | ConexionException e)
         {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new PersistenciaException("Error al guardar el Producto. Contacte al tecnico.", e);
         } catch (DatosNoValidosException e)
         {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new PersistenciaException("Los datos del producto no son validos, Contacte al tecnico", e);
         }
     }
 
 // Método privado que solo inserta y devuelve el ID
-    private int guardarProducto(Connection conn, String nombre, double costo) throws SQLException
+    private int guardarProducto(Connection conn, String nombre, double costo, double porcentajeGanancia) throws SQLException
     {
-        final String sql = "INSERT INTO productos_finales (nombre, costo_total) VALUES (?, ?)";
+        final String sql = "INSERT INTO productos_finales (nombre, costo_total, porcentaje_ganancia) VALUES (?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
         {
             ps.setString(1, nombre);
             ps.setDouble(2, costo);
+            ps.setDouble(3, porcentajeGanancia);
             ps.executeUpdate();
-
+            
             try (ResultSet rs = ps.getGeneratedKeys())
             {
                 if (rs.next())
@@ -88,19 +90,19 @@ public class ProductoFinalDaoImpl implements IProductoFinalDao
             }
         }
     }
-
+    
     private void actualizarCostoProductoFinalCalculado(Connection conn, int idProductoFinal) throws SQLException
     {
         final String sqlUpdate = """
         UPDATE productos_finales
         SET costo_total = (
-            SELECT COALESCE(SUM(monto), 0)
+            SELECT COALESCE(SUM(costo_total), 0)
             FROM costos_de_producto
-            WHERE id_producto_final = ?
+            WHERE id_producto = ?
         )
-        WHERE id_producto_final = ?;
+        WHERE id_producto = ?;
         """;
-
+        
         try (PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate))
         {
             psUpdate.setInt(1, idProductoFinal);
@@ -108,14 +110,14 @@ public class ProductoFinalDaoImpl implements IProductoFinalDao
             psUpdate.executeUpdate();
         }
     }
-
+    
     private void guardarCostosDeProducto(ProductoFinal productoFinal, Connection conn) throws SQLException
     {
         final String sqlDetalle = """
         INSERT INTO costos_de_producto (id_producto, id_tipo_costo, costo_total)
         VALUES (?, ?, ?);
         """;
-
+        
         try (PreparedStatement psDetalle = conn.prepareStatement(sqlDetalle))
         {
             for (CostoDeProducto costo : productoFinal.getCostos())
@@ -128,29 +130,56 @@ public class ProductoFinalDaoImpl implements IProductoFinalDao
             psDetalle.executeBatch();
         }
     }
+    
+    @Override
+    public List<ProductoFinal> ListarProductosFinales() throws PersistenciaException
+    {
+        List<ProductoFinal> productos = new ArrayList<>();
+        
+        final String sql = "SELECT id_producto, nombre, costo_total, porcentaje_ganancia FROM productos_finales";
+        
+        try (Connection conn = conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery())
+        {
+            
+            while (rs.next())
+            {
+                ProductoFinal producto = new ProductoFinal();
+                producto.setId(rs.getInt("id_producto"));
+                producto.setNombre(rs.getString("nombre"));
+                producto.setCostoTotal(rs.getDouble("costo_total"));
+                producto.setPorcentajeGanancia(rs.getDouble("porcentaje_ganancia"));
+                producto.setCostos(new ArrayList<>());
 
+                // si quieres, aquí también podrías cargar los costos asociados
+                // producto.setCostos(obtenerCostosDeProducto(conn, producto.getId()));
+                productos.add(producto);
+            }
+            
+        } catch (SQLException | ConexionException e)
+        {
+            e.printStackTrace();
+            throw new PersistenciaException("Error al listar productos finales.", e);
+        }
+        
+        return productos;
+    }
+    
     @Override
     public boolean modificarProductoFinal(ProductoFinal productoFinal) throws PersistenciaException
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
+    
     @Override
     public void eliminarProductoFinal(int id) throws PersistenciaException
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
+    
     @Override
     public Optional<ProductoFinal> buscarProductoFinalPorId(int id) throws PersistenciaException
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-    @Override
-    public List<ProductoFinal> ListarProductosFinales() throws PersistenciaException
-    {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
+    
 }

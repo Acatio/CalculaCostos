@@ -19,4 +19,13 @@ public interface IVistaProductos
     public void mostrarMensaje(String mensaje);
     public void mostrarMensajeError(String mensajeError);
     public int getIDProductoSeleccionado();
+    public String leerNombre();
+    public double leerPorcentajeDeGanancia();
+    public void mostrarMensajeExito(String mensajeExito);
+    public void iniciarVista();
+    public void setGuardarListener(Runnable callback);
+    public void setEliminarListener(Runnable callback);
+    public void setActualizarListener(Runnable callback);
+    public void setMostrarProductosListener(Runnable callback);
+    public void actualizarVista();
 }

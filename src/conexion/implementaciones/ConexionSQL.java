@@ -27,7 +27,7 @@ public class ConexionSQL implements IConexion
             return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e)
         {
-            LOG.log(Level.SEVERE, "Error al conectar la base de datos: ", e);
+            //LOG.log(Level.SEVERE, "Error al conectar la base de datos: ", e);
             throw new ConexionException("Error al conectar con la base de datos", e);
         }
     }
