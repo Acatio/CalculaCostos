@@ -6,6 +6,7 @@ package appCalculaCostos.productoFinal.vista.controladorVista;
 
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.CostoMateriaPrima;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
+import appCalculaCostos.costosMateriaPrima.vista.interfacesLogicas.IVistaCostosMp;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.ProductoFinal;
 import appCalculaCostos.productoFinal.vista.interfacesLogicas.IVistaProductos;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.Scanner;
  *
  * @author jose
  */
-public class VistaConsolaProductosFImpl implements IVistaProductos
+public class VistaConsolaProductosFImpl implements IVistaProductos, IVistaCostosMp
 {
 
     private Runnable guardarCallback;

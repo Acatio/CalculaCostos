@@ -6,6 +6,7 @@ package appCalculaCostos.productoFinal.vista.controladorVista.vistaSwing;
 
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.CostoMateriaPrima;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
+import appCalculaCostos.costosMateriaPrima.vista.interfacesLogicas.IVistaCostosMp;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.ProductoFinal;
 import appCalculaCostos.productoFinal.vista.interfacesLogicas.IVistaProductos;
 import java.util.List;
@@ -17,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author jose
  */
-public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVistaProductos
+public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVistaProductos, IVistaCostosMp
 {
 
     private Runnable guardarCallback;
@@ -291,7 +292,7 @@ public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVist
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton3ActionPerformed
     {//GEN-HEADEREND:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -507,7 +508,7 @@ public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVist
             panelCantidadInsumo p1 = new panelCantidadInsumo();
             p1.setNombreInsumo(i.getNombre());
             p1.setCantidad(String.valueOf(cantidad));
-            p1.setCosto(String.valueOf(i.getCostoPorUnidad()* cantidad));
+            p1.setCosto(String.valueOf(i.getCostoPorUnidad() * cantidad));
 
             pnlIngredientes.add(p1);
         }

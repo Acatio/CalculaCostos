@@ -29,10 +29,6 @@ public interface IVistaProductos
     public void setEliminarListener(Runnable callback);
     public void setActualizarListener(Runnable callback);
     public void setMostrarProductosListener(Runnable callback);
-    public void setMostrarInsumosListener(Runnable callback);
-    public void mostrarInsumos(List<Insumo> insumos);
-    public void mostrarIngredientes(CostoMateriaPrima ingredientes);
-    public void setAgregarIngredientesListener(Runnable callback);
     public void actualizarVista();
     
 }
