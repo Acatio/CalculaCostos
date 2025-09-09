@@ -4,6 +4,8 @@
  */
 package appCalculaCostos.productoFinal.vista.controladorVista;
 
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.CostoMateriaPrima;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.ProductoFinal;
 import appCalculaCostos.productoFinal.vista.interfacesLogicas.IVistaProductos;
 import java.util.List;
@@ -166,6 +168,30 @@ public class VistaConsolaProductosFImpl implements IVistaProductos
     public void actualizarVista()
     {
        
+    }
+
+    @Override
+    public void setMostrarInsumosListener(Runnable callback)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void mostrarInsumos(List<Insumo> insumos)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void mostrarIngredientes(CostoMateriaPrima ingredientes)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void setAgregarIngredientesListener(Runnable callback)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

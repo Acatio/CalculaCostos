@@ -14,15 +14,15 @@ import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
  */
 public interface IvistaInsumos
 {
-    public void mostrarMenu();
-    public int leerOpcion();
+    public void iniciarVista();
     public void mostrarInsumos(List<Insumo> insumos);
     public int getIDInsumoSeleccionado();
-    public String leerNombre();
-    public double leerCosto();
-    public double leerCantidad();
-    public int seleccionarIDUnidadDeMedida();
     public void mostrarMensaje(String mensaje);
     public void mostrarMensajeError(String mensajeError);
+    public void setGuardarListener(Runnable callback);
+    public void setEliminarListener(Runnable callback);
+    public void setActualizarListener(Runnable callback);
+    public void setMostrarInsumosListener(Runnable callback);
+    public void actualizarVista();
 
 }

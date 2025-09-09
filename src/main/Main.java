@@ -5,10 +5,9 @@
 package main;
 
 import appCalculaCostos.productoFinal.modelo.daos.ProductoFinalDaoImpl;
-import appCalculaCostos.productoFinal.modelo.interfacesLogicas.IProductoFinalDao;
 import appCalculaCostos.productoFinal.presentador.ControladorProductoFInal;
 import appCalculaCostos.productoFinal.vista.controladorVista.VistaConsolaProductosFImpl;
-import appCalculaCostos.productoFinal.vista.controladorVista.VistaProductoFinalSwing;
+import appCalculaCostos.productoFinal.vista.controladorVista.vistaSwing.VistaProductoFinalSwing;
 import appCalculaCostos.productoFinal.vista.interfacesLogicas.IVistaProductos;
 import bd.inicializadorBdMySQLImpl;
 import conexion.Exepciones.InicializacionExeption;
@@ -29,8 +28,8 @@ public class Main
         try
         {
             // Seleccionas la vista
-             vista = new VistaConsolaProductosFImpl();
-           // vista = new VistaProductoFinalSwing();
+           //  vista = new VistaConsolaProductosFImpl();
+            vista = new VistaProductoFinalSwing();
             IConexion conexionSql = new ConexionSQL();
             IInicializacionBd inicializar = new inicializadorBdMySQLImpl(conexionSql);
             inicializar.inicializarBD();

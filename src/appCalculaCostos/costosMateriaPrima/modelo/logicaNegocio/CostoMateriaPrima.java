@@ -30,7 +30,7 @@ public class CostoMateriaPrima implements ICosteable
         {
             Insumo insumo = entry.getKey();
             double cantidad = entry.getValue();
-            total += insumo.calcularCostoTotal() * cantidad; // Receta o materia prima
+            total += insumo.getCostoPorUnidad()* cantidad; // Receta o materia prima
         }
         return total;
     }
@@ -43,4 +43,10 @@ public class CostoMateriaPrima implements ICosteable
                     + " de " + entry.getKey().getNombre());
         }
     }
+
+    public Map<Insumo, Double> getInsumosUsados()
+    {
+        return insumosUsados;
+    }
+    
 }

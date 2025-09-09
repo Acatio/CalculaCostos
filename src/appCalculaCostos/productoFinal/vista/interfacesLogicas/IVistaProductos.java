@@ -4,6 +4,8 @@
  */
 package appCalculaCostos.productoFinal.vista.interfacesLogicas;
 
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.CostoMateriaPrima;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
 import java.util.List;
 import java.util.Optional;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.ProductoFinal;
@@ -27,5 +29,10 @@ public interface IVistaProductos
     public void setEliminarListener(Runnable callback);
     public void setActualizarListener(Runnable callback);
     public void setMostrarProductosListener(Runnable callback);
+    public void setMostrarInsumosListener(Runnable callback);
+    public void mostrarInsumos(List<Insumo> insumos);
+    public void mostrarIngredientes(CostoMateriaPrima ingredientes);
+    public void setAgregarIngredientesListener(Runnable callback);
     public void actualizarVista();
+    
 }
