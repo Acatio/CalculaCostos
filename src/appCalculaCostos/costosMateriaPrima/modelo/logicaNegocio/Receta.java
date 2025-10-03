@@ -6,7 +6,7 @@ import java.util.Map;
 public class Receta extends Insumo
 {
 
-    private Map<Insumo, Double> ingredientes = new HashMap<>();
+    private Map<Insumo, CantidadInsumo> ingredientes = new HashMap<>();
 
     public Receta()
     {
@@ -29,27 +29,27 @@ public class Receta extends Insumo
     public double calcularCostoTotal()
     {
         double total = 0;
-        for (Map.Entry<Insumo, Double> entry : ingredientes.entrySet())
+        for (Map.Entry<Insumo, CantidadInsumo> entry : ingredientes.entrySet())
         {
             Insumo prod = entry.getKey();
-            double cantidad = entry.getValue();
+            double cantidad = entry.getValue().getEnCantidadEstandar();
             total += prod.getCostoPorUnidad() * cantidad;
         }
         return total;
     }
 
-    public void agregarIngrediente(Insumo producto, double cantidadUsada)
+    public void agregarIngrediente(Insumo producto, CantidadInsumo cantidad)
     {
-        ingredientes.put(producto, cantidadUsada);
+        ingredientes.put(producto, cantidad);
     }
 
     public void mostrarReceta()
     {
         System.out.println("++++ RECETA: " + super.getNombre() + " ++++");
-        for (Map.Entry<Insumo, Double> entry : ingredientes.entrySet())
+        for (Map.Entry<Insumo, CantidadInsumo> entry : ingredientes.entrySet())
         {
             Insumo prod = entry.getKey();
-            System.out.println("- " + entry.getValue() + " " + prod.getUnidadDeMedida() + ": " + prod.getNombre());
+            System.out.println("- " + entry.getValue().cantidad + " " + entry.getValue().unidadMedida + ": " + prod.getNombre());
         }
     }
     

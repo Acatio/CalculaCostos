@@ -5,10 +5,10 @@
 package appCalculaCostos.productoFinal.modelo.daos;
 
 import appCalculaCostos.productoFinal.modelo.exepciones.DatosNoValidosException;
-import appCalculaCostos.productoFinal.modelo.exepciones.PersistenciaException;
+import conexion.Exepciones.PersistenciaException;
 import appCalculaCostos.productoFinal.modelo.interfacesLogicas.IProductoFinalDao;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.CostoDeProducto;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.ProductoFinal;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.CostoDeProducto;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFinal;
 import appCalculaCostos.productoFinal.modelo.validaciones.ValidadorProductoFinal;
 import conexion.Exepciones.ConexionException;
 import conexion.interfacesLogicas.IConexion;
@@ -37,7 +37,7 @@ public class ProductoFinalDaoImpl implements IProductoFinalDao
     }
     
     @Override
-    public void guardarProductoFinal(ProductoFinal productoFinal) throws PersistenciaException
+    public void guardarProductoFinalYsusCostos(ProductoFinal productoFinal) throws PersistenciaException
     {
         try (Connection conn = conexion.getConnection())
         {
@@ -123,7 +123,7 @@ public class ProductoFinalDaoImpl implements IProductoFinalDao
             for (CostoDeProducto costo : productoFinal.getCostos())
             {
                 psDetalle.setInt(1, productoFinal.getId());
-                psDetalle.setInt(2, costo.getTipoCosto().getId());
+                psDetalle.setInt(2, costo.getId());
                 psDetalle.setDouble(3, costo.getCosteable().getMonto());
                 psDetalle.addBatch();
             }

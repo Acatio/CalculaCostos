@@ -14,7 +14,7 @@ import appCalculaCostos.productoFinal.modelo.interfacesLogicas.ICosteable;
  */
 public class CostoMateriaPrima implements ICosteable
 {
-
+    
     private final Map<Insumo, Double> insumosUsados = new HashMap<>();
     
     public void agregarInsumo(Insumo insumo, double cantidad)

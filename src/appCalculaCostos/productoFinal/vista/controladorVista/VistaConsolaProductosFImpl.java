@@ -7,7 +7,7 @@ package appCalculaCostos.productoFinal.vista.controladorVista;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.CostoMateriaPrima;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
 import appCalculaCostos.costosMateriaPrima.vista.interfacesLogicas.IVistaCostosMp;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.ProductoFinal;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFinal;
 import appCalculaCostos.productoFinal.vista.interfacesLogicas.IVistaProductos;
 import java.util.List;
 import java.util.Optional;
@@ -191,6 +191,42 @@ public class VistaConsolaProductosFImpl implements IVistaProductos, IVistaCostos
 
     @Override
     public void setAgregarIngredientesListener(Runnable callback)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void mostarMensaje(String mensaje)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void setMostrarIngredientesListener(Runnable callback)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Optional<Insumo> getInsumoSeleccionado()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void setCrearProductoInicialSinCostosListener(Runnable callback)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public double getCantidadInsumo()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int getIDInsumoSeleccionado()
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

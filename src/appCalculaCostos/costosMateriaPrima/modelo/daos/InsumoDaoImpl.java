@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Receta;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoInsumo;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.UnidadDeMedida;
+import conexion.Exepciones.PersistenciaException;
 
 /**
  *
@@ -33,7 +34,7 @@ public class InsumoDaoImpl implements IInsumoDAO
     }
 
     @Override
-    public void guardarInsumo(Insumo insumo) throws Exception
+    public void guardarInsumo(Insumo insumo) throws PersistenciaException
     {
         final String sql = """
             INSERT INTO insumos (nombre, tipo, unidad_medida, cantidad, costo)
@@ -52,7 +53,7 @@ public class InsumoDaoImpl implements IInsumoDAO
         } catch (Exception e)
         {
             System.out.println(e);
-            throw new Exception("Ocurrio un error al guardar la materia prima comuniquese con el tecnico", e);
+            throw new PersistenciaException("Ocurrio un error al guardar la materia prima comuniquese con el tecnico", e);
         }
     }
 
@@ -130,9 +131,17 @@ public class InsumoDaoImpl implements IInsumoDAO
     }
 
     @Override
-    public List<Insumo> ListarInsumos() throws Exception
+    public List<Insumo> ListarInsumos() throws PersistenciaException
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    @Override
+    public List<Insumo> ListarInsumosDeProductoPorID(int id) throws PersistenciaException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+
 
 }

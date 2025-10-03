@@ -4,10 +4,10 @@
  */
 package appCalculaCostos.productoFinal.modelo.interfacesLogicas;
 
-import appCalculaCostos.productoFinal.modelo.exepciones.PersistenciaException;
+import conexion.Exepciones.PersistenciaException;
 import java.util.List;
 import java.util.Optional;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.ProductoFinal;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFinal;
 
 /**
  *
@@ -15,7 +15,7 @@ import appCalculaCostos.productoFinal.modelo.logicaNegocio.ProductoFinal;
  */
 public interface IProductoFinalDao
 {
-    public void guardarProductoFinal(ProductoFinal productoFinal)throws PersistenciaException;
+    public void guardarProductoFinalYsusCostos(ProductoFinal productoFinal)throws PersistenciaException;
     public boolean modificarProductoFinal(ProductoFinal productoFinal)throws PersistenciaException;
     public void eliminarProductoFinal(int id)throws PersistenciaException;
     public Optional<ProductoFinal> buscarProductoFinalPorId(int id)throws PersistenciaException;

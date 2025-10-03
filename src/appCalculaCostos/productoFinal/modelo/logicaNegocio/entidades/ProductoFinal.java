@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package appCalculaCostos.productoFinal.modelo.logicaNegocio;
+package appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades;
 
+import appCalculaCostos.productoFinal.modelo.exepciones.DatosNoValidosException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,10 +116,10 @@ public class ProductoFinal
     @Override
     public String toString()
     {
-        var s = "Id: " + getId() + " Nombre: " + getNombre() + " Porcentaje de Ganancia: " + getPorcentajeGanancia() + " Costo total: "+costoTotal+"\n";
+        var s = "Id: " + getId() + " Nombre: " + getNombre() + " Porcentaje de Ganancia: " + getPorcentajeGanancia() + " Costo total: " + costoTotal + "\n";
         for (CostoDeProducto c : costos)
         {
-            s += c.getTipoCosto().getNombre() + " " + c.getCostoTotal() + "\n";
+            s += c.getNombre() + " " + c.getCostoTotal() + "\n";
         }
         return s;
     }
@@ -139,4 +140,16 @@ public class ProductoFinal
         this.costoTotal = costoTotal;
     }
 
+    public void agregarCosto(CostoDeProducto costo) throws DatosNoValidosException
+    {
+        if (costo == null)
+        {
+            throw new DatosNoValidosException("El modulo de costo no es valido");
+        }
+        if (costos == null)
+        {
+            throw new DatosNoValidosException("La lista de costos del producto es null, contacte al tecnico");
+        }
+        costos.add(costo);
+    }
 }

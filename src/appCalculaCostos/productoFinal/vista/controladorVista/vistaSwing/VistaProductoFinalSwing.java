@@ -7,7 +7,7 @@ package appCalculaCostos.productoFinal.vista.controladorVista.vistaSwing;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.CostoMateriaPrima;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
 import appCalculaCostos.costosMateriaPrima.vista.interfacesLogicas.IVistaCostosMp;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.ProductoFinal;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFinal;
 import appCalculaCostos.productoFinal.vista.interfacesLogicas.IVistaProductos;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +25,7 @@ public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVist
     private Runnable mostrarProductosCallback;
     private Runnable mostrarInsumosCallback;
     private Runnable agregarIngredientesCallback;
+    private Runnable crearProductoFinalCallback;
 
     /**
      * Creates new form C
@@ -515,6 +516,42 @@ public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVist
 
         pnlIngredientes.revalidate();
         pnlIngredientes.repaint();
+    }
+
+    @Override
+    public void mostarMensaje(String mensaje)
+    {
+        JOptionPane.showMessageDialog(this, mensaje, "Info", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void setMostrarIngredientesListener(Runnable callback)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Optional<Insumo> getInsumoSeleccionado()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int getIDInsumoSeleccionado()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public double getCantidadInsumo()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void setCrearProductoInicialSinCostosListener(Runnable callback)
+    {
+        this.crearProductoFinalCallback = callback;
     }
 
 }

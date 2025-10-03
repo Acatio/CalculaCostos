@@ -4,8 +4,7 @@
  */
 package appCalculaCostos.productoFinal.modelo.interfacesLogicas;
 
-import appCalculaCostos.productoFinal.modelo.exepciones.PersistenciaException;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.TipoCosto;
+import conexion.Exepciones.PersistenciaException;
 
 /**
  *
@@ -13,8 +12,8 @@ import appCalculaCostos.productoFinal.modelo.logicaNegocio.TipoCosto;
  */
 public interface ITipoCostoDao
 {
-    public void guardarTipoCosto(TipoCosto tipoCosto) throws PersistenciaException;
-    public void modificarTipoCosto(TipoCosto tipoCosto) throws PersistenciaException;
+    public void guardarTipoCosto() throws PersistenciaException;
+    public void modificarTipoCosto() throws PersistenciaException;
     public void eliminarTipoCosto(int id) throws PersistenciaException;
 
 }
