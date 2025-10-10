@@ -6,13 +6,16 @@ package appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio;
 
 import java.util.HashMap;
 import java.util.Map;
-import appCalculaCostos.productoFinal.modelo.interfacesLogicas.ICosteable;
+import conexion.Exepciones.PersistenciaException;
+import java.util.List;
+import appCalculaCostos.productoFinal.modelo.interfacesLogicas.ServicioCosto;
+import java.sql.Connection;
 
 /**
  *
  * @author jose
  */
-public class CostoMateriaPrima implements ICosteable
+public class CostoMateriaPrima implements ServicioCosto
 {
     
     private final Map<Insumo, Double> insumosUsados = new HashMap<>();
@@ -22,18 +25,6 @@ public class CostoMateriaPrima implements ICosteable
         insumosUsados.put(insumo, cantidad);
     }
 
-    @Override
-    public double getMonto()
-    {
-        double total = 0;
-        for (Map.Entry<Insumo, Double> entry : insumosUsados.entrySet())
-        {
-            Insumo insumo = entry.getKey();
-            double cantidad = entry.getValue();
-            total += insumo.getCostoPorUnidad()* cantidad; // Receta o materia prima
-        }
-        return total;
-    }
 
     public void mostrarInsumos()
     {
@@ -48,5 +39,6 @@ public class CostoMateriaPrima implements ICosteable
     {
         return insumosUsados;
     }
-    
+
+
 }

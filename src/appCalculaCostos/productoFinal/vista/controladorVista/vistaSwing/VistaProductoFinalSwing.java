@@ -6,26 +6,17 @@ package appCalculaCostos.productoFinal.vista.controladorVista.vistaSwing;
 
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.CostoMateriaPrima;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
-import appCalculaCostos.costosMateriaPrima.vista.interfacesLogicas.IVistaCostosMp;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFinal;
-import appCalculaCostos.productoFinal.vista.interfacesLogicas.IVistaProductos;
 import java.util.List;
-import java.util.Optional;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author jose
  */
-public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVistaProductos, IVistaCostosMp
+public class VistaProductoFinalSwing extends javax.swing.JFrame 
 {
 
     private Runnable guardarCallback;
-    private Runnable mostrarProductosCallback;
-    private Runnable mostrarInsumosCallback;
-    private Runnable agregarIngredientesCallback;
-    private Runnable crearProductoFinalCallback;
 
     /**
      * Creates new form C
@@ -78,7 +69,7 @@ public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVist
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTabbedPane1.setEnabled(false);
 
@@ -92,7 +83,7 @@ public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVist
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Porcentaje de ganancia");
 
-        jButton1.setText("Siguiente");
+        jButton1.setText("Aceptar");
         jButton1.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -210,7 +201,7 @@ public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVist
 
         pnlCostoMP.add(pnlInferior, java.awt.BorderLayout.SOUTH);
 
-        pnlCentral.setLayout(new java.awt.GridLayout());
+        pnlCentral.setLayout(new java.awt.GridLayout(1, 0));
 
         jtbInsumos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
@@ -281,9 +272,8 @@ public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVist
     int index = 0;
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
     {//GEN-HEADEREND:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        index += 1;
-        jTabbedPane1.setSelectedIndex(index);
+
+        guardarCallback.run();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton2ActionPerformed
@@ -367,117 +357,6 @@ public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVist
     private javax.swing.JPanel pnlProducto;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void mostrarProductos(List<ProductoFinal> productos)
-    {
-        for (ProductoFinal p : productos)
-        {
-
-        }
-    }
-
-    @Override
-    public Optional<ProductoFinal> getProductoSeleccionado()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void mostrarMensaje(String mensaje)
-    {
-        JOptionPane.showMessageDialog(this, mensaje, "Info", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    @Override
-    public int getIDProductoSeleccionado()
-    {
-        var filaSeleccionada = jtbInsumos.getSelectedRow();
-        int COLUMNA_ID = 0;
-        if (filaSeleccionada != -1)
-        {
-            return Integer.parseInt((String) jtbInsumos.getValueAt(filaSeleccionada, COLUMNA_ID));
-        }
-        return -1;
-    }
-
-    @Override
-    public String leerNombre()
-    {
-        return jtfNombre.getText();
-    }
-
-    @Override
-    public double leerPorcentajeDeGanancia()
-    {
-        return Double.parseDouble(jtfPorcentajeGanancia.getText());
-    }
-
-    @Override
-    public void iniciarVista()
-    {
-        this.setVisible(true);
-        actualizarVista();
-
-    }
-
-    @Override
-    public void mostrarMensajeError(String mensajeError)
-    {
-        JOptionPane.showMessageDialog(this, mensajeError, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    @Override
-    public void mostrarMensajeExito(String mensajeExito)
-    {
-        JOptionPane.showMessageDialog(this, mensajeExito, "Exito", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    @Override
-    public void setGuardarListener(Runnable callback)
-    {
-        this.guardarCallback = callback;
-    }
-
-    @Override
-    public void setEliminarListener(Runnable callback)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void setActualizarListener(Runnable callback)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void setMostrarProductosListener(Runnable callback)
-    {
-        this.mostrarProductosCallback = callback;
-    }
-
-    @Override
-    public void actualizarVista()
-    {
-        if (mostrarProductosCallback != null)
-        {
-            mostrarProductosCallback.run();
-        }
-    }
-
-    @Override
-    public void setMostrarInsumosListener(Runnable callback)
-    {
-        this.mostrarInsumosCallback = callback;
-    }
-
-    @Override
-    public void setAgregarIngredientesListener(Runnable callback)
-    {
-        this.agregarIngredientesCallback = callback;
-    }
-
-    @Override
     public void mostrarInsumos(List<Insumo> insumos)
     {
         DefaultTableModel modelo = (DefaultTableModel) jtbInsumos.getModel();
@@ -495,7 +374,6 @@ public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVist
         }
     }
 
-    @Override
     public void mostrarIngredientes(CostoMateriaPrima materiaPrima)
     {
         var ingredientes = materiaPrima.getInsumosUsados(); // HashMap<Insumo, Double>
@@ -518,40 +396,7 @@ public class VistaProductoFinalSwing extends javax.swing.JFrame implements IVist
         pnlIngredientes.repaint();
     }
 
-    @Override
-    public void mostarMensaje(String mensaje)
-    {
-        JOptionPane.showMessageDialog(this, mensaje, "Info", JOptionPane.INFORMATION_MESSAGE);
-    }
 
-    @Override
-    public void setMostrarIngredientesListener(Runnable callback)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Optional<Insumo> getInsumoSeleccionado()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public int getIDInsumoSeleccionado()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public double getCantidadInsumo()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void setCrearProductoInicialSinCostosListener(Runnable callback)
-    {
-        this.crearProductoFinalCallback = callback;
-    }
+    
 
 }

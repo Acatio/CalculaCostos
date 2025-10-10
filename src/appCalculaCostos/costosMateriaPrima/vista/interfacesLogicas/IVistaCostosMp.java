@@ -23,7 +23,7 @@ public interface IVistaCostosMp
     public void actualizarVista();
     public void mostrarMensajeError(String mensajeError);
     public void mostrarMensajeExito(String mensajeExito);
-    public void mostarMensaje(String mensaje);
+    public void mostrarMensaje(String mensaje);
     public Optional<Insumo> getInsumoSeleccionado();
     public int getIDInsumoSeleccionado();
     public double getCantidadInsumo();

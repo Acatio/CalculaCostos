@@ -4,12 +4,21 @@
  */
 package appCalculaCostos.productoFinal.vista.controladorVista.vistaSwing;
 
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFinal;
+import appCalculaCostos.productoFinal.vista.interfacesLogicas.IVistaProductos;
+import java.util.List;
+import java.util.Optional;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author jose
  */
-public class VistaPrincipal extends javax.swing.JFrame
+public class VistaPrincipal extends javax.swing.JFrame implements IVistaProductos
 {
+    private Runnable mostrarProductosCallback;
+    private Runnable crearProductoFinalSinCostos;
 
     /**
      * Creates new form VistaPrincipal
@@ -18,6 +27,7 @@ public class VistaPrincipal extends javax.swing.JFrame
     {
         initComponents();
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -35,8 +45,9 @@ public class VistaPrincipal extends javax.swing.JFrame
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtbProductos = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -75,7 +86,7 @@ public class VistaPrincipal extends javax.swing.JFrame
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtbProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
                 {null, null, null, null, null, null},
@@ -99,19 +110,34 @@ public class VistaPrincipal extends javax.swing.JFrame
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jtbProductos);
 
         jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jButton1.setText("Nuevo");
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 770, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(595, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(103, 103, 103))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(41, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(36, 36, 36))
         );
 
         jPanel3.add(jPanel4, java.awt.BorderLayout.PAGE_END);
@@ -142,10 +168,16 @@ public class VistaPrincipal extends javax.swing.JFrame
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        VistaProductoFinalSwing vista =new VistaProductoFinalSwing();
+        VistaProductoFinalSwing vista = new VistaProductoFinalSwing();
         dispose();
         vista.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
+    {//GEN-HEADEREND:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+ 
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -193,6 +225,7 @@ public class VistaPrincipal extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -202,7 +235,132 @@ public class VistaPrincipal extends javax.swing.JFrame
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable jtbProductos;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void mostrarProductos(List<ProductoFinal> productos)
+    {
+        DefaultTableModel modelo = (DefaultTableModel) jtbProductos.getModel();
+        modelo.setRowCount(0);
+        for (ProductoFinal p : productos)
+        {
+            String costo = String.format("%.2f", p.calcularCostoTotal());
+            String precioVenta = String.format("%.2f", p.getPrecioVenta());
+            String ganancia = String.format("%.2f", p.getGanancia());
+            String porcentaje = String.format("%.0f%%", p.getPorcentajeGanancia() * 100);
+
+            Object row[] =
+            {
+                p.getId(), p.getNombre(), porcentaje, costo, precioVenta, ganancia
+            };
+            modelo.addRow(row);
+        }
+    }
+
+    @Override
+    public Optional<ProductoFinal> getProductoSeleccionado()
+    {
+        int filaSeleccionada = jtbProductos.getSelectedRow();
+        if (filaSeleccionada == -1)
+        {
+            return Optional.empty(); // nada seleccionado
+        }
+
+        // Recuperar valores de la fila seleccionada
+        int id = (int) jtbProductos.getValueAt(filaSeleccionada, 0);
+        String nombre = (String) jtbProductos.getValueAt(filaSeleccionada, 1);
+        String porcentajeStr = jtbProductos.getValueAt(filaSeleccionada, 2).toString().replace("%", "");
+        double porcentaje = Double.parseDouble(porcentajeStr) / 100.0;
+        double costo = Double.parseDouble(jtbProductos.getValueAt(filaSeleccionada, 3).toString());
+
+        ProductoFinal producto =null;//= new ProductoFinal(id, nombre, porcentaje, costo);
+
+        return Optional.of(producto);
+    }
+
+    @Override
+    public void mostrarMensaje(String mensaje)
+    {
+        JOptionPane.showMessageDialog(this, mensaje, "Info", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void mostrarMensajeError(String mensajeError)
+    {
+        JOptionPane.showMessageDialog(this, mensajeError, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public int getIDProductoSeleccionado()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void mostrarMensajeExito(String mensajeExito)
+    {
+        JOptionPane.showMessageDialog(this, mensajeExito, "Exito", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void iniciarVista()
+    {
+        this.setVisible(true);
+    }
+
+    @Override
+    public void setEliminarListener(Runnable callback)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void setActualizarListener(Runnable callback)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void setMostrarProductosListener(Runnable callback)
+    {
+        this.mostrarProductosCallback = callback;
+    }
+
+    @Override
+    public void actualizarVista()
+    {
+
+    }
+
+    @Override
+    public void setCrearProductoInicialSinCostosListener(Runnable callback)
+    {
+        crearProductoFinalSinCostos = callback;
+    }
+
+    @Override
+    public void setGuardarListener(Runnable callback)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String leerNombre()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public double leerPorcentajeDeGanancia()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public double leerPorecioVenta()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

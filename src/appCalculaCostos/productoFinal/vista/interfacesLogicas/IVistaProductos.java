@@ -15,20 +15,22 @@ import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFin
  */
 public interface IVistaProductos
 {
+    public void iniciarVista();
     public void mostrarProductos(List<ProductoFinal> productos);
     public Optional<ProductoFinal> getProductoSeleccionado();
+    public int getIDProductoSeleccionado();
+    public void setEliminarListener(Runnable callback);
     public void mostrarMensaje(String mensaje);
     public void mostrarMensajeError(String mensajeError);
-    public int getIDProductoSeleccionado();
-    public String leerNombre();
-    public double leerPorcentajeDeGanancia();
     public void mostrarMensajeExito(String mensajeExito);
-    public void iniciarVista();
-    public void setGuardarListener(Runnable callback);
-    public void setEliminarListener(Runnable callback);
     public void setActualizarListener(Runnable callback);
     public void setMostrarProductosListener(Runnable callback);
     public void actualizarVista();
     public void setCrearProductoInicialSinCostosListener(Runnable callback);
+    public void setGuardarListener(Runnable callback);
+    public String leerNombre();
+    public double leerPorcentajeDeGanancia();
+    public double leerPorecioVenta();
+    
     
 }

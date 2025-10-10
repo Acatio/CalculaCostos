@@ -5,7 +5,7 @@
 package appCalculaCostos.productoFinal.modelo.validaciones;
 
 import appCalculaCostos.productoFinal.modelo.exepciones.DatosNoValidosException;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.CostoDeProducto;
+import appCalculaCostos.productoFinal.modelo.interfacesLogicas.ServicioCosto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFinal;
 
 /**
@@ -19,7 +19,7 @@ public class ValidadorProductoFinal
     {
         if (productoFinal == null)
         {
-            throw new DatosNoValidosException("El producto no se ha inicializado correctamente.");
+            throw new DatosNoValidosException("El producto no es valido");
         }
         if (productoFinal.getNombre() == null || productoFinal.getNombre().isBlank())
         {
@@ -31,11 +31,11 @@ public class ValidadorProductoFinal
         }
         if (productoFinal.getCostos() == null)
         {
-            throw new DatosNoValidosException("La lista de costos no se ha creado.");
+            throw new DatosNoValidosException("La lista de costos no es valida");
         }
-        for (CostoDeProducto costo : productoFinal.getCostos())
+        for (ServicioCosto costo : productoFinal.getCostos())
         {
-            if (costo == null || costo.getNombre() == null || costo.getNombre().isBlank() || costo.getCosteable() == null)
+            if (costo == null || costo.getNombreCosto()== null || costo.getNombreCosto().isBlank() || costo.getDetalles()== null)
             {
                 throw new DatosNoValidosException("Costo de producto invalido.");
             }

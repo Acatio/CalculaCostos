@@ -5,15 +5,11 @@
 package appCalculaCostos.productoFinal.presentador;
 
 import appCalculaCostos.productoFinal.modelo.exepciones.DatosNoValidosException;
-import appCalculaCostos.productoFinal.modelo.interfacesLogicas.ICosteable;
-import conexion.Exepciones.PersistenciaException;
-import appCalculaCostos.productoFinal.modelo.interfacesLogicas.IProductoFinalDao;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.CostoDeProducto;
+import appCalculaCostos.productoFinal.modelo.exepciones.ProductoFinalException;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFinal;
-import appCalculaCostos.productoFinal.modelo.validaciones.ValidadorProductoFinal;
 import appCalculaCostos.productoFinal.vista.interfacesLogicas.IVistaProductos;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios.ServicioProductoFinal;
+import appCalculaCostos.productoFinal.modelo.validaciones.ValidadorProductoFinal;
 
 /**
  *
@@ -21,100 +17,80 @@ import java.util.logging.Logger;
  */
 public class ControladorProductoFInal
 {
-    
+
     IVistaProductos vista;
-    IProductoFinalDao dao;
-    private static ProductoFinal productoActual;
-    
-    public ControladorProductoFInal(IVistaProductos vista, IProductoFinalDao dao)
+    ServicioProductoFinal service;
+
+    public ControladorProductoFInal(IVistaProductos vista, ServicioProductoFinal service)
     {
         this.vista = vista;
-        this.dao = dao;
+        this.service = service;
     }
-    
+
     public void iniciar()
     {
-        inicialiarListenerGuardar();
-        inicialiarListenerMostrarProductos();
-        inicializarCrearProductoInicialSinCostos();
-        vista.iniciarVista();
+            inicialiarListenerGuardar();
+            inicialiarListenerMostrarProductos();
+            vista.iniciarVista();
     }
-    
+
     private void mostrarProductos()
     {
         try
         {
-            var productos = dao.ListarProductosFinales();
+            var productos = service.listarProductosFinales();
             vista.mostrarProductos(productos);
-        } catch (PersistenciaException ex)
+        } catch (ProductoFinalException ex)
         {
-            vista.mostrarMensajeError(ex.getMessage());
+            vista.mostrarMensajeError("Ocurrio un error al listar los productos");
             ex.printStackTrace();
         }
     }
-    
+
     private void inicialiarListenerGuardar()
     {
         vista.setGuardarListener(() ->
         {
             try
             {
-                ValidadorProductoFinal.validar(productoActual);
-                dao.guardarProductoFinalYsusCostos(productoActual);
+                ProductoFinal nuevo = crearProductoSinCostos();
+                service.guardarProductoFinalYsusCostos(nuevo);
                 vista.mostrarMensajeExito("Producto agregado correctamente");
                 vista.actualizarVista();
-            } catch (PersistenciaException | DatosNoValidosException ex)
+            } catch (ProductoFinalException ex)
             {
                 vista.mostrarMensajeError(ex.getMessage());
             }
         });
-        
+
     }
-    
+
     private void inicialiarListenerMostrarProductos()
     {
         vista.setMostrarProductosListener(() ->
         {
             mostrarProductos();
         });
-        
+
     }
-    
-    private void inicializarCrearProductoInicialSinCostos()
+
+    private ProductoFinal crearProductoSinCostos() throws DatosNoValidosException
     {
-        vista.setCrearProductoInicialSinCostosListener(() ->
-        {
-            try
-            {
-                productoActual = crearProductoActualSinCostos();
-                vista.mostrarMensajeExito("Producto creado con exito: " + productoActual.getNombre());
-            } catch (DatosNoValidosException ex)
-            {
-                productoActual = null;
-                vista.mostrarMensajeError(ex.getMessage());
-            }
-        });
-    }
-    
-    public void agregarCostoAProducto(CostoDeProducto costo)
-    {
-        try
-        {
-            productoActual.agregarCosto(costo);
-        } catch (DatosNoValidosException ex)
-        {
-            vista.mostrarMensajeError(ex.getMessage());
-        }
-    }
-    
-    private ProductoFinal crearProductoActualSinCostos() throws DatosNoValidosException
-    {
-        final int COSTO_TOTAL_INICIAL = 0;
         var nombre = vista.leerNombre();
-        var porcentajeGanancia = vista.leerPorcentajeDeGanancia();
-        var nuveo = new ProductoFinal(nombre, porcentajeGanancia, COSTO_TOTAL_INICIAL);
+        var nuveo = new ProductoFinal(nombre);
         ValidadorProductoFinal.validar(nuveo);
         return nuveo;
     }
-    
+//    
+//    public void agregarCostoAProducto(CostoDeProducto costo)
+//    {
+//        try
+//        {
+//            productoActual.agregarCosto(costo);
+//        } catch (DatosNoValidosException ex)
+//        {
+//            vista.mostrarMensajeError(ex.getMessage());
+//        }
+//    }
+
 }

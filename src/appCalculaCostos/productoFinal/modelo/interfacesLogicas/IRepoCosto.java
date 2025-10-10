@@ -4,13 +4,14 @@
  */
 package appCalculaCostos.productoFinal.modelo.interfacesLogicas;
 
+import java.sql.Connection;
+import java.util.List;
+
 /**
  *
  * @author jose
  */
-public interface ICosteable
+public interface IRepoCosto
 {
-  //  public String getNombre();
-    public double getMonto();
-    
+    public void guardarDetalles(int id,Connection con,List<IDetalleCosto>detalles);
 }

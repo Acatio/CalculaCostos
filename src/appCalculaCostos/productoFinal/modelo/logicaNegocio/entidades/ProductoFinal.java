@@ -4,7 +4,9 @@
  */
 package appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades;
 
-import appCalculaCostos.productoFinal.modelo.exepciones.DatosNoValidosException;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
+import appCalculaCostos.productoFinal.modelo.interfacesLogicas.DetalleCostoMP;
+import appCalculaCostos.productoFinal.modelo.interfacesLogicas.ServicioCosto;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,29 +19,33 @@ public class ProductoFinal
 
     private int id;
     private String nombre;
-    private List<CostoDeProducto> costos;
     private double porcentajeGanancia;
+    private double precioVenta;
     private double costoTotal;
+    private final List<ServicioCosto> costos;
 
-    public ProductoFinal()
-    {
-    }
-
-    public ProductoFinal(int id, String nombre, double porcentajeGanancia, double costoTotal)
+    public ProductoFinal(int id, String nombre)
     {
         this.id = id;
         this.nombre = nombre;
         this.costos = new ArrayList<>();
-        this.porcentajeGanancia = porcentajeGanancia;
-        this.costoTotal = costoTotal;
     }
 
-    public ProductoFinal(String nombre, double porcentajeGanancia, double costoTotal)
+    public ProductoFinal(String nombre)
     {
         this.nombre = nombre;
         this.costos = new ArrayList<>();
+    }
+
+    public ProductoFinal(int id, String nombre, double porcentajeGanancia, double precioVenta,double costoTotal)
+    {
+        this.id = id;
+        this.nombre = nombre;
         this.porcentajeGanancia = porcentajeGanancia;
-        this.costoTotal = costoTotal;
+        this.precioVenta = precioVenta;
+        this.costoTotal=costoTotal;
+        this.costos = new ArrayList<>();
+
     }
 
     /**
@@ -77,17 +83,9 @@ public class ProductoFinal
     /**
      * @return the costos
      */
-    public List<CostoDeProducto> getCostos()
+    public List<ServicioCosto> getCostos()
     {
         return costos;
-    }
-
-    /**
-     * @param costos the costos to set
-     */
-    public void setCostos(List<CostoDeProducto> costos)
-    {
-        this.costos = costos;
     }
 
     /**
@@ -98,58 +96,120 @@ public class ProductoFinal
         return porcentajeGanancia;
     }
 
-    /**
-     * @param porcentajeGanancia the porcentajeGanancia to set
-     */
-    public void setPorcentajeGanancia(double porcentajeGanancia)
-    {
-        this.porcentajeGanancia = porcentajeGanancia;
-    }
-
-    public double calcularCostoTotal()
-    {
-        return getCostos().stream()
-                .mapToDouble(CostoDeProducto::getCostoTotal)
-                .sum();
-    }
-
-    @Override
-    public String toString()
-    {
-        var s = "Id: " + getId() + " Nombre: " + getNombre() + " Porcentaje de Ganancia: " + getPorcentajeGanancia() + " Costo total: " + costoTotal + "\n";
-        for (CostoDeProducto c : costos)
-        {
-            s += c.getNombre() + " " + c.getCostoTotal() + "\n";
-        }
-        return s;
-    }
-
-    /**
-     * @return the costoTotal
-     */
     public double getCostoTotal()
     {
         return costoTotal;
     }
 
     /**
-     * @param costoTotal the costoTotal to set
+     * @param porcentajeGanancia the porcentajeGanancia to set
      */
-    public void setCostoTotal(double costoTotal)
+    public void setPorcentajeGanancia(double porcentajeGanancia)
     {
-        this.costoTotal = costoTotal;
+        if (porcentajeGanancia < 0)
+        {
+            throw new IllegalArgumentException("El porcentaje de ganancia no puede ser menor a cero");
+        }
+        if (porcentajeGanancia > 1)
+        {
+            this.porcentajeGanancia = porcentajeGanancia / 100;
+        } else
+        {
+            this.porcentajeGanancia = porcentajeGanancia;
+        }
+        this.precioVenta = calcularPrecioVenta();
     }
 
-    public void agregarCosto(CostoDeProducto costo) throws DatosNoValidosException
+    /**
+     * @return the precioVenta
+     */
+    public double getPrecioVenta()
+    {
+        return precioVenta;
+    }
+
+    /**
+     * @param precioVenta the precioVenta to set
+     */
+    public void setPrecioVenta(double precioVenta)
+    {
+        if (precioVenta < 0)
+        {
+            throw new IllegalArgumentException("El precio de venta no puede ser menor a cero");
+        }
+        this.precioVenta = precioVenta;
+        this.porcentajeGanancia = calcularPorcentajeGanancia();
+    }
+
+    @Override
+    public String toString()
+    {
+        var s = "Id: " + getId() + " \nNombre: " + getNombre() + " \nPorcentaje de Ganancia: " + porcentajeGanancia + "\nPrecio Venta: " + precioVenta + "\nMonto ganancia: " + calcularMontoGanancia() + "\n";
+        s += "----COSTOS---\n";
+        for (ServicioCosto c : costos)
+        {
+            s += c.getNombreCosto() + " " + c.getMontoAsociado() + "\n";
+        }
+        s += "Costo total: " + costoTotal;
+        return s;
+    }
+
+    public double calcularCostoTotal()
+    {
+        return getCostos().stream()
+                .mapToDouble(ServicioCosto::getMontoAsociado)
+                .sum();
+    }
+
+    public double calcularMontoGanancia()
+    {
+        return precioVenta - calcularCostoTotal();
+    }
+
+    public double calcularPrecioVenta()
+    {
+        if (calcularCostoTotal() == 0)
+        {
+            return 0;
+        }
+        if (getPorcentajeGanancia() == 1)
+        {
+            throw new IllegalArgumentException("El porcentaje de ganancia no puede ser mayor o igual al 100%");
+        }
+        return calcularCostoTotal() / (1 - getPorcentajeGanancia());
+    }
+
+    public double calcularPorcentajeGanancia()
+    {
+        var costo = calcularCostoTotal();
+        var ganancia = precioVenta - costo;
+        return (ganancia / precioVenta);
+    }
+
+    public double getGanancia()
+    {
+        if (calcularPrecioVenta() == 0)
+        {
+            return 0;
+        }
+        return calcularPrecioVenta() - calcularCostoTotal();
+    }
+
+    public void agregarCosto(ServicioCosto costo)
     {
         if (costo == null)
         {
-            throw new DatosNoValidosException("El modulo de costo no es valido");
+            throw new IllegalArgumentException("El modulo de costo no es valido");
         }
         if (costos == null)
         {
-            throw new DatosNoValidosException("La lista de costos del producto es null, contacte al tecnico");
+            throw new IllegalArgumentException("La lista de costos del producto no es valida");
         }
         costos.add(costo);
+        this.costoTotal = calcularCostoTotal();
+        this.porcentajeGanancia = calcularPorcentajeGanancia();
+
     }
+
+    
 }

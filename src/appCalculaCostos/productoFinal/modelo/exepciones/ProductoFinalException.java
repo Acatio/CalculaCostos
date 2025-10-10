@@ -8,14 +8,17 @@ package appCalculaCostos.productoFinal.modelo.exepciones;
  *
  * @author jose
  */
-public class DatosNoValidosException extends ProductoFinalException
+public class ProductoFinalException extends  Exception
 {
-    public DatosNoValidosException(String message, Throwable cause)
-    {
-        super(message, cause);
-    }
-    public DatosNoValidosException(String message)
+
+    public ProductoFinalException(String message)
     {
         super(message);
     }
+
+    public ProductoFinalException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
+    
 }

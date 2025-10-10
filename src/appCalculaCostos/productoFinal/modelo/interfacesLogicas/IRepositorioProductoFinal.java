@@ -13,9 +13,10 @@ import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFin
  *
  * @author jose
  */
-public interface IProductoFinalDao
+public interface IRepositorioProductoFinal
 {
     public void guardarProductoFinalYsusCostos(ProductoFinal productoFinal)throws PersistenciaException;
+    public void guardarProductoFinalSinCostos(ProductoFinal productoFinal)throws PersistenciaException;
     public boolean modificarProductoFinal(ProductoFinal productoFinal)throws PersistenciaException;
     public void eliminarProductoFinal(int id)throws PersistenciaException;
     public Optional<ProductoFinal> buscarProductoFinalPorId(int id)throws PersistenciaException;
