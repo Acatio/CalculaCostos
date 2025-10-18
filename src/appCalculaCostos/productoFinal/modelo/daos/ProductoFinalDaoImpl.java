@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import appCalculaCostos.productoFinal.modelo.interfacesLogicas.IRepositorioProductoFinal;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.CostoDeModulo;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.RepoDeDetallesFactory;
+import appCalculaCostos.productoFinal.modelo.interfacesLogicas.IRepositorioDetalles;
 
 /**
  *
@@ -40,10 +43,10 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
     {
         try (Connection conn = conexion.getConnection())
         {
-            ValidadorProductoFinal.validar(productoFinal);
+            
             conn.setAutoCommit(false);
             // 1. Insertar producto y obtener ID usando método privado
-            int idProductoFinal = guardarProducto(conn, productoFinal.getNombre(), productoFinal.getCostoTotal(), productoFinal.getPorcentajeGanancia());
+            int idProductoFinal = guardarProducto(conn, productoFinal);
 
             // 2. Guardar costos asociados
             productoFinal.setId(idProductoFinal);
@@ -59,32 +62,33 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
         {
             e.printStackTrace();
             throw new PersistenciaException("Error al guardar el Producto. Contacte al tecnico.", e);
-        } catch (DatosNoValidosException e)
-        {
-            e.printStackTrace();
-            throw new PersistenciaException("Los datos del producto no son validos, Contacte al tecnico", e);
-        }
+        } 
     }
 
     private void guardarCostosDeProducto(ProductoFinal productoFinal, Connection conn) throws PersistenciaException
     {
-        for (ServicioCosto costo : productoFinal.getCostos())
+        for (CostoDeModulo costo : productoFinal.getCostos())
         {
-            costo.guardarCostos(productoFinal.getId(), conn);
+            
+            RepoDeDetallesFactory factory =new RepoDeDetallesFactory();
+            IRepositorioDetalles repoDetalles = factory.crearRepo(costo);//se crea un repositorio de acuerdo al tipo de costo
+            repoDetalles.eliminarDetallesPorProducto(productoFinal.getId(), conn);
+            repoDetalles.insertarDetalles(productoFinal.getId(), costo.getDetalles(), conn);
         }
     }
 
 // Método privado que solo inserta y devuelve el ID
-    private int guardarProducto(Connection conn, String nombre, double costo, double porcentajeGanancia) throws SQLException
+    private int guardarProducto(Connection conn, ProductoFinal p) throws SQLException
     {
-        final String sql = "INSERT INTO productos_finales (nombre, costo_total, porcentaje_ganancia) VALUES (?, ?, ?)";
+        final String sql = "INSERT INTO productos_finales (nombre, costo_total, porcentaje_ganancia,precio_venta, cantidad_vendida) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
         {
-            ps.setString(1, nombre);
-            ps.setDouble(2, costo);
-            ps.setDouble(3, porcentajeGanancia);
+            ps.setString(1, p.getNombre());
+            ps.setDouble(2, p.getCostoTotal());
+            ps.setDouble(3, p.getPorcentajeGanancia());
+            ps.setDouble(4, p.getPrecioVenta());
+            ps.setDouble(5, p.getCantidadVendidaMes());
             ps.executeUpdate();
-
             try (ResultSet rs = ps.getGeneratedKeys())
             {
                 if (rs.next())
@@ -130,10 +134,10 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
 
             while (rs.next())
             {
-                ProductoFinal producto = new ProductoFinal(rs.getInt("id_producto"),rs.getString("nombre"),rs.getDouble("porcentaje_ganancia"),rs.getDouble("precio_venta"),rs.getDouble("costo_total"));
+                ProductoFinal producto = new ProductoFinal(rs.getInt("id_producto"),rs.getString("nombre"),rs.getDouble("cantidadVendida"),rs.getDouble("porcentaje_ganancia"),rs.getDouble("precio_venta"),rs.getDouble("costo_total"));
          
                 // si quieres, aquí también podrías cargar los costos asociados
-                // producto.setCostos(obtenerCostosDeProducto(conn, producto.getId()));
+               // producto.setCostos(obtenerCostosDeProducto(conn, producto.getId()));
                 productos.add(producto);
             }
 
@@ -169,7 +173,7 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
     {
         try (Connection conn = conexion.getConnection())
         {
-            guardarProducto(conn, productoFinal.getNombre(), productoFinal.getCostoTotal(), productoFinal.getPorcentajeGanancia());
+            guardarProducto(conn, productoFinal);
         } catch (SQLException | ConexionException e)
         {
             e.printStackTrace();

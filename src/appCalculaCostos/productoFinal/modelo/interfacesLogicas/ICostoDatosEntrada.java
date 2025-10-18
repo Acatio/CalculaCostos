@@ -4,14 +4,8 @@
  */
 package appCalculaCostos.productoFinal.modelo.interfacesLogicas;
 
-import java.sql.Connection;
-import java.util.List;
-
 /**
  *
  * @author jose
  */
-public interface IRepoCosto
-{
-    public void guardarDetalles(int id,Connection con,List<IDetalleCosto>detalles);
-}
+public interface ICostoDatosEntrada {}

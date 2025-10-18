@@ -4,88 +4,54 @@
  */
 package appCalculaCostos.productoFinal.modelo.interfacesLogicas;
 
-import conexion.Exepciones.PersistenciaException;
-import java.util.ArrayList;
-import java.util.List;
-import java.sql.Connection;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.CostoDeModulo;
 
 /**
  *
  * @author jose
+ * @param <T>
  */
-public abstract class ServicioCosto
+public abstract class ServicioCosto<T extends ICostoDatosEntrada>
 {
 
-    protected int id;
-    protected String nombre;
-    protected IRepoCosto repoCosto;
-    protected List<IDetalleCosto> detallesCosto;
-    protected int idProductoAsociado;
+    protected final int id; // Usamos final para inmutabilidad
+    protected final String nombre; // Usamos final para inmutabilidad
 
-    public ServicioCosto(int id, String nombre, IRepoCosto repoCosto, int idProductoAsociado)
+    // Constructor Único para forzar la validación de ambos campos
+    public ServicioCosto(int id, String nombre)
     {
+        if (id < 1)
+        {
+            throw new IllegalArgumentException("El ID del costo debe ser mayor a cero.");
+        }
+        if (nombre == null || nombre.isBlank())
+        {
+            throw new IllegalArgumentException("El nombre del tipo de costo no es válido.");
+        }
         this.id = id;
         this.nombre = nombre;
-        this.repoCosto = repoCosto;
-        this.idProductoAsociado = idProductoAsociado;
-        detallesCosto=new ArrayList<>();
     }
 
-    public ServicioCosto(String nombre, IRepoCosto repoCosto, int idProductoAsociado)
+    // --- Getters (Propiedades Inmutables) ---
+    public int getIdTipoCosto()
     {
-        this.nombre = nombre;
-        this.repoCosto = repoCosto;
-        this.idProductoAsociado = idProductoAsociado;
-        detallesCosto=new ArrayList<>();
+        return id;
     }
 
-    public int getIdProductoAsociado(){return idProductoAsociado;}
-    public int getIdTipoCosto(){ return id;}
-    public String getNombreCosto(){return nombre;}
-    public List<IDetalleCosto> getDetalles(){return detallesCosto;}
-    
-    public abstract void guardarCostos(int idProductoFinal, Connection conn) throws PersistenciaException;
-    public abstract void agregarDetalle(IDetalleCosto detalle); 
-    public void setIdProductoAsociado(int idProductoAsociado)
+    public String getNombreCosto()
     {
-        if (idProductoAsociado < 1)
-        {
-            throw new IllegalArgumentException("El id del producto debe ser mayor a cero");
-        }
-        this.idProductoAsociado = idProductoAsociado;
+        return nombre;
     }
 
-    public void setIdTipoCosto(int idTipoCosto)
-    {
-        if (idTipoCosto < 1)
-        {
-            throw new IllegalArgumentException("El id del costo debe ser mayor a cero");
-        }
-        this.id = idTipoCosto;
-    }
-
-    public void setNombreCosto(String nombreCosto)
-    {
-        if (nombreCosto == null || nombreCosto.isBlank())
-        {
-            throw new IllegalArgumentException("El nombre del tipo de costo no es valido");
-        }
-        this.nombre = nombreCosto;
-    }
-    public double getMontoAsociado()
-    {
-        if (detallesCosto==null)
-        {
-            throw new IllegalStateException("No se ha inicializado la lista de detalles");
-        }
-        var total=0d;
-        for (IDetalleCosto d:detallesCosto)
-        {
-            total+=d.getMonto();
-        }
-        return total;
-    }
-    
-
+    // --- Contrato de Lógica ---
+    /**
+     * Genera la entidad de dominio CostoDeModulo a partir de los datos de
+     * entrada.
+     *
+     * @param datosEntrada Una lista o DTO que contiene los datos crudos de la
+     * UI.
+     * @return El objeto de dominio CostoDeModulo final.
+     */
+    public abstract CostoDeModulo generarCostoDeModulo(Object datosEntrada);
 
 }

@@ -31,6 +31,6 @@ public interface IVistaProductos
     public String leerNombre();
     public double leerPorcentajeDeGanancia();
     public double leerPorecioVenta();
-    
+    public double leerCantidadVendia();
     
 }
