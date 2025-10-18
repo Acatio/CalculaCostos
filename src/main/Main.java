@@ -25,7 +25,8 @@ public class Main
     public static void main(String[] args)
     {
         ServicioProductoFinal spf= new ServicioProductoFinal(new ProductoFinalDaoImpl(new ConexionSQL()));
-        ProductoFinalCreacionDTO dto = new ProductoFinalCreacionDTO("pizza Rec", 200, null,450d,new ArrayList<>()); 
+        ProductoFinalCreacionDTO dto = new ProductoFinalCreacionDTO("pizza Rec", 200, null,450d,new ArrayList<>());
+        
         try
         {
             spf.guardarNuevoProducto(dto);

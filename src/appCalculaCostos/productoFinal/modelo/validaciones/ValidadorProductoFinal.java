@@ -8,7 +8,6 @@ import appCalculaCostos.productoFinal.modelo.exepciones.DatosNoValidosException;
 import appCalculaCostos.productoFinal.modelo.interfacesLogicas.CostoModuloDTO;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalCreacionDTO;
 
-
 /**
  *
  * @author jose
@@ -22,15 +21,15 @@ public class ValidadorProductoFinal
         {
             throw new DatosNoValidosException("El producto no es valido");
         }
-        if (dto.nombre()== null || dto.nombre().isBlank())
+        if (dto.nombre() == null || dto.nombre().isBlank())
         {
             throw new DatosNoValidosException("El producto debe tener un nombre.");
         }
-        if (dto.porcentajeGanancia()!=null && dto.porcentajeGanancia() < 0)
+        if (dto.porcentajeGanancia() != null && dto.porcentajeGanancia() < 0)
         {
             throw new DatosNoValidosException("El producto debe tener un porcentaje de ganancia mayor o igual a cero.");
         }
-        if (dto.precioVenta()!=null && dto.precioVenta()< 0)
+        if (dto.precioVenta() != null && dto.precioVenta() < 0)
         {
             throw new DatosNoValidosException("El producto debe tener un precio de venta mayor o igual a cero.");
         }
@@ -38,16 +37,38 @@ public class ValidadorProductoFinal
         {
             throw new DatosNoValidosException("La lista de costos no es valida");
         }
-        if (dto.cantidadVendida()<0)
+        if (dto.cantidadVendida() < 0)
         {
             throw new DatosNoValidosException("La cantidad vendida no puede ser menor a cero");
         }
-        for (CostoModuloDTO costo : dto.costos())
+        for (CostoModuloDTO costoDto : dto.costos())
         {
-            if (costo == null)
+            if (costoDto == null)
             {
                 throw new DatosNoValidosException("Costo de producto invalido.");
             }
+            validarCostoEspecifico(costoDto);
         }
     }
+
+    // Método que delega la validación según el tipo
+    private static void validarCostoEspecifico(CostoModuloDTO costoDto) throws DatosNoValidosException
+    {
+
+//        // Usa instanceof para determinar el tipo de DTO
+//        if (costoDto instanceof MateriaPrimaInputDTO mpDto)
+//        {
+//            validarMateriaPrima(mpDto);
+//
+//        } else if (costoDto instanceof ManoObraInputDTO moDto)
+//        {
+//            validarManoObra(moDto);
+//
+//        } else
+//        {
+//            // Manejar un caso donde un DTO no reconocido llegue al sistema
+//            throw new DatosNoValidosException("Tipo de módulo de costo no reconocido o no soportado para la validación.");
+//        }
+    }
+
 }
