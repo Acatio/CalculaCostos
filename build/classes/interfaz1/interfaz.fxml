@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171"
+            fx:controller="interfaz1.Controlador"
+            prefWidth="750" prefHeight="480" style="-fx-background-color: #f0f3f7;">
+    <VBox spacing="20" alignment="TOP_LEFT" AnchorPane.topAnchor="25" AnchorPane.leftAnchor="25" AnchorPane.rightAnchor="25" AnchorPane.bottomAnchor="25">
+        <Label text="Opciones" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2c2c2c;" />
+        <VBox spacing="10" VBox.vgrow="ALWAYS"
+              style="-fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 4); -fx-padding: 0;">
+            <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 15 20 10 20;">
+                <TextField fx:id="txtBuscar" promptText="Buscar" HBox.hgrow="ALWAYS"
+                           style="-fx-background-radius: 5; -fx-padding: 8 12 8 12; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-color: #f7f7f7;" />
+                <Label text="🔍" style="-fx-font-size: 16px; -fx-text-fill: #666;" />
+            </HBox>
+
+            <TableView fx:id="tablaOpciones" VBox.vgrow="ALWAYS">
+                <VBox.margin>
+                    <Insets top="0" right="20" bottom="20" left="20" />
+                </VBox.margin>
+
+                <columns>
+                    <TableColumn text="Id" minWidth="50" prefWidth="50"/>
+                    <TableColumn text="Nombre" minWidth="120" prefWidth="120"/>
+                    <!-- Esta columna se le asignará el texto en el controlador -->
+                    <TableColumn fx:id="colPorcentaje" minWidth="120" prefWidth="120"/>
+                    <TableColumn text="Costo Total" minWidth="100" prefWidth="100"/>
+                    <TableColumn text="Precio venta" minWidth="100" prefWidth="100"/>
+                    <TableColumn text="Ganancia" minWidth="150" prefWidth="190"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</AnchorPane>

@@ -1,0 +1,91 @@
+/*
+ * Archivo: estilo.css
+ * Estilos consolidados para toda la aplicación (Tabla y Pestañas)
+ */
+
+/* =================================================== */
+/* 1. FONDOS Y CONTENEDORES GENERALES */
+/* =================================================== */
+
+/* Asegura que el fondo principal del TabPane sea el gris claro de tu app */
+.tab-pane, .tab-content-area {
+    -fx-background-color: #f0f3f7; 
+}
+
+/* =================================================== */
+/* 2. ESTILOS DE TABLA (TableView) - Ya son correctos */
+/* =================================================== */
+
+/* Fondo del encabezado de la tabla (Color principal oscuro: #34495e) */
+.table-view .column-header-background {
+    -fx-background-color: #34495e; 
+    -fx-padding: 0.5em 0; 
+}
+
+/* Texto de las cabeceras */
+.table-view .label {
+    -fx-text-fill: white; 
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-alignment: CENTER;
+}
+
+/* =================================================== */
+/* 3. ESTILOS DE PESTAÑAS (TabPane) - Ajustados a la paleta */
+/* =================================================== */
+
+/* Contenedor de la barra de pestañas */
+.tab-pane:top .tab-header-area {
+    -fx-background-color: #f0f3f7; /* Fondo del área donde están los botones de las pestañas */
+}
+
+/* Estilo para las pestañas no seleccionadas */
+.tab {
+    -fx-background-color: #e0e0e0;
+    -fx-background-insets: 0 0 0 0;
+    -fx-font-weight: bold;
+    -fx-text-fill: #555555;
+    -fx-padding: 8 15; /* Un poco más de padding para que se vean mejor */
+}
+
+/* Estilo para la pestaña seleccionada */
+.tab:selected {
+    -fx-background-color: white;       /* Fondo blanco o muy claro para la pestaña activa */
+    -fx-border-color: #34495e;         /* **Borde inferior con el color principal oscuro de la tabla** */
+    -fx-border-width: 0 0 3px 0;
+    -fx-text-fill: #2c2c2c;
+}
+
+
+/* =================================================== */
+/* 4. CONTROLES DE FORMULARIO (Botones y TextField) */
+/* =================================================== */
+
+/* Botón Siguiente (Color de acción: azul brillante) */
+#btnSiguiente {
+    -fx-background-color: #4a86e8; 
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8 30; 
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);
+}
+
+#btnSiguiente:hover {
+    -fx-background-color: #3b74d9; 
+}
+
+/* Campos de texto (TextField) */
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-padding: 6; 
+}
+
+.text-field:focused {
+    -fx-border-color: #34495e; /* **Borde al enfocar con el color principal oscuro** */
+    -fx-border-width: 2px;
+}
