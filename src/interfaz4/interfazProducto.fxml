@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="interfaz4.ControladorProducto"
+            prefWidth="500" prefHeight="420"
+            style="-fx-background-color: #f5f7fa;">
+
+    <StackPane alignment="CENTER">
+        <VBox spacing="20" alignment="CENTER">
+            <padding>
+                <Insets top="20" right="40" bottom="20" left="40"/>
+            </padding>
+
+            <Label text="Registrar Insumo"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+
+            <GridPane hgap="15" vgap="15" alignment="CENTER">
+                <Label text="Nombre:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                <TextField fx:id="txtNombre" promptText="Ej. Enchiladas"
+                           GridPane.rowIndex="0" GridPane.columnIndex="1"
+                           styleClass="campo-texto"/>
+
+                <Label text="Cantidad:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                <TextField fx:id="txtCantidad" promptText="Ej. 10"
+                           GridPane.rowIndex="1" GridPane.columnIndex="1"
+                           styleClass="campo-texto"/>
+
+                <Label text="Unidad de medida:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                <ComboBox fx:id="cmbUnidad"
+                          promptText="Selecciona unidad"
+                          GridPane.rowIndex="2" GridPane.columnIndex="1"
+                          styleClass="campo-combo"/>
+
+                <Label text="Costo:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                <TextField fx:id="txtCosto" promptText="Ej. 25.50"
+                           GridPane.rowIndex="3" GridPane.columnIndex="1"
+                           styleClass="campo-texto"/>
+            </GridPane>
+
+            <Button text="Guardar" fx:id="btnGuardar" styleClass="boton-primario"/>
+
+        </VBox>
+    </StackPane>
+</AnchorPane>
