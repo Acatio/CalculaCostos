@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package appCalculaCostos.costosMateriaPrima.presentador;
+package appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO;
 
 /**
  *
  * @author jose
  */
-public class presentadorCostoMp
-{
-
-}
+public record UnidadMedidaDto(
+        String nombre,
+        String simbolo)
+        {}

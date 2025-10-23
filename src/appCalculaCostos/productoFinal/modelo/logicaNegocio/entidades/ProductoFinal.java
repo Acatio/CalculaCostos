@@ -81,7 +81,7 @@ public class ProductoFinal
         this.nombre = nombre;
     }
 
-    /**
+    /** 
      * @return the costos
      */
     public List<CostoDeModulo> getCostos()
@@ -100,6 +100,11 @@ public class ProductoFinal
     public double getCostoTotal()
     {
         return costoTotal;
+    }
+
+    public double getCantidadVendida()
+    {
+        return cantidadVendida;
     }
 
     /**

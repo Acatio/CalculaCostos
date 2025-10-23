@@ -4,7 +4,7 @@
  */
 package appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida;
 
-
+import appCalculaCostos.costosMateriaPrima.modelo.excepciones.NoPosibleConversion;
 
 /**
  *
@@ -19,14 +19,26 @@ public class Gramo extends UnidadMedida
     }
 
     @Override
-    public double aEstandar(double cantidad)
+    public double aOtraUnidad(UnidadMedida unidadDestino, double cantidad) throws NoPosibleConversion
     {
-        return cantidad;
+        if (unidadDestino == null)
+        {
+            throw new IllegalArgumentException("La unidad de medida no es valida");
+        }
+        if (cantidad <= 0)
+        {
+            throw new IllegalArgumentException("La cantidad no es valida");
+        }
+        if (unidadDestino instanceof Gramo)
+        {
+            return cantidad;
+        }
+        if (unidadDestino instanceof Kilo)
+        {
+            return cantidad /1000;
+        }
+
+        throw new NoPosibleConversion("No es posible convertir de gramos a: " + unidadDestino.getNombre());
     }
 
-    @Override
-    public double desdeEstandar(double cantidadEstandar)
-    {
-        return cantidadEstandar;
-    }
 }

@@ -6,17 +6,16 @@ package appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida;
 
 import appCalculaCostos.costosMateriaPrima.modelo.excepciones.NoPosibleConversion;
 
-
 /**
  *
  * @author jose
  */
-public class Kilo extends UnidadMedida
+public class Litro extends UnidadMedida
 {
 
-    public Kilo()
+    public Litro()
     {
-        super("Kilogramo", "kg");
+        super("Litro", "L");
     }
 
     @Override
@@ -30,15 +29,16 @@ public class Kilo extends UnidadMedida
         {
             throw new IllegalArgumentException("La cantidad no es valida");
         }
-     
-        if (unidadDestino instanceof Kilo)
+        if (unidadDestino instanceof Litro)
         {
             return cantidad;
         }
-        if (unidadDestino instanceof Gramo)
+        if (unidadDestino instanceof Mililitro)
         {
-            return cantidad * 1000;
+            return cantidad *1000;
         }
-        throw new NoPosibleConversion("No es posible convertir de gramos a: " + unidadDestino.getNombre());
+
+        throw new NoPosibleConversion("No es posible convertir de Litros a: " + unidadDestino.getNombre());
     }
+
 }

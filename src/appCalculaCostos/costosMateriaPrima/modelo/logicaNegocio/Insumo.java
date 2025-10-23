@@ -4,19 +4,21 @@
  */
 package appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio;
 
+import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.UnidadMedida;
+
 public abstract class Insumo
 {
     private int id;
     private String nombre;
     private double cantidad;
-    private UnidadDeMedida unidadDeMedida;
+    private UnidadMedida unidadDeMedida;
     private TipoInsumo tipoInsumo;
 
     public Insumo()
     {
     }
 
-    public Insumo(int id, String nombre, double cantidad, UnidadDeMedida unidadDeMedida, TipoInsumo tipoInsumo)
+    public Insumo(int id, String nombre, double cantidad, UnidadMedida unidadDeMedida, TipoInsumo tipoInsumo)
     {
         this.id = id;
         this.nombre = nombre;
@@ -24,7 +26,7 @@ public abstract class Insumo
         this.unidadDeMedida = unidadDeMedida;
         this.tipoInsumo = tipoInsumo;
     }
-    public Insumo(String nombre, double cantidad, UnidadDeMedida unidadDeMedida, TipoInsumo tipoInsumo)
+    public Insumo(String nombre, double cantidad, UnidadMedida unidadDeMedida, TipoInsumo tipoInsumo)
     {
         this.nombre = nombre;
         this.cantidad = cantidad;
@@ -84,7 +86,7 @@ public abstract class Insumo
     /**
      * @return the unidadDeMedida
      */
-    public UnidadDeMedida getUnidadDeMedida()
+    public UnidadMedida getUnidadDeMedida()
     {
         return unidadDeMedida;
     }
@@ -92,7 +94,7 @@ public abstract class Insumo
     /**
      * @param unidadDeMedida the unidadDeMedida to set
      */
-    public void setUnidadDeMedida(UnidadDeMedida unidadDeMedida)
+    public void setUnidadDeMedida(UnidadMedida unidadDeMedida)
     {
         this.unidadDeMedida = unidadDeMedida;
     }

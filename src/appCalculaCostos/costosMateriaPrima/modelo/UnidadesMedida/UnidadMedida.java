@@ -4,6 +4,9 @@
  */
 package appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida;
 
+import appCalculaCostos.costosMateriaPrima.modelo.excepciones.NoPosibleConversion;
+import java.util.Objects;
+
 /**
  *
  * @author jose
@@ -13,7 +16,7 @@ public abstract class UnidadMedida
 
     private final String nombre;
     private final String simbolo;
-
+  
     public UnidadMedida(String nombre, String simbolo)
     {
         this.nombre = nombre;
@@ -30,7 +33,36 @@ public abstract class UnidadMedida
         return simbolo;
     }
 
-    public abstract double aEstandar(double cantidad);
+    @Override
+    public int hashCode()
+    {
+        int hash = 3;
+        return hash;
+    }
 
-    public abstract double desdeEstandar(double cantidadEstandar);
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final UnidadMedida other = (UnidadMedida) obj;
+        if (!Objects.equals(this.nombre, other.nombre))
+        {
+            return false;
+        }
+        return Objects.equals(this.simbolo, other.simbolo);
+    }
+    
+    public abstract double aOtraUnidad(UnidadMedida unidadDestino, double cantidad) throws NoPosibleConversion;
+   
 }

@@ -1,57 +1,145 @@
 package appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio;
 
-import java.util.HashMap;
-import java.util.Map;
+import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.Gramo;
+import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.Kilo;
+import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.Litro;
+import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.Mililitro;
+import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.Pieza;
+import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.UnidadMedida;
+import appCalculaCostos.costosMateriaPrima.modelo.daos.InsumoDaoImpl;
+import appCalculaCostos.costosMateriaPrima.modelo.excepciones.InsumoException;
+import appCalculaCostos.costosMateriaPrima.modelo.excepciones.NoPosibleConversion;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.DetalleRecetaDto;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.MateriaPrimaDto;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.RecetaDto;
+import conexion.implementaciones.ConexionSQL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Receta extends Insumo
 {
 
-    private Map<Insumo, CantidadInsumo> ingredientes = new HashMap<>();
+    private List<DetalleReceta> ingredientes;
 
     public Receta()
     {
-        ingredientes = new HashMap<>();
+        ingredientes = new ArrayList<>();
     }
 
-    public Receta(int id, String nombre, double masaDrenada, UnidadDeMedida unidadDeMedida)
+    public Receta(int id, String nombre, double cantidadProducida, UnidadMedida unidadDeMedida)
     {
-        super(id, nombre, masaDrenada, unidadDeMedida, TipoInsumo.RECETA);
-        ingredientes = new HashMap<>();
+        super(id, nombre, cantidadProducida, unidadDeMedida, TipoInsumo.RECETA);
+        ingredientes = new ArrayList<>();
     }
 
-    public Receta(String nombre, double masaDrenada, UnidadDeMedida unidadDeMedida)
+    public Receta(String nombre, double cantidadProducida, UnidadMedida unidadDeMedida)
     {
-        super(nombre, masaDrenada, unidadDeMedida, TipoInsumo.RECETA);
-        ingredientes = new HashMap<>();
+        super(nombre, cantidadProducida, unidadDeMedida, TipoInsumo.RECETA);
+        ingredientes = new ArrayList<>();
+    }
+
+    public List<DetalleReceta> getIngredientes()
+    {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<DetalleReceta> ingredientes)
+    {
+        if (ingredientes == null)
+        {
+            throw new IllegalArgumentException("la lista de ingredientes no es valida");
+        }
+        this.ingredientes = ingredientes;
     }
 
     @Override
     public double calcularCostoTotal()
     {
         double total = 0;
-        for (Map.Entry<Insumo, CantidadInsumo> entry : ingredientes.entrySet())
+        for (DetalleReceta detalle : ingredientes)
         {
-            Insumo prod = entry.getKey();
-            double cantidad = entry.getValue().getEnCantidadEstandar();
-            total += prod.getCostoPorUnidad() * cantidad;
+
+            try
+            {
+                total += detalle.getMonto();
+            } catch (NoPosibleConversion ex)
+            {
+                System.out.println(ex.getMessage());
+            }
         }
         return total;
     }
 
-    public void agregarIngrediente(Insumo producto, CantidadInsumo cantidad)
+    public void agregarIngrediente(DetalleReceta detalle)
     {
-        ingredientes.put(producto, cantidad);
+        ingredientes.add(detalle);
     }
 
     public void mostrarReceta()
     {
         System.out.println("++++ RECETA: " + super.getNombre() + " ++++");
-        for (Map.Entry<Insumo, CantidadInsumo> entry : ingredientes.entrySet())
+        for (DetalleReceta detalle : ingredientes)
         {
-            Insumo prod = entry.getKey();
-            System.out.println("- " + entry.getValue().cantidad + " " + entry.getValue().unidadMedida + ": " + prod.getNombre());
+            try
+            {
+                var insumo = detalle.getInsumo();
+                System.out.println("Ingrediente: " + insumo.getNombre() + " cantidad: " + detalle.getCantidad() + " " + detalle.getUnidadMedida().getSimbolo() + " costo: " + detalle.getMonto());
+            } catch (NoPosibleConversion ex)
+            {
+                System.out.println(ex.getMessage());
+            }
         }
+        System.out.println("costo Total: " + this.calcularCostoTotal());
+        System.out.println("costo por " + super.getUnidadDeMedida().getNombre() + " " + super.getCostoPorUnidad());
     }
-    
 
+    public static void main(String[] args)
+    {
+        UnidadMedida kilo = new Kilo();
+        UnidadMedida gramo = new Gramo();
+        UnidadMedida litro = new Litro();
+        UnidadMedida mililitro = new Mililitro();
+        UnidadMedida pieza = new Pieza();
+
+        Insumo i1 = new MateriaPrima("Harina", 25, kilo, 800);
+        Insumo i2 = new MateriaPrima("Huevo", 16, pieza, 50);
+        Insumo i3 = new MateriaPrima("sal", 1, kilo, 23);
+        Insumo i4 = new MateriaPrima("agua", 1, litro, 25);
+
+        Receta masa = new Receta("masa", 8, kilo);
+        Receta pure = new Receta("pure", 4, litro);
+        DetalleReceta d1 = new DetalleReceta(i1, 4, kilo);
+        DetalleReceta d2 = new DetalleReceta(i2, 4, pieza);
+        DetalleReceta d3 = new DetalleReceta(i3, 32, gramo);
+        DetalleReceta d4 = new DetalleReceta(i4, 2, litro);
+        masa.agregarIngrediente(d1);
+        masa.agregarIngrediente(d2);
+        masa.agregarIngrediente(d3);
+        masa.agregarIngrediente(d4);
+        pure.agregarIngrediente(d4);
+        pure.agregarIngrediente(d4);
+        DetalleReceta d5 = new DetalleReceta(pure, 2, litro);
+        masa.agregarIngrediente(d5);
+        masa.mostrarReceta();
+        MateriaPrimaService mps = new MateriaPrimaService(new InsumoDaoImpl(new ConexionSQL()));
+        MateriaPrimaDto mp1=new MateriaPrimaDto("Harina", 25, kilo.getNombre(), TipoInsumo.MATERIA_PRIMA, 800);
+        ArrayList<DetalleRecetaDto> detalles=new ArrayList<>();
+        
+        DetalleRecetaDto detalle=new DetalleRecetaDto(4, 4, kilo.getNombre());
+        detalles.add(detalle);
+        
+        RecetaDto dtoReceta=new RecetaDto( "masa", 4, kilo.getNombre(), TipoInsumo.RECETA, detalles);
+        try
+        {
+          //  mps.guardarMateriaPrima(mp1);
+            mps.guardarReceta(dtoReceta);
+        } catch (InsumoException ex)
+        {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
+
+    }
 }

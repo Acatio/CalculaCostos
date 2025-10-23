@@ -6,17 +6,16 @@ package appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida;
 
 import appCalculaCostos.costosMateriaPrima.modelo.excepciones.NoPosibleConversion;
 
-
 /**
  *
  * @author jose
  */
-public class Kilo extends UnidadMedida
+public class Pieza extends UnidadMedida
 {
 
-    public Kilo()
+    public Pieza()
     {
-        super("Kilogramo", "kg");
+        super("Pieza", "pz");
     }
 
     @Override
@@ -30,15 +29,11 @@ public class Kilo extends UnidadMedida
         {
             throw new IllegalArgumentException("La cantidad no es valida");
         }
-     
-        if (unidadDestino instanceof Kilo)
+        if (unidadDestino instanceof Pieza)
         {
             return cantidad;
         }
-        if (unidadDestino instanceof Gramo)
-        {
-            return cantidad * 1000;
-        }
-        throw new NoPosibleConversion("No es posible convertir de gramos a: " + unidadDestino.getNombre());
+        throw new NoPosibleConversion("No es posible convertir de piezas a: " + unidadDestino.getNombre());
     }
+
 }

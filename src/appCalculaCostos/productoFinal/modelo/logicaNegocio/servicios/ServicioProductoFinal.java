@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author jose
  */
-    public class ServicioProductoFinal
+public class ServicioProductoFinal
 {
 
     private final IRepositorioProductoFinal repo;
@@ -33,7 +33,7 @@ import java.util.List;
     {
         try
         {
-          
+
             // 1. Validar la entrada de datos
             validarDatosEntrada(dto);
             // 2. Crear y construir la entidad de dominio
@@ -49,6 +49,41 @@ import java.util.List;
             // Captura errores de la capa inferior y relanza una excepción de la capa de servicio
             throw new ProductoFinalException("No se pudo guardar el producto debido a un error de persistencia.", e);
         }
+    }
+
+    public void guardarNuevoProductoSinCostos(ProductoFinalCreacionDTO dto) throws ProductoFinalException
+    {
+        try
+        {
+            // 1. Validar la entrada de datos
+            validarDatosEntrada(dto);
+            // 2. Crear y construir la entidad de dominio
+            ProductoFinal productoFinal = construirProductoFinalSinCostos(dto);
+            // 3. Aplicar los cálculos de precio y ganancia
+            aplicarLogicaPrecioVenta(dto, productoFinal);
+            // 4. Persistir el agregado completo
+            repo.guardarProductoFinalSinCostos(productoFinal);
+            System.out.println("producto SIN costos guardado");
+            System.out.println(productoFinal.toString());
+        } catch (PersistenciaException e)
+        {
+            // Captura errores de la capa inferior y relanza una excepción de la capa de servicio
+            throw new ProductoFinalException("No se pudo guardar el producto debido a un error de persistencia.", e);
+        }
+    }
+
+    /**
+     * Crea la entidad ProductoFinal e inserta todos los módulos de costo.
+     */
+    private ProductoFinal construirProductoFinalSinCostos(ProductoFinalCreacionDTO dto) throws PersistenciaException
+    {
+        final double COSTO_INICIAL = 0;
+        
+        //Creación de la Entidad y adjunción de Costos
+        ProductoFinal productoFinal = new ProductoFinal(dto.nombre(), dto.cantidadVendida());
+        // Calcular y fijar el costo total (snapshot)
+        productoFinal.setCostoTotal(COSTO_INICIAL);
+        return productoFinal;
     }
 
     //--------------------------------------------------------------------------

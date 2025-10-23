@@ -4,7 +4,10 @@
  */
 package appCalculaCostos.costosMateriaPrima.modelo.daos;
 
+import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.UnidadMedida;
+import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.UnidadMedidaFactory;
 import appCalculaCostos.costosMateriaPrima.modelo.interfacesLogicas.IInsumoDAO;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DetalleReceta;
 import conexion.interfacesLogicas.IConexion;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +19,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Receta;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoInsumo;
-import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.UnidadDeMedida;
+import conexion.Exepciones.ConexionException;
+import java.sql.Statement;
 import conexion.Exepciones.PersistenciaException;
 
 /**
@@ -34,7 +38,7 @@ public class InsumoDaoImpl implements IInsumoDAO
     }
 
     @Override
-    public void guardarInsumo(Insumo insumo) throws PersistenciaException
+    public void guardarMateriaPrima(MateriaPrima materiaP) throws PersistenciaException
     {
         final String sql = """
             INSERT INTO insumos (nombre, tipo, unidad_medida, cantidad, costo)
@@ -43,17 +47,112 @@ public class InsumoDaoImpl implements IInsumoDAO
 
         try (Connection conn = conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(sql))
         {
-            ps.setString(1, insumo.getNombre());
-            ps.setString(2, TipoInsumo.MATERIA_PRIMA.name());
-            ps.setInt(3, insumo.getUnidadDeMedida().getId());
-            ps.setDouble(4, insumo.getCantidad());
-            ps.setDouble(5, insumo.calcularCostoTotal());
+            ps.setString(1, materiaP.getNombre());
+            ps.setString(2, materiaP.getTipoInsumo().name());
+            ps.setString(3, materiaP.getUnidadDeMedida().getNombre());
+            ps.setDouble(4, materiaP.getCantidad());
+            ps.setDouble(5, materiaP.calcularCostoTotal());
             ps.executeUpdate();
-
+            System.out.println("insumo guardado");
+            System.out.println(materiaP.toString());
         } catch (Exception e)
         {
             System.out.println(e);
             throw new PersistenciaException("Ocurrio un error al guardar la materia prima comuniquese con el tecnico", e);
+        }
+    }
+
+    @Override
+    public void guardarReceta(Receta receta) throws PersistenciaException
+    {
+        final String sqlReceta = """
+        INSERT INTO insumos (nombre, tipo, unidad_medida, cantidad, costo)
+        VALUES (?, ?, ?, ?, ?);
+        """;
+
+        Connection conn = null;
+
+        try
+        {
+            conn = conexion.getConnection();
+            conn.setAutoCommit(false); // Desactivamos autocommit para atomicidad
+
+            // Guardar receta
+            try (PreparedStatement psReceta = conn.prepareStatement(sqlReceta, Statement.RETURN_GENERATED_KEYS))
+            {
+                psReceta.setString(1, receta.getNombre());
+                psReceta.setString(2, receta.getTipoInsumo().name());
+                psReceta.setString(3, receta.getUnidadDeMedida().getNombre());
+                psReceta.setDouble(4, receta.getCantidad());
+                psReceta.setDouble(5, receta.calcularCostoTotal());
+                psReceta.executeUpdate();
+
+                // Obtener ID generado
+                int recetaId = 0;
+                try (ResultSet rs = psReceta.getGeneratedKeys())
+                {
+                    if (rs.next())
+                    {
+                        recetaId = rs.getInt(1);
+
+                    }
+                }
+
+                // Guardar detalles de la receta
+                guardarDetalles(recetaId, receta.getIngredientes(), conn);
+            }
+
+            conn.commit(); // Confirmamos toda la transacción
+            System.out.println("Receta y detalles guardados correctamente");
+            System.out.println(receta.toString());
+
+        } catch (SQLException | ConexionException e)
+        {
+            if (conn != null)
+            {
+                try
+                {
+                    conn.rollback(); // Revertimos todo si ocurre un error
+                } catch (SQLException ex)
+                {
+                    ex.printStackTrace();//TODO revisar si no se lanza la exepcion
+                }
+            }
+            e.printStackTrace();
+            throw new PersistenciaException("Ocurrió un error al guardar la receta, comuníquese con el técnico", e);
+        } finally
+        {
+            if (conn != null)
+            {
+                try
+                {
+                    conn.setAutoCommit(true); // Restauramos autocommit por si acaso
+                    conn.close();            // Cerramos la conexión
+                } catch (SQLException ignored) //TODO revisar si debe ser ignorada
+                {
+                }
+            }
+        }
+    }
+
+    private void guardarDetalles(int recetaId, List<DetalleReceta> ingredientes, Connection conn) throws SQLException
+    {
+        final String sql = """
+        INSERT INTO detalle_receta (id_receta, id_insumo, cantidad, unidad_medida)
+        VALUES (?, ?, ?, ?);
+        """;
+        System.out.println("recetaId: " + recetaId);
+        try (PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            for (DetalleReceta d : ingredientes)
+            {
+                ps.setInt(1, recetaId);
+                ps.setInt(2, d.getInsumo().getId());
+                ps.setDouble(3, d.getCantidad());
+                ps.setString(4, d.getUnidadMedida().getNombre());
+                ps.addBatch();
+            }
+            ps.executeBatch(); // ejecuta todos los inserts a la vez
         }
     }
 
@@ -70,9 +169,49 @@ public class InsumoDaoImpl implements IInsumoDAO
     }
 
     @Override
-    public Optional<Insumo> buscarInsumoPorID(int id)
+    public Optional<Insumo> buscarInsumoPorID(int id) throws PersistenciaException
     {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        final String sql = """
+            SELECT id_insumo, tipo, nombre, unidad_medida, cantidad, costo FROM insumos WHERE id_insumo=?;
+            """;
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(sql))
+        {
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            Insumo insumo = null;
+            if (rs.next())
+            {
+                var nombre = rs.getString("nombre");
+                var unidadMedida = UnidadMedidaFactory.obtenerUnidadDeMedidaPorNombre(rs.getString("unidad_medida"));
+                var cantidad = rs.getDouble("cantidad");
+                var costo = rs.getDouble("costo");
+
+                if (rs.getString("tipo").equals(TipoInsumo.MATERIA_PRIMA.name()))
+                {
+                    insumo = new MateriaPrima(nombre, cantidad, unidadMedida, costo);
+                    insumo.setId(id);
+                } else
+                {
+                    if (rs.getString("tipo").equals(TipoInsumo.RECETA.name()))
+                    {
+                        insumo = new Receta(nombre, cantidad, unidadMedida);
+                        insumo.setId(id);
+                    } else
+                    {
+                        throw new AssertionError("Tipo de insumo no conocido: " + rs.getString("tipo"));
+                    }
+                }
+
+            }
+            return Optional.ofNullable(insumo);
+        } catch (SQLException | ConexionException e)
+        {
+            e.printStackTrace();
+            throw new PersistenciaException("Ocurrio un error al buscar el insumo con id: " + id, e);
+        }
+
     }
 
 //    @Override
@@ -107,8 +246,7 @@ public class InsumoDaoImpl implements IInsumoDAO
     {
         String tipo = rs.getString("tipo");
 
-        UnidadDeMedida unidad = new UnidadDeMedida();
-        unidad.setId(rs.getInt("unidad_medida"));
+        UnidadMedida unidad = UnidadMedidaFactory.obtenerUnidadDeMedidaPorNombre(rs.getString("unidad_medida"));
 
         if (tipo.equals(TipoInsumo.MATERIA_PRIMA.name()))
         {
@@ -141,7 +279,5 @@ public class InsumoDaoImpl implements IInsumoDAO
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
 
 }

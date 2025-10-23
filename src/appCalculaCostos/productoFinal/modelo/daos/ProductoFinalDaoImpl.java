@@ -127,14 +127,14 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
     {
         List<ProductoFinal> productos = new ArrayList<>();
 
-        final String sql = "SELECT id_producto, nombre, porcentaje_ganancia, precio_venta, costo_total FROM productos_finales";
+        final String sql = "SELECT id_producto, nombre, porcentaje_ganancia, precio_venta, cantidad_vendida, costo_total FROM productos_finales";
 
         try (Connection conn = conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery())
         {
 
             while (rs.next())
             {
-                ProductoFinal producto = new ProductoFinal(rs.getInt("id_producto"),rs.getString("nombre"),rs.getDouble("cantidadVendida"),rs.getDouble("porcentaje_ganancia"),rs.getDouble("precio_venta"),rs.getDouble("costo_total"));
+                ProductoFinal producto = new ProductoFinal(rs.getInt("id_producto"),rs.getString("nombre"),rs.getDouble("cantidad_vendida"),rs.getDouble("porcentaje_ganancia"),rs.getDouble("precio_venta"),rs.getDouble("costo_total"));
          
                 // si quieres, aquí también podrías cargar los costos asociados
                // producto.setCostos(obtenerCostosDeProducto(conn, producto.getId()));
