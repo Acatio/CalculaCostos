@@ -1,4 +1,4 @@
-package appCalculaCostos.vista.interfaz1;
+package appCalculaCostos.vista.interfaz6;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +13,7 @@ public class Main extends Application
         try {
             // 1. Carga del FXML
             // Usamos la ruta absoluta: /view/opciones.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz1/vistaPF.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz6/vistaInsumos.fxml"));
             Scene scene = new Scene(loader.load());
 
             // 2. Carga del Estilo CSS

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appCalculaCostos.vista.interfaz2.InterfazProductoController">
+<BorderPane prefHeight="362.0" prefWidth="368.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appCalculaCostos.vista.interfaz2.InterfazProductoController">
    <center>
           <VBox alignment="TOP_CENTER" prefHeight="359.0" prefWidth="550.0" spacing="20" style="-fx-padding: 30;" BorderPane.alignment="CENTER">
               
@@ -21,14 +21,14 @@
                       <ColumnConstraints hgrow="ALWAYS" minWidth="200" />
                   </columnConstraints>
                   
-                              <Label style="-fx-font-weight: bold;" text="Nombre" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <Label style="-fx-font-weight: bold;" text="Nombre" textFill="#574747" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                   <TextField fx:id="txtNombre" prefHeight="25.0" prefWidth="89.0" style="-fx-background-radius: 4;" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                        <Label style="-fx-font-weight: bold;" text="Porcentaje de ganancia" GridPane.rowIndex="1" />
+                        <Label style="-fx-font-weight: bold;" text="Porcentaje de ganancia" textFill="#574747" GridPane.rowIndex="1" />
                   <TextField fx:id="txtPorcentajeGanancia" style="-fx-background-radius: 4;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label layoutX="10.0" layoutY="54.0" style="-fx-font-weight: bold;" text="Precio de Venta" GridPane.rowIndex="2" />
+            <Label layoutX="10.0" layoutY="54.0" style="-fx-font-weight: bold;" text="Precio de Venta" textFill="#574747" GridPane.rowIndex="2" />
             <TextField fx:id="txtPrecioVenta" layoutX="170.0" layoutY="50.0" prefHeight="25.0" prefWidth="148.0" style="-fx-background-radius: 4;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label layoutX="10.0" layoutY="97.0" style="-fx-font-weight: bold;" text="Ventas Semanales" GridPane.rowIndex="3" />
+            <Label layoutX="10.0" layoutY="97.0" style="-fx-font-weight: bold;" text="Ventas Semanales" textFill="#574747" GridPane.rowIndex="3" />
             <TextField fx:id="txtCantidadVendida" layoutX="170.0" layoutY="93.0" style="-fx-background-radius: 4;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <rowConstraints>
                <RowConstraints />

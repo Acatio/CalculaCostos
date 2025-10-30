@@ -42,7 +42,9 @@ public class DetalleReceta
     public double getMonto() throws NoPosibleConversion
     {
         var cantidadEnUnidadDeMedidaDelInsumo = unidadMedida.aOtraUnidad(insumo.getUnidadDeMedida(), cantidad);
-
+        System.out.println("cantidadEnUnidadDeMedidaDelInsumo = " + cantidadEnUnidadDeMedidaDelInsumo);
+        System.out.println("costo unitario = " + insumo.getCostoPorUnidad());
+        System.out.println("transformando de "+unidadMedida.getNombre()+" a "+insumo.getUnidadDeMedida().getNombre());
         return insumo.getCostoPorUnidad()*cantidadEnUnidadDeMedidaDelInsumo;
     }
 }

@@ -10,15 +10,13 @@ import appCalculaCostos.costosMateriaPrima.modelo.excepciones.InsumoException;
 import appCalculaCostos.costosMateriaPrima.modelo.interfacesLogicas.IInsumoDAO;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.DetalleRecetaDto;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.IDatosComunes;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.InsumoDto;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.MateriaPrimaDto;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.RecetaDto;
 import appCalculaCostos.productoFinal.modelo.exepciones.DatosNoValidosException;
 import conexion.Exepciones.PersistenciaException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author jose
@@ -66,7 +64,7 @@ public class MateriaPrimaService
         } catch (PersistenciaException ex)
         {
             ex.printStackTrace();
-            throw new InsumoException("Ocurrio un error al guardar el insumo");
+            throw new InsumoException("Ocurrio un error al guardar el insumo: "+ex.getMessage());
         }
 
     }
@@ -144,16 +142,27 @@ public class MateriaPrimaService
     private DetalleReceta crearDetalle(DetalleRecetaDto detalleDto) throws PersistenciaException, InsumoException
     {
 
-        var optionalInsumo = repoInsumos.buscarInsumoPorID(detalleDto.idInsumo());
+        var optionalInsumo = repoInsumos.buscarInsumoPorID(detalleDto.getIdInsumo());
         if (optionalInsumo.isEmpty())
         {
-            throw new InsumoException("No se encontró el insumo con ID " + detalleDto.idInsumo());
+            throw new InsumoException("No se encontró el insumo con ID " + detalleDto.getIdInsumo());
         }
         var insumo = optionalInsumo.get();
-        var unidadMedida = UnidadMedidaFactory.obtenerUnidadDeMedidaPorNombre(detalleDto.nombreUnidadMedida());
+        var unidadMedida = UnidadMedidaFactory.obtenerUnidadDeMedidaPorNombre(detalleDto.getNombreUnidadMedida());
 
-        return new DetalleReceta(insumo, detalleDto.cantidad(), unidadMedida);
+        return new DetalleReceta(insumo, detalleDto.getCantidad(), unidadMedida);
 
+    }
+
+    public List<InsumoDto> listarInsumos() throws InsumoException
+    {
+        try
+        {
+            return repoInsumos.listarDtoInsumos();
+        } catch (PersistenciaException ex)
+        {
+            throw new InsumoException("Error: No se pudieron cargar los insumos...");
+        }
     }
 
 }

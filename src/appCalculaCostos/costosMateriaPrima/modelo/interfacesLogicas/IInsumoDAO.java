@@ -4,6 +4,7 @@
  */
 package appCalculaCostos.costosMateriaPrima.modelo.interfacesLogicas;
 
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.InsumoDto;
 import java.util.List;
 import java.util.Optional;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
@@ -22,7 +23,7 @@ public interface IInsumoDAO
     public boolean modificarInsumo(Insumo materiaP) throws PersistenciaException;
     public void eliminarInsumo(int id)throws PersistenciaException;
     public Optional<Insumo> buscarInsumoPorID(int id)throws PersistenciaException;
-    public List<Insumo>ListarInsumos()throws PersistenciaException;
+    public List<InsumoDto>listarDtoInsumos()throws PersistenciaException;
     public List<Insumo>ListarInsumosDeProductoPorID(int id)throws PersistenciaException;
     
 }

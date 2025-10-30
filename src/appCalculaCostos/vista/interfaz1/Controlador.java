@@ -26,6 +26,7 @@ public class Controlador
 {
 
     private Stage ventanaNuevoProducto;
+    private Stage ventanaInsumos;
 
     private final ServicioProductoFinal productoService = new ServicioProductoFinal(new ProductoFinalDaoImpl(new ConexionSQL()));
 
@@ -90,7 +91,7 @@ public class Controlador
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz2/interfazProducto.fxml"));
                 Parent root = loader.load();
-                InterfazProductoController controllerPF=loader.getController();
+                InterfazProductoController controllerPF = loader.getController();
                 controllerPF.setPrincipalController(this);
                 controllerPF.setProductoService(productoService);
                 ventanaNuevoProducto = new Stage();
@@ -114,6 +115,34 @@ public class Controlador
     private void onActionEditar()
     {
         System.out.println("Editar");
+    }
+
+    @FXML
+    private void onActionInsumos()
+    {
+        try
+        {
+            if (ventanaInsumos == null)
+            {
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz6/vistaInsumos.fxml"));
+                Parent root = loader.load();
+                
+                ventanaInsumos = new Stage();
+                ventanaInsumos.setTitle("Nueva Ventana");
+                ventanaInsumos.setScene(new Scene(root));
+                
+
+                // Opcional: limpiar la referencia cuando se cierre
+                ventanaInsumos.setOnHidden(event -> ventanaNuevoProducto = null);
+            }
+
+            ventanaInsumos.show();
+            ventanaInsumos.toFront(); // Si ya estaba abierta, la trae al frente
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
 }

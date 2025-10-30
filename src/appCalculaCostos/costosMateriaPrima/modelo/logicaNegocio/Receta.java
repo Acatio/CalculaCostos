@@ -55,19 +55,12 @@ public class Receta extends Insumo
     }
 
     @Override
-    public double calcularCostoTotal()
+    public double calcularCostoTotal() throws NoPosibleConversion
     {
         double total = 0;
         for (DetalleReceta detalle : ingredientes)
         {
-
-            try
-            {
                 total += detalle.getMonto();
-            } catch (NoPosibleConversion ex)
-            {
-                System.out.println(ex.getMessage());
-            }
         }
         return total;
     }
@@ -91,8 +84,6 @@ public class Receta extends Insumo
                 System.out.println(ex.getMessage());
             }
         }
-        System.out.println("costo Total: " + this.calcularCostoTotal());
-        System.out.println("costo por " + super.getUnidadDeMedida().getNombre() + " " + super.getCostoPorUnidad());
     }
 
     public static void main(String[] args)
@@ -127,7 +118,7 @@ public class Receta extends Insumo
         MateriaPrimaDto mp1=new MateriaPrimaDto("Harina", 25, kilo.getNombre(), TipoInsumo.MATERIA_PRIMA, 800);
         ArrayList<DetalleRecetaDto> detalles=new ArrayList<>();
         
-        DetalleRecetaDto detalle=new DetalleRecetaDto(4, 4, kilo.getNombre());
+        DetalleRecetaDto detalle=new DetalleRecetaDto(4, "a",4, kilo.getNombre());
         detalles.add(detalle);
         
         RecetaDto dtoReceta=new RecetaDto( "masa", 4, kilo.getNombre(), TipoInsumo.RECETA, detalles);

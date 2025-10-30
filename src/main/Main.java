@@ -4,6 +4,10 @@
  */
 package main;
 
+import appCalculaCostos.costosMateriaPrima.modelo.daos.InsumoDaoImpl;
+import appCalculaCostos.costosMateriaPrima.modelo.excepciones.InsumoException;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.InsumoDto;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.MateriaPrimaService;
 import appCalculaCostos.productoFinal.modelo.daos.ProductoFinalDaoImpl;
 import appCalculaCostos.productoFinal.modelo.exepciones.ProductoFinalException;
 import appCalculaCostos.productoFinal.modelo.interfacesLogicas.CostoModuloDTO;
@@ -22,17 +26,14 @@ import java.util.logging.Logger;
 public class Main
 {
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws InsumoException
     {
-        ServicioProductoFinal spf= new ServicioProductoFinal(new ProductoFinalDaoImpl(new ConexionSQL()));
-        ProductoFinalCreacionDTO dto = new ProductoFinalCreacionDTO("pizza Rec", 200, null,450d,new ArrayList<>());
+        MateriaPrimaService mps =new MateriaPrimaService(new InsumoDaoImpl(new ConexionSQL()));
         
-        try
+        var insumos= mps.listarInsumos();
+        for (InsumoDto d:insumos)
         {
-            spf.guardarNuevoProducto(dto);
-        } catch (ProductoFinalException ex)
-        {
-            System.out.println(ex.getMessage());
+            System.out.println(d.toString());
         }
     }
 }

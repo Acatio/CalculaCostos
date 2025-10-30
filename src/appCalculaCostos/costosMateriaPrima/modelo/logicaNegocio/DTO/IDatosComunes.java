@@ -12,7 +12,6 @@ import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoInsumo;
  */
 public interface IDatosComunes
 {
-
     String nombre();
     double cantidad();
     String nombreUnidadDeMedida();

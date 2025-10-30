@@ -6,7 +6,9 @@ package appCalculaCostos.costosMateriaPrima.modelo.daos;
 
 import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.UnidadMedida;
 import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.UnidadMedidaFactory;
+import appCalculaCostos.costosMateriaPrima.modelo.excepciones.NoPosibleConversion;
 import appCalculaCostos.costosMateriaPrima.modelo.interfacesLogicas.IInsumoDAO;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.InsumoDto;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DetalleReceta;
 import conexion.interfacesLogicas.IConexion;
 import java.util.List;
@@ -22,6 +24,9 @@ import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoInsumo;
 import conexion.Exepciones.ConexionException;
 import java.sql.Statement;
 import conexion.Exepciones.PersistenciaException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -100,6 +105,9 @@ public class InsumoDaoImpl implements IInsumoDAO
 
                 // Guardar detalles de la receta
                 guardarDetalles(recetaId, receta.getIngredientes(), conn);
+            } catch (NoPosibleConversion ex)
+            {
+              throw  new PersistenciaException(ex.getMessage(), ex);
             }
 
             conn.commit(); // Confirmamos toda la transacción
@@ -269,15 +277,42 @@ public class InsumoDaoImpl implements IInsumoDAO
     }
 
     @Override
-    public List<Insumo> ListarInsumos() throws PersistenciaException
+    public List<Insumo> ListarInsumosDeProductoPorID(int id) throws PersistenciaException
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public List<Insumo> ListarInsumosDeProductoPorID(int id) throws PersistenciaException
+    public List<InsumoDto> listarDtoInsumos() throws PersistenciaException
     {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        final String sql = """
+        SELECT id_insumo, tipo, nombre, unidad_medida, cantidad, costo 
+        FROM insumos;
+        """;
+
+        List<InsumoDto> insumos = new ArrayList<>();
+
+        try (Connection conn = this.conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery())
+        {
+
+            while (rs.next())
+            {
+                InsumoDto dto = new InsumoDto(
+                        rs.getInt("id_insumo"),
+                        rs.getString("nombre"),
+                        rs.getDouble("cantidad"),
+                        rs.getString("unidad_medida"),
+                        rs.getString("tipo"),
+                        rs.getDouble("costo")
+                );
+                insumos.add(dto);
+            }
+
+        } catch (SQLException |ConexionException e)
+        {
+            throw new PersistenciaException("Error al listar los insumos", e);
+        } 
+        return insumos;
     }
 
 }

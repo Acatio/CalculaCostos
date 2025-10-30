@@ -60,9 +60,9 @@
                   <MenuItem mnemonicParsing="false" text="Fijos" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Almacen">
+          <Menu mnemonicParsing="false" text="Inventario">
             <items>
-              <MenuItem mnemonicParsing="false" text="Insumos" />
+              <MenuItem fx:id="itmInsumos" mnemonicParsing="false" onAction="#onActionInsumos" text="Insumos" />
                   <MenuItem mnemonicParsing="false" text="Costos indirectos" />
             </items>
           </Menu>
