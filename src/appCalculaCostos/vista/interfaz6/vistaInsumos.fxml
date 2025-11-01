@@ -49,11 +49,11 @@
                       </VBox.margin>
       
                       <columns>
-                          <TableColumn fx:id="colNombre" editable="false" minWidth="120" prefWidth="205.0" sortable="false" text="Nombre" />
                           <!-- Esta columna se le asignará el texto en el controlador -->
                           <TableColumn fx:id="colTipo" editable="false" minWidth="105.0" prefWidth="155.0" sortable="false" text="Tipo" />
-                          <TableColumn fx:id="colUnidadMedida" editable="false" minWidth="46.0" prefWidth="122.0" sortable="false" text="Unidad Medida" />
+                          <TableColumn fx:id="colNombre" editable="false" minWidth="120" prefWidth="205.0" sortable="false" text="Nombre" />
                           <TableColumn fx:id="colCantidad" editable="false" minWidth="72.0" prefWidth="72.0" sortable="false" text="Cantidad" />
+                          <TableColumn fx:id="colUnidadMedida" editable="false" minWidth="46.0" prefWidth="122.0" sortable="false" text="Unidad Medida" />
                      <TableColumn fx:id="colCostoTotal" editable="false" minWidth="72.0" prefWidth="72.0" sortable="false" text="Costo Total" />
                       </columns>
                   <columnResizePolicy>
