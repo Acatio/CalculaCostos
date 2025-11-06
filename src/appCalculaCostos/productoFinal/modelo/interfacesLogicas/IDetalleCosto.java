@@ -4,11 +4,13 @@
  */
 package appCalculaCostos.productoFinal.modelo.interfacesLogicas;
 
+import appCalculaCostos.productoFinal.modelo.exepciones.NoPosibleCalcularMonto;
+
 /**
  *
  * @author jose
  */
 public interface IDetalleCosto
 {
-    public double getMonto();
+    public double getMonto() throws NoPosibleCalcularMonto;
 }

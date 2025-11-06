@@ -6,12 +6,14 @@ package appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio;
 
 import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.UnidadMedida;
 import appCalculaCostos.costosMateriaPrima.modelo.excepciones.NoPosibleConversion;
+import appCalculaCostos.productoFinal.modelo.exepciones.NoPosibleCalcularMonto;
+import appCalculaCostos.productoFinal.modelo.interfacesLogicas.IDetalleCosto;
 
 /**
  *
  * @author jose
  */
-public class DetalleReceta
+public class DetalleReceta implements IDetalleCosto
 {
 
     private final Insumo insumo;
@@ -39,12 +41,22 @@ public class DetalleReceta
     {
         return unidadMedida;
     }
-    public double getMonto() throws NoPosibleConversion
+
+    /**
+     *
+     * @return  monto del detalle
+     * @throws appCalculaCostos.productoFinal.modelo.exepciones.NoPosibleCalcularMonto
+     */
+    @Override
+    public double getMonto() throws NoPosibleCalcularMonto
     {
-        var cantidadEnUnidadDeMedidaDelInsumo = unidadMedida.aOtraUnidad(insumo.getUnidadDeMedida(), cantidad);
-        System.out.println("cantidadEnUnidadDeMedidaDelInsumo = " + cantidadEnUnidadDeMedidaDelInsumo);
-        System.out.println("costo unitario = " + insumo.getCostoPorUnidad());
-        System.out.println("transformando de "+unidadMedida.getNombre()+" a "+insumo.getUnidadDeMedida().getNombre());
-        return insumo.getCostoPorUnidad()*cantidadEnUnidadDeMedidaDelInsumo;
+        try
+        {
+            var cantidadEnUnidadDeMedidaDelInsumo = unidadMedida.aOtraUnidad(insumo.getUnidadDeMedida(), cantidad);
+            return insumo.getCostoPorUnidad() * cantidadEnUnidadDeMedidaDelInsumo;
+        } catch (NoPosibleConversion ex)
+        {
+            throw new NoPosibleCalcularMonto("No se pudo calcular el monto por: " + ex.getMessage());
+        }
     }
 }

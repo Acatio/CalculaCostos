@@ -12,6 +12,7 @@ import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFin
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios.ServicioProductoFinal;
 import appCalculaCostos.vista.interfaz2.InterfazProductoController;
 import appCalculaCostos.vista.interfaz5.ControladorReceta;
+import appCalculaCostos.vista.interfaz7.ControladorCosto;
 import conexion.implementaciones.ConexionSQL;
 import interfaz4.ControladorAltaInsumo;
 import java.io.IOException;
@@ -34,7 +35,7 @@ import javafx.stage.Stage;
 public class ControladorVistaInsumos
 {
 
-    private ControladorReceta controladorInsumos;
+    private ControladorCosto controladorInsumos;
     private Stage ventanaInsumos;
     private Stage ventanaRecetas;
 
@@ -72,8 +73,7 @@ public class ControladorVistaInsumos
         colUnidadMedida.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().unidadMedida()));
         colCantidad.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().cantidad()).asObject());
         colCostoTotal.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().costo()).asObject());
-
-        mostrarInsumos();
+        actualizarVista();
 
     }
 
@@ -145,13 +145,14 @@ public class ControladorVistaInsumos
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz5/interfazReceta.fxml"));
                 Parent root = loader.load();
-                ControladorReceta controlador = loader.getController();
-                controlador.setControlador(this);
 //                controllerPF.setProductoService(productoService);
+                
+                ControladorReceta controladorRecetas = loader.getController();
+                controladorRecetas.listarInsumos();
+                controladorRecetas.setControlador(this);
                 ventanaRecetas = new Stage();
                 ventanaRecetas.setTitle("Nueva Ventana");
                 ventanaRecetas.setScene(new Scene(root));
-                actualizarVista();
                 // Opcional: limpiar la referencia cuando se cierre
                 ventanaRecetas.setOnHidden(event -> ventanaInsumos = null);
             }
@@ -174,12 +175,12 @@ public class ControladorVistaInsumos
     {
     }
 
-    public ControladorReceta getControladorInsumos()
+    public ControladorCosto getControladorInsumos()
     {
         return controladorInsumos;
     }
 
-    public void setControladorInsumos(ControladorReceta controladorInsumos)
+    public void setControladorInsumos(ControladorCosto controladorInsumos)
     {
         this.controladorInsumos = controladorInsumos;
     }

@@ -55,7 +55,7 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Agregar Costos">
             <items>
-              <MenuItem mnemonicParsing="false" text="Materia Prima" />
+              <MenuItem mnemonicParsing="false" onAction="#onAgregarCmp" text="Materia Prima" />
                   <MenuItem mnemonicParsing="false" text="Indirectos" />
                   <MenuItem mnemonicParsing="false" text="Fijos" />
             </items>
@@ -63,7 +63,7 @@
           <Menu mnemonicParsing="false" text="Inventario">
             <items>
               <MenuItem fx:id="itmInsumos" mnemonicParsing="false" onAction="#onActionInsumos" text="Insumos" />
-                  <MenuItem mnemonicParsing="false" text="Costos indirectos" />
+                  <MenuItem mnemonicParsing="false" text="Costos Fijos" />
             </items>
           </Menu>
         </menus>

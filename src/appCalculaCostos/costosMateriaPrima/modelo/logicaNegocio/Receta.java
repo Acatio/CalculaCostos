@@ -12,11 +12,10 @@ import appCalculaCostos.costosMateriaPrima.modelo.excepciones.NoPosibleConversio
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.DetalleRecetaDto;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.MateriaPrimaDto;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.RecetaDto;
+import appCalculaCostos.productoFinal.modelo.exepciones.NoPosibleCalcularMonto;
 import conexion.implementaciones.ConexionSQL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Receta extends Insumo
 {
@@ -55,7 +54,7 @@ public class Receta extends Insumo
     }
 
     @Override
-    public double calcularCostoTotal() throws NoPosibleConversion
+    public double calcularCostoTotal() throws NoPosibleCalcularMonto
     {
         double total = 0;
         for (DetalleReceta detalle : ingredientes)
@@ -79,7 +78,7 @@ public class Receta extends Insumo
             {
                 var insumo = detalle.getInsumo();
                 System.out.println("Ingrediente: " + insumo.getNombre() + " cantidad: " + detalle.getCantidad() + " " + detalle.getUnidadMedida().getSimbolo() + " costo: " + detalle.getMonto());
-            } catch (NoPosibleConversion ex)
+            } catch (NoPosibleCalcularMonto ex)
             {
                 System.out.println(ex.getMessage());
             }

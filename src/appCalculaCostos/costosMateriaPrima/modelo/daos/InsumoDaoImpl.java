@@ -21,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Receta;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoInsumo;
+import appCalculaCostos.productoFinal.modelo.exepciones.NoPosibleCalcularMonto;
 import conexion.Exepciones.ConexionException;
 import java.sql.Statement;
 import conexion.Exepciones.PersistenciaException;
@@ -105,7 +106,7 @@ public class InsumoDaoImpl implements IInsumoDAO
 
                 // Guardar detalles de la receta
                 guardarDetalles(recetaId, receta.getIngredientes(), conn);
-            } catch (NoPosibleConversion ex)
+            } catch (NoPosibleCalcularMonto ex)
             {
               throw  new PersistenciaException(ex.getMessage(), ex);
             }

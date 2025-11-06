@@ -4,16 +4,29 @@
  */
 package appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios;
 
+import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.UnidadMedida;
+import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.UnidadMedidaFactory;
+import appCalculaCostos.costosMateriaPrima.modelo.interfacesLogicas.IInsumoDAO;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.DetalleRecetaDto;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DetalleReceta;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.MateriaPrimaService;
 import appCalculaCostos.productoFinal.modelo.exepciones.DatosNoValidosException;
 import appCalculaCostos.productoFinal.modelo.exepciones.ProductoFinalException;
 import appCalculaCostos.productoFinal.modelo.interfacesLogicas.CostoModuloDTO;
+import appCalculaCostos.productoFinal.modelo.interfacesLogicas.ICostoMpRepo;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFinal;
 import appCalculaCostos.productoFinal.modelo.validaciones.ValidadorProductoFinal;
 import conexion.Exepciones.PersistenciaException;
 import appCalculaCostos.productoFinal.modelo.interfacesLogicas.IRepositorioProductoFinal;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.ModuloCostoMpDto;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoCosto;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalAsignarCostoDto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalCreacionDTO;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.CostoDeModulo;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -23,32 +36,14 @@ public class ServicioProductoFinal
 {
 
     private final IRepositorioProductoFinal repo;
+    private final ICostoMpRepo repoCostoMp;
+    private final IInsumoDAO insumoDao;
 
-    public ServicioProductoFinal(IRepositorioProductoFinal repo)
+    public ServicioProductoFinal(IRepositorioProductoFinal repo, ICostoMpRepo repoMp, IInsumoDAO insumoDao)
     {
         this.repo = repo;
-    }
-
-    public void guardarNuevoProducto(ProductoFinalCreacionDTO dto) throws ProductoFinalException
-    {
-        try
-        {
-
-            // 1. Validar la entrada de datos
-            validarDatosEntrada(dto);
-            // 2. Crear y construir la entidad de dominio
-            ProductoFinal productoFinal = construirProductoFinal(dto);
-            // 3. Aplicar los cálculos de precio y ganancia
-            aplicarLogicaPrecioVenta(dto, productoFinal);
-            // 4. Persistir el agregado completo
-            repo.guardarProductoFinalYsusCostos(productoFinal);
-            System.out.println("producto guardado");
-            System.out.println(productoFinal.toString());
-        } catch (PersistenciaException e)
-        {
-            // Captura errores de la capa inferior y relanza una excepción de la capa de servicio
-            throw new ProductoFinalException("No se pudo guardar el producto debido a un error de persistencia.", e);
-        }
+        this.repoCostoMp = repoMp;
+        this.insumoDao = insumoDao;
     }
 
     public void guardarNuevoProductoSinCostos(ProductoFinalCreacionDTO dto) throws ProductoFinalException
@@ -78,7 +73,7 @@ public class ServicioProductoFinal
     private ProductoFinal construirProductoFinalSinCostos(ProductoFinalCreacionDTO dto) throws PersistenciaException
     {
         final double COSTO_INICIAL = 0;
-        
+
         //Creación de la Entidad y adjunción de Costos
         ProductoFinal productoFinal = new ProductoFinal(dto.nombre(), dto.cantidadVendida());
         // Calcular y fijar el costo total (snapshot)
@@ -94,47 +89,6 @@ public class ServicioProductoFinal
     private void validarDatosEntrada(ProductoFinalCreacionDTO dto) throws DatosNoValidosException
     {
         ValidadorProductoFinal.validarDatos(dto);
-    }
-
-    /**
-     * Crea la entidad ProductoFinal e inserta todos los módulos de costo.
-     */
-    private ProductoFinal construirProductoFinal(ProductoFinalCreacionDTO dto) throws PersistenciaException
-    {
-
-        //Creación de la Entidad y adjunción de Costos
-        ProductoFinal productoFinal = new ProductoFinal(dto.nombre(), dto.cantidadVendida());
-        // Adjuntar todos los módulos de costo al producto
-        adjuntarModulosDeCosto(dto, productoFinal);
-        // Calcular y fijar el costo total (snapshot)
-        double costoTotal = productoFinal.calcularCostoTotal();
-        productoFinal.setCostoTotal(costoTotal);
-
-        return productoFinal;
-    }
-
-    // Nivel de Abstracción 3: Adjuntar Costos
-    /**
-     * Itera los DTOs de costo y los convierte en entidades de dominio.
-     */
-    private void adjuntarModulosDeCosto(ProductoFinalCreacionDTO dto, ProductoFinal productoFinal)
-    {
-        // La implementación real requiere la lógica de switch/if-else para llamar al ServicioCosto correcto
-        if (dto.costos() != null)
-        {
-            for (CostoModuloDTO costoDto : dto.costos())
-            {
-                // Implementación pendiente: Llamar al servicio y obtener el módulo
-                // CostoDeModulo moduloDeDominio = servicioCostoFactory.obtenerModulo(costoDto);
-
-                CostoDeModulo moduloDeDominio = null; // Línea temporal
-
-                if (moduloDeDominio != null)
-                {
-                    productoFinal.agregarCosto(moduloDeDominio);
-                }
-            }
-        }
     }
 
     //--------------------------------------------------------------------------
@@ -198,4 +152,119 @@ public class ServicioProductoFinal
             throw new ProductoFinalException("No se pudo obtener la lista de productos", e);
         }
     }
+
+    public void guardarCostosMp(int idProducto, List<DetalleRecetaDto> costosMp) throws ProductoFinalException
+    {
+        try
+        {
+
+            validarCostosMP(costosMp);
+            List<DetalleReceta> costos = construirDetalles(costosMp);
+            repoCostoMp.guardarCotosMP(idProducto, costos, repo);
+
+        } catch (PersistenciaException ex)
+        {
+            // Reempaqueta la excepción de persistencia como una excepción de negocio
+            throw new ProductoFinalException("Error al guardar los costos de materia prima: " + ex.getMessage(), ex);
+        }
+    }
+
+    public List<DetalleRecetaDto> listarCostosMp(int idProducto) throws ProductoFinalException
+    {
+        try
+        {
+            List<DetalleReceta> costosMp = repoCostoMp.listarCostosMp(idProducto, insumoDao);
+            List<DetalleRecetaDto> costosDto = new ArrayList<>();
+
+            for (DetalleReceta detalle : costosMp)
+            {
+                DetalleRecetaDto detalleDto = new DetalleRecetaDto(
+                        detalle.getInsumo().getId(),
+                        detalle.getInsumo().getNombre(),
+                        detalle.getCantidad(),
+                        detalle.getUnidadMedida().getNombre()
+                );
+                costosDto.add(detalleDto);
+            }
+
+            return costosDto;
+        } catch (PersistenciaException ex)
+        {
+            throw new ProductoFinalException("No se pudieron obtener los costos de materia prima", ex);
+        }
+    }
+
+    public void modificarCostosMp(int idProducto, List<DetalleRecetaDto> costosMp) throws ProductoFinalException
+    {
+        try
+        {
+            validarCostosMP(costosMp);
+            List<DetalleReceta> costos = construirDetalles(costosMp);
+            repoCostoMp.actualizarCostosMP(idProducto, costos, repo);
+
+        } catch (PersistenciaException ex)
+        {
+            // Reempaqueta la excepción de persistencia como una excepción de negocio
+            throw new ProductoFinalException("Error al guardar los costos de materia prima: " + ex.getMessage(), ex);
+        }
+    }
+
+    private void validarCostosMP(List<DetalleRecetaDto> costosMp) throws ProductoFinalException
+    {
+        if (costosMp == null)
+        {
+            throw new IllegalArgumentException("la lsita de detalles es invalida");
+        }
+        for (DetalleRecetaDto d : costosMp)
+        {
+            if (d.getCantidad() < 0)
+            {
+                throw new ProductoFinalException("la cantidad del detalle: " + d.getNombre() + " no es valida");
+            }
+        }
+    }
+
+    /**
+     * Convierte una lista de DetalleRecetaDto a una lista de DetalleReceta.
+     */
+    private List<DetalleReceta> construirDetalles(List<DetalleRecetaDto> detallesDto) throws PersistenciaException
+    {
+        List<DetalleReceta> detalles = new ArrayList<>();
+
+        for (DetalleRecetaDto dto : detallesDto)
+        {
+            // Buscar el insumo en la BD
+            Optional<Insumo> insumoOpt = insumoDao.buscarInsumoPorID(dto.getIdInsumo());
+
+            // Si no existe el insumo, lanzamos una excepción
+            Insumo insumo = insumoOpt.orElseThrow(()
+                    -> new PersistenciaException("No se encontró el insumo con ID: " + dto.getIdInsumo()));
+
+            // Obtener la unidad de medida correspondiente
+            UnidadMedida unidad = UnidadMedidaFactory.obtenerUnidadDeMedidaPorNombre(dto.getNombreUnidadMedida());
+
+            // Crear el DetalleReceta con el insumo, cantidad y unidad
+            DetalleReceta detalle = new DetalleReceta(insumo, dto.getCantidad(), unidad);
+
+            detalles.add(detalle);
+        }
+
+        return detalles;
+    }
+
+    public IRepositorioProductoFinal getRepo()
+    {
+        return repo;
+    }
+
+    public ICostoMpRepo getRepoCostoMp()
+    {
+        return repoCostoMp;
+    }
+
+    public IInsumoDAO getInsumoDao()
+    {
+        return insumoDao;
+    }
+
 }

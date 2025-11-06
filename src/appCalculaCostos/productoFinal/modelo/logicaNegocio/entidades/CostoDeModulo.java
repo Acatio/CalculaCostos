@@ -4,6 +4,7 @@
  */
 package appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades;
 
+import appCalculaCostos.productoFinal.modelo.exepciones.NoPosibleCalcularMonto;
 import appCalculaCostos.productoFinal.modelo.interfacesLogicas.IDetalleCosto;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,10 +42,15 @@ public abstract class CostoDeModulo
         return detalles;
     }
 
-    public final double calcularMontoBase()
+    public final double calcularMontoBase() throws NoPosibleCalcularMonto
     {
-        return this.detalles.stream().mapToDouble(IDetalleCosto::getMonto).sum();
+        double montoBase = 0d;
+        for (IDetalleCosto d : detalles)
+        {
+            montoBase += d.getMonto();
+        }
+        return montoBase;
     }
 
-    public abstract double calcularMontoTotal();
+    public abstract double calcularMontoTotal() throws NoPosibleCalcularMonto;
 }

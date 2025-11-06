@@ -5,9 +5,8 @@
 package appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio;
 
 import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.UnidadMedida;
-import appCalculaCostos.costosMateriaPrima.modelo.excepciones.NoPosibleConversion;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import appCalculaCostos.productoFinal.modelo.exepciones.NoPosibleCalcularMonto;
+
 
 public abstract class Insumo
 {
@@ -103,12 +102,18 @@ public abstract class Insumo
         this.unidadDeMedida = unidadDeMedida;
     }
 
-    public double getCostoPorUnidad() throws NoPosibleConversion
+    public double getCostoPorUnidad() throws NoPosibleCalcularMonto
     {
-        return calcularCostoTotal() / cantidad;
+        try
+        {
+            return calcularCostoTotal() / cantidad;
+        } catch (NoPosibleCalcularMonto ex)
+        {
+            throw new NoPosibleCalcularMonto(ex.getMessage());
+        }
     }
 
-    public abstract double calcularCostoTotal() throws NoPosibleConversion;
+    public abstract double calcularCostoTotal() throws NoPosibleCalcularMonto;
 
     @Override
     public String toString()
@@ -116,7 +121,7 @@ public abstract class Insumo
         try
         {
             return "Insumo{" + "id=" + id + ", nombre=" + nombre + ", cantidad=" + cantidad + ", unidadDeMedida=" + unidadDeMedida + ",costo " + calcularCostoTotal() + '}';
-        } catch (NoPosibleConversion ex)
+        } catch (NoPosibleCalcularMonto ex)
         {
             return ex.getMessage();
         }

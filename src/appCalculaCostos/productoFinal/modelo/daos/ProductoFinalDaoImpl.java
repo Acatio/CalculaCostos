@@ -4,6 +4,7 @@
  */
 package appCalculaCostos.productoFinal.modelo.daos;
 
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoCosto;
 import appCalculaCostos.productoFinal.modelo.exepciones.DatosNoValidosException;
 import conexion.Exepciones.PersistenciaException;
 import appCalculaCostos.productoFinal.modelo.interfacesLogicas.ServicioCosto;
@@ -38,45 +39,6 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
         this.conexion = conexion;
     }
 
-    @Override
-    public void guardarProductoFinalYsusCostos(ProductoFinal productoFinal) throws PersistenciaException
-    {
-        try (Connection conn = conexion.getConnection())
-        {
-            
-            conn.setAutoCommit(false);
-            // 1. Insertar producto y obtener ID usando método privado
-            int idProductoFinal = guardarProducto(conn, productoFinal);
-
-            // 2. Guardar costos asociados
-            productoFinal.setId(idProductoFinal);
-            guardarCostosDeProducto(productoFinal, conn);
-
-            // 3. Actualizar costo_total
-            actualizarCostoProductoFinalCalculado(conn, idProductoFinal);
-
-            // 4. Confirmar transacción
-            conn.commit();
-
-        } catch (SQLException | ConexionException e)
-        {
-            e.printStackTrace();
-            throw new PersistenciaException("Error al guardar el Producto. Contacte al tecnico.", e);
-        } 
-    }
-
-    private void guardarCostosDeProducto(ProductoFinal productoFinal, Connection conn) throws PersistenciaException
-    {
-        for (CostoDeModulo costo : productoFinal.getCostos())
-        {
-            
-            RepoDeDetallesFactory factory =new RepoDeDetallesFactory();
-            IRepositorioDetalles repoDetalles = factory.crearRepo(costo);//se crea un repositorio de acuerdo al tipo de costo
-            repoDetalles.eliminarDetallesPorProducto(productoFinal.getId(), conn);
-            repoDetalles.insertarDetalles(productoFinal.getId(), costo.getDetalles(), conn);
-        }
-    }
-
 // Método privado que solo inserta y devuelve el ID
     private int guardarProducto(Connection conn, ProductoFinal p) throws SQLException
     {
@@ -102,13 +64,14 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
         }
     }
 
-    private void actualizarCostoProductoFinalCalculado(Connection conn, int idProductoFinal) throws SQLException
+    @Override
+    public void actualizarCostoProductoFinalCalculado(Connection conn, int idProductoFinal) throws PersistenciaException
     {
         final String sqlUpdate = """
         UPDATE productos_finales
         SET costo_total = (
-            SELECT COALESCE(SUM(costo_total), 0)
-            FROM costos_de_producto
+            SELECT COALESCE(SUM(costo), 0)
+            FROM insumos_de_producto
             WHERE id_producto = ?
         )
         WHERE id_producto = ?;
@@ -119,7 +82,11 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
             psUpdate.setInt(1, idProductoFinal);
             psUpdate.setInt(2, idProductoFinal);
             psUpdate.executeUpdate();
+        } catch (SQLException ex)
+        {
+            throw new PersistenciaException("No se pudo actualizar el costo del producto con id: " + idProductoFinal, ex);
         }
+
     }
 
     @Override
@@ -134,10 +101,10 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
 
             while (rs.next())
             {
-                ProductoFinal producto = new ProductoFinal(rs.getInt("id_producto"),rs.getString("nombre"),rs.getDouble("cantidad_vendida"),rs.getDouble("porcentaje_ganancia"),rs.getDouble("precio_venta"),rs.getDouble("costo_total"));
-         
+                ProductoFinal producto = new ProductoFinal(rs.getInt("id_producto"), rs.getString("nombre"), rs.getDouble("cantidad_vendida"), rs.getDouble("porcentaje_ganancia"), rs.getDouble("precio_venta"), rs.getDouble("costo_total"));
+
                 // si quieres, aquí también podrías cargar los costos asociados
-               // producto.setCostos(obtenerCostosDeProducto(conn, producto.getId()));
+                // producto.setCostos(obtenerCostosDeProducto(conn, producto.getId()));
                 productos.add(producto);
             }
 
@@ -180,5 +147,23 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
             throw new PersistenciaException("Error al guardar el Producto. Contacte al tecnico.", e);
         }
     }
+  
+    @Override
+    public void borrarCostotosDeProductoPorTipo(int idProductoFinal, TipoCosto tipoCosto,Connection conn) throws PersistenciaException
+    {
+        String sql = "DELETE FROM insumos_de_producto WHERE id_producto=? AND tipo=?";
 
+        try (PreparedStatement ps = conn.prepareStatement(sql))
+        {
+
+            ps.setInt(1, idProductoFinal);
+            ps.setString(2, tipoCosto.name());
+            ps.executeUpdate();
+
+        } catch (SQLException ex)
+        {
+            throw new PersistenciaException("No se pudieron borrar los antiguos costos de: "
+                    + tipoCosto.name(), ex);
+        }
+    }
 }

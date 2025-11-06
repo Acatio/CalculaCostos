@@ -1,21 +1,24 @@
-package appCalculaCostos.vista.interfaz5;
+package appCalculaCostos.vista.interfaz7;
 
 import appCalculaCostos.costosMateriaPrima.modelo.daos.InsumoDaoImpl;
 import appCalculaCostos.costosMateriaPrima.modelo.excepciones.InsumoException;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.DetalleRecetaDto;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.InsumoDto;
-import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.RecetaDto;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.MateriaPrimaService;
-import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoInsumo;
-import appCalculaCostos.vista.interfaz6.ControladorVistaInsumos;
+import appCalculaCostos.costosMateriaPrima.modelo.daos.CostoMpRepoImpl;
+import appCalculaCostos.productoFinal.modelo.daos.ProductoFinalDaoImpl;
+import appCalculaCostos.productoFinal.modelo.exepciones.ProductoFinalException;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalAsignarCostoDto;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios.ServicioProductoFinal;
+import appCalculaCostos.vista.interfaz1.Controlador;
 import conexion.implementaciones.ConexionSQL;
-import interfaz4.ControladorAltaInsumo;
+import conexion.interfacesLogicas.IConexion;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,19 +27,14 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.DoubleStringConverter;
 
-public class ControladorReceta
+public class ControladorCosto
 {
 
-    private ControladorVistaInsumos controlador;
-    MateriaPrimaService mps = new MateriaPrimaService(new InsumoDaoImpl(new ConexionSQL()));
-
-    @FXML
-    private TextField txtNombre;
-    @FXML
-    private TextField txtCantidad;
-    @FXML
-    private ComboBox<String> cmbUnidad;
-
+    private MateriaPrimaService mps = new MateriaPrimaService(new InsumoDaoImpl(new ConexionSQL()));
+    private final IConexion conexion = new ConexionSQL();
+    private ServicioProductoFinal spf = new ServicioProductoFinal(new ProductoFinalDaoImpl(conexion), new CostoMpRepoImpl(conexion), new InsumoDaoImpl(conexion));
+    private ProductoFinalAsignarCostoDto productoDto;
+    Controlador controladorP;
     @FXML
     private TableView<InsumoDto> tbInsumos;
     @FXML
@@ -55,13 +53,15 @@ public class ControladorReceta
     private TableColumn<DetalleRecetaDto, String> colUnidadIngrediente;
 
     @FXML
+    private Label lblNombre;
+
+    @FXML
     public void initialize()
     {
-        cmbUnidad.getItems().addAll("Kilogramo", "Gramo", "Litro", "Mililitro", "Pieza");
         colInsumo.setCellValueFactory(c -> new ReadOnlyStringWrapper(c.getValue().nombre()));
         colUnidad.setCellValueFactory(c -> new ReadOnlyStringWrapper(c.getValue().unidadMedida()));
-        inicializarSeleccionInsumos();
         listarInsumos();
+        inicializarSeleccionInsumos();
 
     }
 
@@ -140,46 +140,32 @@ public class ControladorReceta
     @FXML
     private void onGuardar()
     {
-        var nombre = txtNombre.getText();
-        var cant = txtCantidad.getText();
-        var opc = cmbUnidad.getSelectionModel().getSelectedItem();
-        var error = validarCampos(nombre, cant, opc);
-        if (error != null)
-        {
-            mostrarMensajeError(error);
-            return;
-        }
 
-        ObservableList<DetalleRecetaDto> detalles = tbIngredientes.getItems();
-        // Si quieres trabajarla como una lista normal (por ejemplo, para enviarla a un DAO)
-        List<DetalleRecetaDto> listaDetalles = new ArrayList<>(detalles);
-
-        if (listaDetalles.isEmpty())
-        {
-            mostrarMensajeError("No hay ingredientes agregados a la receta");
-            return;
-        }
-        for (DetalleRecetaDto d : listaDetalles)
-        {
-            if (d.getNombreUnidadMedida().equals("Seleccione"))
-            {
-                mostrarMensajeError("Debe seleccinar una unidad de medida para cada ingrediente");
-                return;
-            }
-        }
         try
         {
-            double cantInt = Double.parseDouble(cant);
-            RecetaDto dto = new RecetaDto(nombre, cantInt, opc, TipoInsumo.RECETA, listaDetalles);
-            mps.guardarReceta(dto);
-            mostrarMensajeExito("Receta guardada");
-            controlador.actualizarVista();
-            limpiarCampos();
-        } catch (NumberFormatException ex)
-        {
-            ex.printStackTrace();
-            mostrarMensajeError("La cantidad debe ser un numero");
-        } catch (InsumoException ex)
+            ObservableList<DetalleRecetaDto> detalles = tbIngredientes.getItems();
+            // Si quieres trabajarla como una lista normal (por ejemplo, para enviarla a un DAO)
+            List<DetalleRecetaDto> listaDetalles = new ArrayList<>(detalles);
+
+            if (listaDetalles.isEmpty())
+            {
+                mostrarMensajeError("No hay ingredientes agregados a la receta");
+                return;
+            }
+
+            for (DetalleRecetaDto d : listaDetalles)
+            {
+                if (d.getNombreUnidadMedida().equals("Seleccione"))
+                {
+                    mostrarMensajeError("Debe seleccinar una unidad de medida para cada ingrediente");
+                    return;
+                }
+            }
+            spf.guardarCostosMp(productoDto.getId(), listaDetalles);
+            mostrarMensajeExito("Costos MP agregados");
+            controladorP.actualizarVista();
+            
+        } catch (ProductoFinalException ex)
         {
             mostrarMensajeError(ex.getMessage());
         }
@@ -263,17 +249,46 @@ public class ControladorReceta
 
     }
 
-    public void setControlador(ControladorVistaInsumos controlador)
+    public ProductoFinalAsignarCostoDto getProductoDto()
     {
-        this.controlador = controlador;
-
+        return productoDto;
     }
 
-    private void limpiarCampos()
+    public void setProductoDto(ProductoFinalAsignarCostoDto productoDto)
     {
-        txtNombre.clear();
-        txtCantidad.clear();
-        cmbUnidad.getSelectionModel().clearSelection();
-        tbIngredientes.getItems().clear();
+        this.productoDto = productoDto;
+        lblNombre.setText(productoDto.getNombre());
     }
+
+    public MateriaPrimaService getMps()
+    {
+        return mps;
+    }
+
+    public void setMps(MateriaPrimaService mps)
+    {
+        this.mps = mps;
+    }
+
+    public ServicioProductoFinal getSpf()
+    {
+        return spf;
+    }
+
+    public void setSpf(ServicioProductoFinal spf)
+    {
+        this.spf = spf;
+    }
+
+    public Controlador getControladorP()
+    {
+        return controladorP;
+    }
+
+    public void setControladorP(Controlador controladorP)
+    {
+        this.controladorP = controladorP;
+    }
+    
+
 }
