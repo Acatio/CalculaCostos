@@ -23,10 +23,13 @@ import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.ModuloCostoM
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoCosto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalAsignarCostoDto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalCreacionDTO;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalDatosDto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.CostoDeModulo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -142,11 +145,18 @@ public class ServicioProductoFinal
         productoFinal.setPrecioVenta(0.0);
     }
 
-    public List<ProductoFinal> listarProductosFinales() throws ProductoFinalException
+    public List<ProductoFinalDatosDto> listarProductosFinales() throws ProductoFinalException
     {
         try
         {
-            return repo.ListarProductosFinales();
+            List<ProductoFinal> productosF = repo.ListarProductosFinales();
+            List<ProductoFinalDatosDto> productosDto = new ArrayList<>();
+            for (ProductoFinal p : productosF)
+            {
+                productosDto.add(new ProductoFinalDatosDto(p.getId(), p.getNombre(), p.getPorcentajeGanancia(),
+                        p.getPrecioVenta(), p.getCostoTotal(), p.getCantidadVendida()));
+            }
+            return productosDto;
         } catch (PersistenciaException e)
         {
             throw new ProductoFinalException("No se pudo obtener la lista de productos", e);
@@ -265,6 +275,50 @@ public class ServicioProductoFinal
     public IInsumoDAO getInsumoDao()
     {
         return insumoDao;
+    }
+
+    public void actualizar(ProductoFinalDatosDto productoEditadoDto) throws ProductoFinalException
+    {
+        try
+        {
+            // Validar datos del DTO antes de convertir
+            ValidadorProductoFinal.validarDatosProductoEditado(productoEditadoDto);
+            // Convertir DTO → Entidad de dominio
+            ProductoFinal productoEditado = convertirADominio(productoEditadoDto);
+
+            // Enviar la entidad al repositorio
+            repo.actualizarDatosProductoFinal(productoEditado);
+
+        } catch (PersistenciaException ex)
+        {
+            ex.printStackTrace();
+            throw new ProductoFinalException(
+                    "No se pudieron actualizar los datos del producto: " + productoEditadoDto.getNombre()
+            );
+        }
+    }
+
+    private ProductoFinal convertirADominio(ProductoFinalDatosDto dto)
+    {
+        return new ProductoFinal(
+                dto.getId(),
+                dto.getNombre(),
+                dto.getCantidadVendida(),
+                dto.getPorcentajeGanancia(),
+                dto.getPrecioVenta(),
+                dto.getCostoTotal()
+        );
+    }
+
+    public void borrarProductoFinalPorId(int idProductoFinal)throws ProductoFinalException
+    {
+        try
+        {
+            repo.borrarProductoFinal(idProductoFinal);
+        } catch (PersistenciaException ex)
+        {
+            throw new ProductoFinalException("Ocurrio un error al intentar borrar el producto.");
+        }
     }
 
 }

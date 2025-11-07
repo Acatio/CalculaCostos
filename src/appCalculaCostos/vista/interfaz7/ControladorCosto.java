@@ -24,6 +24,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.DoubleStringConverter;
 
@@ -147,11 +148,11 @@ public class ControladorCosto
             // Si quieres trabajarla como una lista normal (por ejemplo, para enviarla a un DAO)
             List<DetalleRecetaDto> listaDetalles = new ArrayList<>(detalles);
 
-            if (listaDetalles.isEmpty())
-            {
-                mostrarMensajeError("No hay ingredientes agregados a la receta");
-                return;
-            }
+//            if (listaDetalles.isEmpty())
+//            {
+//                mostrarMensajeError("No hay ingredientes agregados a la receta");
+//                return;
+//            }
 
             for (DetalleRecetaDto d : listaDetalles)
             {
@@ -161,10 +162,10 @@ public class ControladorCosto
                     return;
                 }
             }
-            spf.guardarCostosMp(productoDto.getId(), listaDetalles);
+            spf.modificarCostosMp(productoDto.getId(), listaDetalles);
             mostrarMensajeExito("Costos MP agregados");
             controladorP.actualizarVista();
-            
+
         } catch (ProductoFinalException ex)
         {
             mostrarMensajeError(ex.getMessage());
@@ -208,6 +209,7 @@ public class ControladorCosto
     {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Exito");
+        alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
 
@@ -217,6 +219,7 @@ public class ControladorCosto
     {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
+        alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
 
@@ -258,6 +261,9 @@ public class ControladorCosto
     {
         this.productoDto = productoDto;
         lblNombre.setText(productoDto.getNombre());
+        System.out.println("Nombre "+productoDto.getNombre());
+        System.out.println("Nombre atributo "+this.productoDto.getNombre());
+        cargarIngredientes();
     }
 
     public MateriaPrimaService getMps()
@@ -289,6 +295,28 @@ public class ControladorCosto
     {
         this.controladorP = controladorP;
     }
-    
 
+    private void cargarIngredientes()
+    {
+        try
+        {
+            // 1. Obtener la lista de ingredientes (DTOs)
+            List<DetalleRecetaDto> ingredientes = spf.listarCostosMp(productoDto.getId());
+
+            // 2. Configurar las columnas para que muestren los datos del DTO
+            colIngrediente.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+            colCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+            colUnidadIngrediente.setCellValueFactory(new PropertyValueFactory<>("NombreUnidadMedida"));
+
+            // 3. Convertir la lista a un ObservableList (JavaFX necesita esto)
+            ObservableList<DetalleRecetaDto> listaObservable = FXCollections.observableArrayList(ingredientes);
+
+            // 4. Asignar la lista a la tabla
+            tbIngredientes.setItems(listaObservable);
+
+        } catch (ProductoFinalException ex)
+        {
+            mostrarMensajeError("No se pudieron cargar los ingredientes del producto: " + productoDto.getNombre());
+        }
+    }
 }

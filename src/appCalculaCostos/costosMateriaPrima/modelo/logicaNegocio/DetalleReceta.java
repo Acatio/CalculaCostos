@@ -53,6 +53,10 @@ public class DetalleReceta implements IDetalleCosto
         try
         {
             var cantidadEnUnidadDeMedidaDelInsumo = unidadMedida.aOtraUnidad(insumo.getUnidadDeMedida(), cantidad);
+            if (insumo instanceof Receta r)
+            {
+                return (r.getCosto()/r.getCantidad())*cantidadEnUnidadDeMedidaDelInsumo;
+            }
             return insumo.getCostoPorUnidad() * cantidadEnUnidadDeMedidaDelInsumo;
         } catch (NoPosibleConversion ex)
         {

@@ -50,10 +50,10 @@
             <items>
               <MenuItem fx:id="itmNuevo" mnemonicParsing="false" onAction="#onActionNuevo" text="Nuevo " />
                   <MenuItem fx:id="itmEditar" mnemonicParsing="false" onAction="#onActionEditar" text="Editar" />
-                  <MenuItem mnemonicParsing="false" text="Eliminar" />
+                  <MenuItem mnemonicParsing="false" onAction="#onActionEliminar" text="Eliminar" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Agregar Costos">
+          <Menu mnemonicParsing="false" text="Costos">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#onAgregarCmp" text="Materia Prima" />
                   <MenuItem mnemonicParsing="false" text="Indirectos" />

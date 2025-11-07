@@ -5,6 +5,7 @@
 package appCalculaCostos.productoFinal.modelo.interfacesLogicas;
 
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoCosto;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalDatosDto;
 import conexion.Exepciones.PersistenciaException;
 import java.util.List;
 import java.util.Optional;
@@ -24,5 +25,7 @@ public interface IRepositorioProductoFinal
     public List<ProductoFinal>ListarProductosFinales()throws PersistenciaException;
     public  void actualizarCostoProductoFinalCalculado(Connection conn, int idProductoFinal) throws PersistenciaException;    
     public void borrarCostotosDeProductoPorTipo(int idProductoFinal,TipoCosto tipoCosto, Connection conn) throws PersistenciaException;
+    public void actualizarDatosProductoFinal(ProductoFinal productoActualizado) throws PersistenciaException;
+    public void borrarProductoFinal(int idProducto) throws PersistenciaException;
  
 }

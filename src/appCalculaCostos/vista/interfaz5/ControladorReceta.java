@@ -222,6 +222,7 @@ public class ControladorReceta
     {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Exito");
+        alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
 
@@ -231,6 +232,7 @@ public class ControladorReceta
     {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
+        alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
 

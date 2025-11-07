@@ -4,6 +4,7 @@
  */
 package appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades;
 
+import appCalculaCostos.productoFinal.modelo.exepciones.NoPosibleCalcularMonto;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class ProductoFinal
         this.nombre = nombre;
     }
 
-    /** 
+    /**
      * @return the costos
      */
     public List<CostoDeModulo> getCostos()
@@ -165,24 +166,47 @@ public class ProductoFinal
     @Override
     public String toString()
     {
-        var s = "Id: " + getId() + " \nNombre: " + getNombre() + " \nPorcentaje de Ganancia: " + porcentajeGanancia + "\nPrecio Venta: " + precioVenta + "\nMonto ganancia: " + calcularMontoGanancia() + "\n";
-        s += "----COSTOS---\n";
-        for (CostoDeModulo c : costos)
+        try
         {
-            s += c.getClass().getName() + " " + c.calcularMontoTotal() + "\n";
+            var s = "Id: " + getId() + " \nNombre: " + getNombre() + " \nPorcentaje de Ganancia: " + porcentajeGanancia + "\nPrecio Venta: " + precioVenta + "\nMonto ganancia: " + calcularMontoGanancia() + "\n";
+            s += "----COSTOS---\n";
+            for (CostoDeModulo c : costos)
+            {
+                try
+                {
+                    s += c.getClass().getName() + " " + c.calcularMontoTotal() + "\n";
+                } catch (NoPosibleCalcularMonto ex)
+                {
+                    return ex.getMessage();
+                }
+            }
+            s += "Costo total: " + costoTotal;
+            return s;
+        } catch (NoPosibleCalcularMonto ex)
+        {
+            return ex.getMessage();
         }
-        s += "Costo total: " + costoTotal;
-        return s;
     }
 
-    public double calcularCostoTotal()
+    public double calcularCostoTotal() throws NoPosibleCalcularMonto
     {
-        return getCostos().stream()
-                .mapToDouble(CostoDeModulo::calcularMontoTotal)
-                .sum();
+        double total = 0.0;
+
+        for (CostoDeModulo costo : getCostos())
+        {
+            try
+            {
+                total += costo.calcularMontoTotal();
+            } catch (NoPosibleCalcularMonto ex)
+            {
+                throw new NoPosibleCalcularMonto("No se pudo calcular el costoTotal", ex);
+            }
+        }
+
+        return total;
     }
 
-    public double calcularMontoGanancia()
+    public double calcularMontoGanancia() throws NoPosibleCalcularMonto
     {
 
         return precioVenta - calcularCostoTotal();
@@ -198,7 +222,7 @@ public class ProductoFinal
         return (ganancia / precioVenta);
     }
 
-    public double getGanancia()
+    public double getGanancia() throws NoPosibleCalcularMonto
     {
         if (calcularPrecioVenta() == 0)
         {
@@ -241,7 +265,8 @@ public class ProductoFinal
     }
 
     public void setCantidadVendida(double cantidadVendida)
-    {     if (cantidadVendida < 0)
+    {
+        if (cantidadVendida < 0)
         {
             throw new IllegalArgumentException("La cantidad vendida no puede ser menor a cero!!");
         }

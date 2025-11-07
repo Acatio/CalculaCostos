@@ -7,6 +7,7 @@ package appCalculaCostos.productoFinal.modelo.validaciones;
 import appCalculaCostos.productoFinal.modelo.exepciones.DatosNoValidosException;
 import appCalculaCostos.productoFinal.modelo.interfacesLogicas.CostoModuloDTO;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalCreacionDTO;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalDatosDto;
 
 /**
  *
@@ -47,28 +48,36 @@ public class ValidadorProductoFinal
             {
                 throw new DatosNoValidosException("Costo de producto invalido.");
             }
-            validarCostoEspecifico(costoDto);
+
         }
     }
 
-    // Método que delega la validación según el tipo
-    private static void validarCostoEspecifico(CostoModuloDTO costoDto) throws DatosNoValidosException
+    public static void validarDatosProductoEditado(ProductoFinalDatosDto dto) throws DatosNoValidosException
     {
+        if (dto == null)
+        {
+            throw new DatosNoValidosException("El producto no puede ser nulo.");
+        }
 
-//        // Usa instanceof para determinar el tipo de DTO
-//        if (costoDto instanceof MateriaPrimaInputDTO mpDto)
-//        {
-//            validarMateriaPrima(mpDto);
-//
-//        } else if (costoDto instanceof ManoObraInputDTO moDto)
-//        {
-//            validarManoObra(moDto);
-//
-//        } else
-//        {
-//            // Manejar un caso donde un DTO no reconocido llegue al sistema
-//            throw new DatosNoValidosException("Tipo de módulo de costo no reconocido o no soportado para la validación.");
-//        }
+        if (dto.getNombre() == null || dto.getNombre().isBlank())
+        {
+            throw new DatosNoValidosException("El nombre del producto no puede estar vacío.");
+        }
+
+        if (dto.getPorcentajeGanancia() < 0)
+        {
+            throw new DatosNoValidosException("El porcentaje de ganancia no puede ser negativo.");
+        }
+
+        if (dto.getPrecioVenta() < 0)
+        {
+            throw new DatosNoValidosException("El precio de venta no puede ser negativo.");
+        }
+
+        if (dto.getCantidadVendida() < 0)
+        {
+            throw new DatosNoValidosException("La cantidad vendida no puede ser negativa.");
+        }
     }
 
 }

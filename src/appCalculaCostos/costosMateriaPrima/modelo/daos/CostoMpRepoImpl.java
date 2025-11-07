@@ -103,6 +103,7 @@ public class CostoMpRepoImpl implements ICostoMpRepo
                 ps.setInt(2, detalle.getInsumo().getId());
                 ps.setDouble(3, detalle.getCantidad());
                 ps.setDouble(4, detalle.getMonto());
+                System.out.println("monto guardado: "+detalle.getMonto());
                 ps.setString(5, TipoCosto.MATERIA_PRIMA.name());
                 ps.setString(6, detalle.getUnidadMedida().getNombre());
                 ps.addBatch();

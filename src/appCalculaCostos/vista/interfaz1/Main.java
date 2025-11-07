@@ -1,11 +1,5 @@
 package appCalculaCostos.vista.interfaz1;
 
-import appCalculaCostos.costosMateriaPrima.modelo.daos.InsumoDaoImpl;
-import appCalculaCostos.costosMateriaPrima.modelo.daos.CostoMpRepoImpl;
-import appCalculaCostos.productoFinal.modelo.daos.ProductoFinalDaoImpl;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios.ServicioProductoFinal;
-import conexion.implementaciones.ConexionSQL;
-import conexion.interfacesLogicas.IConexion;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

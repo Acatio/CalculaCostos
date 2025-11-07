@@ -4,24 +4,16 @@
  */
 package appCalculaCostos.vista.interfaz2;
 
-import appCalculaCostos.productoFinal.modelo.daos.ProductoFinalDaoImpl;
 import appCalculaCostos.productoFinal.modelo.exepciones.ProductoFinalException;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalCreacionDTO;
+import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalDatosDto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios.ServicioProductoFinal;
 import appCalculaCostos.vista.interfaz1.Controlador;
-import conexion.implementaciones.ConexionSQL;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -31,8 +23,10 @@ import javafx.stage.Stage;
 public class InterfazProductoController
 {
 
+    private boolean modoEdicion = false;
     Controlador controladorPrincipal;
     private ServicioProductoFinal productoService;
+    ProductoFinalDatosDto productoEditable;
 
     @FXML
     private TextField txtNombre;
@@ -50,29 +44,66 @@ public class InterfazProductoController
     {
         try
         {
-            var nuevo = crearPfDto();
-            productoService.guardarNuevoProductoSinCostos(nuevo);
+            if (modoEdicion)
+            {
+                var nombre = txtNombre.getText();
+                var porcentajeTxt = txtPorcentajeGanancia.getText();
+                var cantVendidaTxt = txtCantidadVendida.getText();
+                var precioVentaTxt = txtPrecioVenta.getText();
+
+                // Convertir textos a double de forma segura
+                double ganancia = porcentajeTxt.isEmpty() ? 0.0 : Double.parseDouble(porcentajeTxt);
+                double cantidadVendida = cantVendidaTxt.isEmpty() ? 0.0 : Double.parseDouble(cantVendidaTxt);
+                double precioV = precioVentaTxt.isEmpty() ? 0.0 : Double.parseDouble(precioVentaTxt);
+
+                // Crear DTO con los valores convertidos
+                ProductoFinalDatosDto productoEditado = new ProductoFinalDatosDto(
+                        productoEditable.getId(),
+                        nombre,
+                        ganancia,
+                        precioV,
+                        -1,
+                        cantidadVendida
+                );
+
+                // Aquí podrías llamar al servicio para actualizar
+                productoService.actualizar(productoEditado);
+                mostrarMensajeExito("Producto actualizado");
+            } else
+            {
+                var nuevo = crearPfDto();
+                productoService.guardarNuevoProductoSinCostos(nuevo);
+                mostrarMensajeExito("Producto guardado");
+            }
             controladorPrincipal.actualizarVista();
-            mostrarMensajeExito("Producto guardado");
-//            Stage stage = (Stage) btnSiguiente.getScene().getWindow();
-//            stage.close();
         } catch (ProductoFinalException ex)
         {
-            System.out.println("Error: No se pudo guardar el producto");
+            mostrarMensajeError(ex.getMessage());
         } catch (NumberFormatException ex)
         {
-            System.out.println("Error: ingrese campos validos");
+            mostrarMensajeError("la ganancia, precio de venta, y cantidad vendida deben ser numeros");
         }
 
     }
 
     public void mostrarMensajeExito(String mensaje)
     {
-        Alert alert =new Alert(Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Exito");
+        alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
-        
+
+    }
+
+    public void mostrarMensajeError(String mensaje)
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+
     }
 
     public ProductoFinalCreacionDTO crearPfDto()
@@ -101,6 +132,52 @@ public class InterfazProductoController
     public void setProductoService(ServicioProductoFinal service)
     {
         this.productoService = service;
+    }
+
+    public boolean isModoEdicion()
+    {
+        return modoEdicion;
+    }
+
+    public void setModoEdicion(boolean modoEdicion)
+    {
+        this.modoEdicion = modoEdicion;
+    }
+
+    public ProductoFinalDatosDto getProducto()
+    {
+        return productoEditable;
+    }
+
+    public void setProducto(ProductoFinalDatosDto ProductoEditable)
+    {
+        this.productoEditable = ProductoEditable;
+        if (ProductoEditable != null)
+        {
+            modoEdicion = true;
+            cargarDatosProducto();
+        } else
+        {
+            modoEdicion = false;
+            limpiarCampos();
+        }
+    }
+
+    private void cargarDatosProducto()
+    {
+        txtNombre.setText(productoEditable.getNombre());
+        txtPorcentajeGanancia.setText(String.valueOf(productoEditable.getPorcentajeGanancia()));
+        txtCantidadVendida.setText(String.valueOf(productoEditable.getCantidadVendida()));
+        txtPrecioVenta.setText(String.valueOf(productoEditable.getPrecioVenta()));
+
+    }
+
+    private void limpiarCampos()
+    {
+        txtNombre.clear();
+        txtPorcentajeGanancia.clear();
+        txtCantidadVendida.clear();
+        txtPrecioVenta.clear();
     }
 
 }

@@ -5,11 +5,8 @@
 package appCalculaCostos.productoFinal.modelo.daos;
 
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoCosto;
-import appCalculaCostos.productoFinal.modelo.exepciones.DatosNoValidosException;
 import conexion.Exepciones.PersistenciaException;
-import appCalculaCostos.productoFinal.modelo.interfacesLogicas.ServicioCosto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFinal;
-import appCalculaCostos.productoFinal.modelo.validaciones.ValidadorProductoFinal;
 import conexion.Exepciones.ConexionException;
 import conexion.interfacesLogicas.IConexion;
 import java.sql.Connection;
@@ -21,9 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import appCalculaCostos.productoFinal.modelo.interfacesLogicas.IRepositorioProductoFinal;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.CostoDeModulo;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.RepoDeDetallesFactory;
-import appCalculaCostos.productoFinal.modelo.interfacesLogicas.IRepositorioDetalles;
 
 /**
  *
@@ -147,23 +141,78 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
             throw new PersistenciaException("Error al guardar el Producto. Contacte al tecnico.", e);
         }
     }
-  
+
     @Override
-    public void borrarCostotosDeProductoPorTipo(int idProductoFinal, TipoCosto tipoCosto,Connection conn) throws PersistenciaException
+    public void borrarCostotosDeProductoPorTipo(int idProductoFinal, TipoCosto tipoCosto, Connection conn) throws PersistenciaException
     {
         String sql = "DELETE FROM insumos_de_producto WHERE id_producto=? AND tipo=?";
-
         try (PreparedStatement ps = conn.prepareStatement(sql))
         {
-
             ps.setInt(1, idProductoFinal);
             ps.setString(2, tipoCosto.name());
+            System.out.println("borrando del id " + idProductoFinal);
+            System.out.println("tipo " + tipoCosto.name());
             ps.executeUpdate();
-
         } catch (SQLException ex)
         {
-            throw new PersistenciaException("No se pudieron borrar los antiguos costos de: "
-                    + tipoCosto.name(), ex);
+            throw new PersistenciaException("Error al borrar costos de tipo " + tipoCosto.name(), ex);
         }
     }
+
+    @Override
+    public void actualizarDatosProductoFinal(ProductoFinal productoActualizado) throws PersistenciaException
+    {
+        String sql = """
+        UPDATE productos_finales
+        SET nombre = ?, 
+            porcentaje_ganancia = ?, 
+            precio_venta = ?, 
+            cantidad_vendida = ?
+        WHERE id_producto = ?
+    """;
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+
+            stmt.setString(1, productoActualizado.getNombre());
+            stmt.setDouble(2, productoActualizado.getPorcentajeGanancia());
+            stmt.setDouble(3, productoActualizado.getPrecioVenta());
+            stmt.setDouble(4, productoActualizado.getCantidadVendida());
+            stmt.setInt(5, productoActualizado.getId());
+
+            int filasAfectadas = stmt.executeUpdate();
+
+            if (filasAfectadas == 0)
+            {
+                throw new PersistenciaException("No se encontró un producto con el ID especificado: " + productoActualizado.getId());
+            }
+
+        } catch (SQLException | ConexionException ex)
+        {
+            throw new PersistenciaException("Error al actualizar los datos del producto: " + ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    public void borrarProductoFinal(int idProducto) throws PersistenciaException
+    {
+        String sql = "DELETE FROM productos_finales WHERE id_producto = ?";
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+
+            stmt.setInt(1, idProducto);
+            int filasAfectadas = stmt.executeUpdate();
+
+            if (filasAfectadas == 0)
+            {
+                throw new PersistenciaException("No se encontró un producto con el ID especificado: " + idProducto);
+            }
+
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error al eliminar el producto con ID " + idProducto + ": " + e.getMessage(), e);
+        }
+    }
+
 }

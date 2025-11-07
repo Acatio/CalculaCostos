@@ -207,6 +207,7 @@ public class InsumoDaoImpl implements IInsumoDAO
                     {
                         insumo = new Receta(nombre, cantidad, unidadMedida);
                         insumo.setId(id);
+                        insumo.setCosto(costo);
                     } else
                     {
                         throw new AssertionError("Tipo de insumo no conocido: " + rs.getString("tipo"));
@@ -223,31 +224,6 @@ public class InsumoDaoImpl implements IInsumoDAO
 
     }
 
-//    @Override
-//    public List<Insumo> ListarInsumos() throws Exception
-//    {
-//        List<Insumo> lista = new ArrayList<>();
-//
-//        final String SQL = """
-//        SELECT id, nombre, tipo, unidad_medida, cantidad, costo
-//        FROM insumos;
-//        """;
-//
-//        try (Connection conn = conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(SQL); ResultSet rs = ps.executeQuery())
-//        {
-//
-//            while (rs.next())
-//            {
-//                lista.add(mapearInsumo(rs));
-//            }
-//
-//        } catch (Exception e)
-//        {
-//            throw new Exception("Ocurrió un error al listar los insumos. Comuníquese con el técnico.", e);
-//        }
-//
-//        return lista;
-//    }
     /**
      * Mapea un ResultSet a un objeto Insumo (MateriaPrima o Receta)
      */

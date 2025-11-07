@@ -16,6 +16,7 @@ public abstract class Insumo
     private double cantidad;
     private UnidadMedida unidadDeMedida;
     private TipoInsumo tipoInsumo;
+    private double costo;
 
     public Insumo()
     {
@@ -135,6 +136,16 @@ public abstract class Insumo
     public void setTipoInsumo(TipoInsumo tipoInsumo)
     {
         this.tipoInsumo = tipoInsumo;
+    }
+
+    public double getCosto()
+    {
+        return costo;
+    }
+
+    public void setCosto(double costo)
+    {
+        this.costo = costo;
     }
 
 }
