@@ -20,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Receta;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Redondeo;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoInsumo;
 import appCalculaCostos.productoFinal.modelo.exepciones.NoPosibleCalcularMonto;
 import conexion.Exepciones.ConexionException;
@@ -280,7 +281,7 @@ public class InsumoDaoImpl implements IInsumoDAO
                         rs.getDouble("cantidad"),
                         rs.getString("unidad_medida"),
                         rs.getString("tipo"),
-                        rs.getDouble("costo")
+                        Redondeo.redondear(rs.getDouble("costo"),1)
                 );
                 insumos.add(dto);
             }

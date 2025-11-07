@@ -20,6 +20,7 @@ import appCalculaCostos.productoFinal.modelo.validaciones.ValidadorProductoFinal
 import conexion.Exepciones.PersistenciaException;
 import appCalculaCostos.productoFinal.modelo.interfacesLogicas.IRepositorioProductoFinal;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.ModuloCostoMpDto;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Redondeo;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoCosto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalAsignarCostoDto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalCreacionDTO;
@@ -154,7 +155,8 @@ public class ServicioProductoFinal
             for (ProductoFinal p : productosF)
             {
                 productosDto.add(new ProductoFinalDatosDto(p.getId(), p.getNombre(), p.getPorcentajeGanancia(),
-                        p.getPrecioVenta(), p.getCostoTotal(), p.getCantidadVendida()));
+                        p.getPrecioVenta(), Redondeo.redondear(p.getCostoTotal(), 1), p.getCantidadVendida()));
+
             }
             return productosDto;
         } catch (PersistenciaException e)
@@ -310,7 +312,7 @@ public class ServicioProductoFinal
         );
     }
 
-    public void borrarProductoFinalPorId(int idProductoFinal)throws ProductoFinalException
+    public void borrarProductoFinalPorId(int idProductoFinal) throws ProductoFinalException
     {
         try
         {
