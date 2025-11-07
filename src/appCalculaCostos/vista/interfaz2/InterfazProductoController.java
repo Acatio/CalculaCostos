@@ -74,6 +74,7 @@ public class InterfazProductoController
                 var nuevo = crearPfDto();
                 productoService.guardarNuevoProductoSinCostos(nuevo);
                 mostrarMensajeExito("Producto guardado");
+                limpiarCampos();
             }
             controladorPrincipal.actualizarVista();
         } catch (ProductoFinalException ex)
