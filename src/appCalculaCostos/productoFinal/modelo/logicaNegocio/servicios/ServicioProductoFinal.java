@@ -154,7 +154,7 @@ public class ServicioProductoFinal
             List<ProductoFinalDatosDto> productosDto = new ArrayList<>();
             for (ProductoFinal p : productosF)
             {
-                productosDto.add(new ProductoFinalDatosDto(p.getId(), p.getNombre(), p.getPorcentajeGanancia(),
+                productosDto.add(new ProductoFinalDatosDto(p.getId(), p.getNombre(), Redondeo.redondear(p.getPorcentajeGanancia(),2),
                         p.getPrecioVenta(), Redondeo.redondear(p.getCostoTotal(), 1), p.getCantidadVendida()));
 
             }
@@ -320,6 +320,31 @@ public class ServicioProductoFinal
         } catch (PersistenciaException ex)
         {
             throw new ProductoFinalException("Ocurrio un error al intentar borrar el producto.");
+        }
+    }
+    /**
+     * metodo para calcular y actualizar el porcentaje de ganancia de un producto por su id
+     * para que funcionese tiene que tener cargados los valores correctamente en la tabla
+     * productos_finales en la base de datos
+     * @param idProducto
+     * @throws ProductoFinalException 
+     */
+    public void actualizarPorcentajeDeGanancia(int idProducto) throws ProductoFinalException
+    {
+        try
+        {
+            Optional<ProductoFinal> productoOpt = repo.buscarProductoFinalPorId(idProducto);
+            if (productoOpt.isEmpty())
+            {
+                throw new ProductoFinalException("No se encnotro el producto con id: " + idProducto);
+            }
+            ProductoFinal producto = productoOpt.get();
+            double nuevoPorcentaje = producto.calcularPorcentajeGanancia();
+            repo.actualizarPorcentajeGanancia(idProducto, nuevoPorcentaje);
+        } catch (PersistenciaException ex)
+        {
+            ex.printStackTrace();
+            throw new ProductoFinalException("Ocurrio un error al actualizar el nuevo porcentaje de ganancia");
         }
     }
 

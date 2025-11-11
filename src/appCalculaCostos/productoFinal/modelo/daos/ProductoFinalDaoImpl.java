@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import appCalculaCostos.productoFinal.modelo.interfacesLogicas.IRepositorioProductoFinal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -126,7 +128,27 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
     @Override
     public Optional<ProductoFinal> buscarProductoFinalPorId(int id) throws PersistenciaException
     {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        final String sql = "SELECT  nombre, costo_total, porcentaje_ganancia, precio_venta, cantidad_vendida FROM  productos_finales  WHERE id_producto=?";
+        try (Connection conn = conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            ProductoFinal producto = null;
+            if (rs.next())
+            {
+                var nombre = rs.getString("nombre");
+                var costo = rs.getDouble("costo_total");
+                var porcentaje = rs.getDouble("porcentaje_ganancia");
+                var precio = rs.getDouble("precio_venta");
+                var cantVendida = rs.getDouble("cantidad_vendida");
+                producto = new ProductoFinal(id, nombre, cantVendida, porcentaje, precio, costo);
+            }
+            return Optional.ofNullable(producto);
+        } catch (SQLException | ConexionException ex)
+        {
+            ex.printStackTrace();
+            throw new PersistenciaException("No se encontro un producto con id: " + id, ex);
+        }
     }
 
     @Override
@@ -212,6 +234,24 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
         } catch (SQLException | ConexionException e)
         {
             throw new PersistenciaException("Error al eliminar el producto con ID " + idProducto + ": " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void actualizarPorcentajeGanancia(int idProducto, double nuevoPorcentaje) throws PersistenciaException
+    {
+        String sql = "UPDATE productos_finales SET porcentaje_ganancia = ? WHERE id_producto = ?";
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(sql))
+        {
+
+            ps.setDouble(1, nuevoPorcentaje);
+            ps.setInt(2, idProducto);
+            ps.executeUpdate();
+
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error al actualizar el porcentaje de ganancia", e);
         }
     }
 

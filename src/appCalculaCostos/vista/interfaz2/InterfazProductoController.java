@@ -69,6 +69,7 @@ public class InterfazProductoController
                 // Aquí podrías llamar al servicio para actualizar
                 productoService.actualizar(productoEditado);
                 mostrarMensajeExito("Producto actualizado");
+                productoService.actualizarPorcentajeDeGanancia(productoEditado.getId());
             } else
             {
                 var nuevo = crearPfDto();

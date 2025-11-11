@@ -27,5 +27,6 @@ public interface IRepositorioProductoFinal
     public void borrarCostotosDeProductoPorTipo(int idProductoFinal,TipoCosto tipoCosto, Connection conn) throws PersistenciaException;
     public void actualizarDatosProductoFinal(ProductoFinal productoActualizado) throws PersistenciaException;
     public void borrarProductoFinal(int idProducto) throws PersistenciaException;
+    public void actualizarPorcentajeGanancia(int idProducto,double nuevoPorcentaje) throws PersistenciaException;
  
 }

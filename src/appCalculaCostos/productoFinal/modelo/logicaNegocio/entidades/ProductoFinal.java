@@ -218,8 +218,11 @@ public class ProductoFinal
         {
             return 0;
         }
-        var ganancia = precioVenta - costoTotal;
-        return (ganancia / precioVenta);
+        double ganancia = precioVenta - costoTotal;
+        double porcentaje = ganancia / precioVenta;
+
+        // Evita porcentajes negativos
+        return Math.max(0, porcentaje);
     }
 
     public double getGanancia() throws NoPosibleCalcularMonto
