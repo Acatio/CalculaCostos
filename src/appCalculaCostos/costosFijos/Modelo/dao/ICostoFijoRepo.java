@@ -1,0 +1,22 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
+package appCalculaCostos.costosFijos.Modelo.dao;
+
+import appCalculaCostos.costosFijos.Modelo.Entidades.CostoFijo;
+import conexion.Exepciones.PersistenciaException;
+import java.util.List;
+
+/**
+ *
+ * @author jose
+ */
+public interface ICostoFijoRepo
+{
+    public void guardarCostoFijo(CostoFijo costo)throws PersistenciaException;
+    public void actualizarCostoFijo(CostoFijo actualizado)throws PersistenciaException;
+    public void eliminarrCostoFijo(int id)throws PersistenciaException;
+    public List<CostoFijo> listarCostosFijos()throws PersistenciaException;
+    public CostoFijo buscarCostoFijoPorID(int id)throws PersistenciaException;
+}
