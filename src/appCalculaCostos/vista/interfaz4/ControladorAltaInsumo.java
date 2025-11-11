@@ -1,4 +1,4 @@
-package interfaz4;
+package appCalculaCostos.vista.interfaz4;
 
 import appCalculaCostos.costosMateriaPrima.modelo.daos.InsumoDaoImpl;
 import appCalculaCostos.costosMateriaPrima.modelo.excepciones.InsumoException;

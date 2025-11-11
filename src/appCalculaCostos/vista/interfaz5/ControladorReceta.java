@@ -9,7 +9,6 @@ import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.MateriaPrimaServ
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoInsumo;
 import appCalculaCostos.vista.interfaz6.ControladorVistaInsumos;
 import conexion.implementaciones.ConexionSQL;
-import interfaz4.ControladorAltaInsumo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;

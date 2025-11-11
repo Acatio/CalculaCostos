@@ -10,7 +10,7 @@ import appCalculaCostos.productoFinal.modelo.daos.ProductoFinalDaoImpl;
 import appCalculaCostos.productoFinal.modelo.exepciones.ProductoFinalException;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalAsignarCostoDto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios.ServicioProductoFinal;
-import appCalculaCostos.vista.interfaz1.Controlador;
+import appCalculaCostos.vista.interfaz1.ControladorPf;
 import conexion.implementaciones.ConexionSQL;
 import conexion.interfacesLogicas.IConexion;
 import java.util.ArrayList;
@@ -28,14 +28,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.DoubleStringConverter;
 
-public class ControladorCosto
+public class ControladorAgregarCostoMp
 {
 
     private MateriaPrimaService mps = new MateriaPrimaService(new InsumoDaoImpl(new ConexionSQL()));
     private final IConexion conexion = new ConexionSQL();
     private ServicioProductoFinal spf = new ServicioProductoFinal(new ProductoFinalDaoImpl(conexion), new CostoMpRepoImpl(conexion), new InsumoDaoImpl(conexion));
     private ProductoFinalAsignarCostoDto productoDto;
-    Controlador controladorP;
+    ControladorPf controladorP;
     @FXML
     private TableView<InsumoDto> tbInsumos;
     @FXML
@@ -287,12 +287,12 @@ public class ControladorCosto
         this.spf = spf;
     }
 
-    public Controlador getControladorP()
+    public ControladorPf getControladorP()
     {
         return controladorP;
     }
 
-    public void setControladorP(Controlador controladorP)
+    public void setControladorP(ControladorPf controladorP)
     {
         this.controladorP = controladorP;
     }

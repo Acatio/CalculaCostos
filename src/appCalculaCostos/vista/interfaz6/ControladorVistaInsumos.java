@@ -3,22 +3,13 @@ package appCalculaCostos.vista.interfaz6;
 import appCalculaCostos.costosMateriaPrima.modelo.daos.InsumoDaoImpl;
 import appCalculaCostos.costosMateriaPrima.modelo.excepciones.InsumoException;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.InsumoDto;
-import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Insumo;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.MateriaPrimaService;
-import appCalculaCostos.productoFinal.modelo.daos.ProductoFinalDaoImpl;
-import appCalculaCostos.productoFinal.modelo.exepciones.ProductoFinalException;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalCreacionDTO;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFinal;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios.ServicioProductoFinal;
-import appCalculaCostos.vista.interfaz2.InterfazProductoController;
+import appCalculaCostos.vista.interfaz4.ControladorAltaInsumo;
 import appCalculaCostos.vista.interfaz5.ControladorReceta;
-import appCalculaCostos.vista.interfaz7.ControladorCosto;
+import appCalculaCostos.vista.interfaz7.ControladorAgregarCostoMp;
 import conexion.implementaciones.ConexionSQL;
-import interfaz4.ControladorAltaInsumo;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -29,13 +20,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 public class ControladorVistaInsumos
 {
 
-    private ControladorCosto controladorInsumos;
+    private ControladorAgregarCostoMp controladorInsumos;
     private Stage ventanaInsumos;
     private Stage ventanaRecetas;
 
@@ -175,12 +165,12 @@ public class ControladorVistaInsumos
     {
     }
 
-    public ControladorCosto getControladorInsumos()
+    public ControladorAgregarCostoMp getControladorInsumos()
     {
         return controladorInsumos;
     }
 
-    public void setControladorInsumos(ControladorCosto controladorInsumos)
+    public void setControladorInsumos(ControladorAgregarCostoMp controladorInsumos)
     {
         this.controladorInsumos = controladorInsumos;
     }

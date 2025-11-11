@@ -11,7 +11,7 @@ import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFin
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios.ServicioProductoFinal;
 import appCalculaCostos.vista.interfaz2.InterfazProductoController;
 import appCalculaCostos.vista.interfaz6.ControladorVistaInsumos;
-import appCalculaCostos.vista.interfaz7.ControladorCosto;
+import appCalculaCostos.vista.interfaz8.ControladorCostosFijos;
 import conexion.implementaciones.ConexionSQL;
 import conexion.interfacesLogicas.IConexion;
 import java.io.IOException;
@@ -31,12 +31,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-public class Controlador
+public class ControladorPf
 {
 
     private Stage ventanaNuevoProducto;
     private Stage ventanaInsumos;
     private Stage ventanaCmp;
+    private Stage ventanaCostosFijos;
     IConexion conexion = new ConexionSQL();
     private ServicioProductoFinal productoService = new ServicioProductoFinal(new ProductoFinalDaoImpl(conexion), new CostoMpRepoImpl(conexion), new InsumoDaoImpl(conexion));
 
@@ -228,7 +229,7 @@ public class Controlador
             // Cargar el FXML
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz7/interfazAgregarCosto.fxml"));
             Parent root = loader.load();
-            ControladorCosto controladorCostoMp = loader.getController();
+            appCalculaCostos.vista.interfaz7.ControladorAgregarCostoMp controladorCostoMp = loader.getController();
             controladorCostoMp.setControladorP(this);
             // Obtener el controlador y pasarle el DTO
             controladorCostoMp.setProductoDto(new ProductoFinalAsignarCostoDto(
@@ -248,6 +249,35 @@ public class Controlador
         {
             ex.printStackTrace();
         }
+    }
+
+    @FXML
+    public void onInventarioCostosFijos()
+    {
+        try
+        {
+            if (ventanaCostosFijos == null)
+            {
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz8/vistaCostosFijos.fxml"));
+                Parent root = loader.load();
+                ControladorCostosFijos controladorCf = loader.getController();
+                controladorCf.setControladorPrincipal(this);
+                ventanaCostosFijos = new Stage();
+                ventanaCostosFijos.setTitle("Nuevo Producto");
+                ventanaCostosFijos.setScene(new Scene(root));
+
+                // Opcional: limpiar la referencia cuando se cierre
+                ventanaCostosFijos.setOnHidden(event -> ventanaNuevoProducto = null);
+            }
+
+            ventanaCostosFijos.show();
+            ventanaCostosFijos.toFront(); // Si ya estaba abierta, la trae al frente
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     public void mostrarMensajeError(String mensaje)

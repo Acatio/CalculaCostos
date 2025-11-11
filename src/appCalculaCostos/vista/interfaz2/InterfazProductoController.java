@@ -8,7 +8,7 @@ import appCalculaCostos.productoFinal.modelo.exepciones.ProductoFinalException;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalCreacionDTO;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalDatosDto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios.ServicioProductoFinal;
-import appCalculaCostos.vista.interfaz1.Controlador;
+import appCalculaCostos.vista.interfaz1.ControladorPf;
 import java.util.ArrayList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -24,7 +24,7 @@ public class InterfazProductoController
 {
 
     private boolean modoEdicion = false;
-    Controlador controladorPrincipal;
+    ControladorPf controladorPrincipal;
     private ServicioProductoFinal productoService;
     ProductoFinalDatosDto productoEditable;
 
@@ -126,7 +126,7 @@ public class InterfazProductoController
         return nuevo;
     }
 
-    public void setPrincipalController(Controlador controller)
+    public void setPrincipalController(ControladorPf controller)
     {
         this.controladorPrincipal = controller;
     }

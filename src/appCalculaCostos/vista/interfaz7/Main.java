@@ -14,7 +14,7 @@ public class Main extends Application
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz7/interfazAgregarCosto.fxml"));
         Scene scene = new Scene(loader.load());
-        ControladorCosto controlador=loader.getController();
+        ControladorAgregarCostoMp controlador=loader.getController();
         controlador.setProductoDto(new ProductoFinalAsignarCostoDto(1, "Producto Prueba"));
         scene.getStylesheets().add(getClass().getResource("estilo.css").toExternalForm());
         stage.setTitle("Registrar Receta");

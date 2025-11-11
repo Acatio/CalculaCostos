@@ -103,7 +103,7 @@ public class CostoMpRepoImpl implements ICostoMpRepo
                 ps.setInt(2, detalle.getInsumo().getId());
                 ps.setDouble(3, detalle.getCantidad());
                 ps.setDouble(4, detalle.getMonto());
-                System.out.println("monto guardado: "+detalle.getMonto());
+                System.out.println("monto guardado: " + detalle.getMonto());
                 ps.setString(5, TipoCosto.MATERIA_PRIMA.name());
                 ps.setString(6, detalle.getUnidadMedida().getNombre());
                 ps.addBatch();
@@ -132,8 +132,9 @@ public class CostoMpRepoImpl implements ICostoMpRepo
             guardarCostosMPLocal(idProductoFinal, nuevosCostos, repoPf, conn);
 
             conn.commit();
-        } catch (SQLException | ConexionException | NoPosibleCalcularMonto ex)
+        } catch (SQLException | ConexionException ex)
         {
+
             if (conn != null)
             {
                 try
@@ -146,6 +147,20 @@ public class CostoMpRepoImpl implements ICostoMpRepo
                 }
             }
             throw new PersistenciaException("No se pudieron actualizar los costos de materia prima", ex);
+        } catch (NoPosibleCalcularMonto ex)
+        {
+            if (conn != null)
+            {
+                try
+                {
+                    conn.rollback();
+                } catch (SQLException rbEx)
+                {
+                    rbEx.addSuppressed(ex);
+                    throw new PersistenciaException(ex.getMessage(), rbEx);
+                }
+            }
+            throw new PersistenciaException(ex.getMessage(), ex);
         } finally
         {
             if (conn != null)

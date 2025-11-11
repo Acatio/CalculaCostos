@@ -60,7 +60,7 @@ public class DetalleReceta implements IDetalleCosto
             return insumo.getCostoPorUnidad() * cantidadEnUnidadDeMedidaDelInsumo;
         } catch (NoPosibleConversion ex)
         {
-            throw new NoPosibleCalcularMonto("No se pudo calcular el monto por: " + ex.getMessage());
+            throw new NoPosibleCalcularMonto( ex.getMessage());
         }
     }
 }
