@@ -229,7 +229,7 @@ public class ControladorPf
             // Cargar el FXML
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz7/interfazAgregarCosto.fxml"));
             Parent root = loader.load();
-            appCalculaCostos.vista.interfaz7.ControladorAgregarCostoMp controladorCostoMp = loader.getController();
+            appCalculaCostos.vista.interfaz10.ControladorAgregarCostoF controladorCostoMp = loader.getController();
             controladorCostoMp.setControladorP(this);
             // Obtener el controlador y pasarle el DTO
             controladorCostoMp.setProductoDto(new ProductoFinalAsignarCostoDto(

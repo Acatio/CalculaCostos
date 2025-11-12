@@ -5,6 +5,7 @@
 package appCalculaCostos.costosFijos.Modelo.dao;
 
 import appCalculaCostos.costosFijos.Modelo.Entidades.CostoFijo;
+import appCalculaCostos.costosFijos.Modelo.Servicio.Ponderacion;
 import conexion.Exepciones.ConexionException;
 import conexion.Exepciones.PersistenciaException;
 import conexion.interfacesLogicas.IConexion;
@@ -16,6 +17,7 @@ import conexion.interfacesLogicas.IConexion;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CostoFijoRepoImpl implements ICostoFijoRepo
 {
@@ -150,7 +152,87 @@ public class CostoFijoRepoImpl implements ICostoFijoRepo
 
         } catch (SQLException | ConexionException e)
         {
-            throw new PersistenciaException("Error al buscar el costo fijo con ID " + id , e);
+            throw new PersistenciaException("Error al buscar el costo fijo con ID " + id, e);
         }
     }
+
+    @Override
+    public void guardarPonderacion(Ponderacion ponderacion) throws PersistenciaException
+    {
+        String sql = "INSERT INTO producto_ponderacion (id_producto, tamanio, tiempo_preparacion, cantidad_recursos_usados) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setInt(1, ponderacion.getIdProducto());
+            stmt.setFloat(2, ponderacion.getTamanio());
+            stmt.setFloat(3, ponderacion.getTiempoPreparacion());
+            stmt.setFloat(4, ponderacion.getCantidadRecursosUsados());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error al guardar la ponderación del producto.", e);
+        }
+    }
+
+    @Override
+    public void actualizarPonderacion(Ponderacion ponderacion) throws PersistenciaException
+    {
+        String sql = "UPDATE producto_ponderacion "
+                + "SET tamanio = ?, tiempo_preparacion = ?, cantidad_recursos_usados = ? "
+                + "WHERE id_producto = ?";
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setFloat(1, ponderacion.getTamanio());
+            stmt.setFloat(2, ponderacion.getTiempoPreparacion());
+            stmt.setFloat(3, ponderacion.getCantidadRecursosUsados());
+            stmt.setInt(4, ponderacion.getIdProducto());
+
+            int filasAfectadas = stmt.executeUpdate();
+
+            if (filasAfectadas == 0)
+            {
+                throw new PersistenciaException("No se encontró una ponderación para el producto especificado: " + ponderacion.getIdProducto());
+            }
+
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error al actualizar la ponderación del producto.", e);
+        }
+    }
+
+    @Override
+    public Optional<Ponderacion> cargarPonderacion(int idProducto) throws PersistenciaException
+    {
+        String sql = "SELECT id_producto, tamanio, tiempo_preparacion, cantidad_recursos_usados "
+                + "FROM producto_ponderacion WHERE id_producto = ?";
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setInt(1, idProducto);
+
+            try (ResultSet rs = stmt.executeQuery())
+            {
+                if (rs.next())
+                {
+                    Ponderacion p = new Ponderacion();
+                    p.setIdProducto(rs.getInt("id_producto"));
+                    p.setTamanio(rs.getFloat("tamanio"));
+                    p.setTiempoPreparacion(rs.getFloat("tiempo_preparacion"));
+                    p.setCantidadRecursosUsados(rs.getFloat("cantidad_recursos_usados"));
+                    return Optional.of(p);
+                } else
+                {
+                    return Optional.empty();
+                }
+            }
+
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error al cargar la ponderación del producto.", e);
+        }
+    }
+
 }

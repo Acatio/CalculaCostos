@@ -53,11 +53,11 @@
                   <MenuItem mnemonicParsing="false" onAction="#onActionEliminar" text="Eliminar" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Agregar Costo">
+          <Menu mnemonicParsing="false" text="Asignar Costo">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#onAgregarCmp" text="Materia Prima" />
-                  <MenuItem mnemonicParsing="false" text="Indirectos" />
-                  <MenuItem mnemonicParsing="false" text="Fijos" />
+                  <MenuItem mnemonicParsing="false" text="Costos Fijos" />
+                  <MenuItem mnemonicParsing="false" text="Mano Obra" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Inventario">

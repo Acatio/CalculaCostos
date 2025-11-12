@@ -5,8 +5,10 @@
 package appCalculaCostos.costosFijos.Modelo.dao;
 
 import appCalculaCostos.costosFijos.Modelo.Entidades.CostoFijo;
+import appCalculaCostos.costosFijos.Modelo.Servicio.Ponderacion;
 import conexion.Exepciones.PersistenciaException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -19,4 +21,7 @@ public interface ICostoFijoRepo
     public void eliminarrCostoFijo(int id)throws PersistenciaException;
     public List<CostoFijo> listarCostosFijos()throws PersistenciaException;
     public CostoFijo buscarCostoFijoPorID(int id)throws PersistenciaException;
+    public void guardarPonderacion(Ponderacion ponderacion)throws PersistenciaException;
+    public void actualizarPonderacion(Ponderacion ponderacion)throws PersistenciaException;
+    public Optional<Ponderacion> cargarPonderacion(int idProducto) throws PersistenciaException;
 }

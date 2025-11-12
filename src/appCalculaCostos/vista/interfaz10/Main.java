@@ -1,6 +1,5 @@
-package appCalculaCostos.vista.interfaz7;
+package appCalculaCostos.vista.interfaz10;
 
-import appCalculaCostos.vista.interfaz10.ControladorAgregarCostoF;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalAsignarCostoDto;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,12 +12,12 @@ public class Main extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz7/interfazAgregarCosto.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz10/interfazAgregarCostoF.fxml"));
         Scene scene = new Scene(loader.load());
         ControladorAgregarCostoF controlador=loader.getController();
         controlador.setProductoDto(new ProductoFinalAsignarCostoDto(1, "Producto Prueba"));
         scene.getStylesheets().add(getClass().getResource("estilo.css").toExternalForm());
-        stage.setTitle("Registrar Receta");
+        stage.setTitle("Calcular costo fijo");
         stage.setScene(scene);
         stage.setResizable(false); // para mantener el diseño fijo
         stage.show();

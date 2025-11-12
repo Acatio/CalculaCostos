@@ -6,7 +6,7 @@ import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.InsumoDto;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.MateriaPrimaService;
 import appCalculaCostos.vista.interfaz4.ControladorAltaInsumo;
 import appCalculaCostos.vista.interfaz5.ControladorReceta;
-import appCalculaCostos.vista.interfaz7.ControladorAgregarCostoMp;
+import appCalculaCostos.vista.interfaz10.ControladorAgregarCostoF;
 import conexion.implementaciones.ConexionSQL;
 import java.io.IOException;
 import java.util.List;
@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 public class ControladorVistaInsumos
 {
 
-    private ControladorAgregarCostoMp controladorInsumos;
+    private ControladorAgregarCostoF controladorInsumos;
     private Stage ventanaInsumos;
     private Stage ventanaRecetas;
 
@@ -165,12 +165,12 @@ public class ControladorVistaInsumos
     {
     }
 
-    public ControladorAgregarCostoMp getControladorInsumos()
+    public ControladorAgregarCostoF getControladorInsumos()
     {
         return controladorInsumos;
     }
 
-    public void setControladorInsumos(ControladorAgregarCostoMp controladorInsumos)
+    public void setControladorInsumos(ControladorAgregarCostoF controladorInsumos)
     {
         this.controladorInsumos = controladorInsumos;
     }

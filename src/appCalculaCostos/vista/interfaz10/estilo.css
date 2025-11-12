@@ -1,0 +1,48 @@
+.campo-texto, .campo-combo {
+    -fx-background-color: white;
+    -fx-border-color: #dfe4ea;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 6 10;
+    -fx-font-size: 13px;
+}
+
+.campo-texto:focused, .campo-combo:focused {
+    -fx-border-color: #5dade2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 1);
+}
+
+.boton-primario {
+    -fx-background-color: #34495e;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 10 30;
+    -fx-font-weight: bold;
+}
+
+.boton-primario:hover {
+    -fx-background-color: #2c3e50;
+}
+
+.boton-secundario {
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: #2c3e50;
+    -fx-background-radius: 8;
+    -fx-padding: 10 30;
+    -fx-font-weight: bold;
+}
+
+.boton-secundario:hover {
+    -fx-background-color: #d5d8dc;
+}
+
+.boton-accion {
+    -fx-background-color: #5dade2;
+    -fx-text-fill: white;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16;
+}
+
+.boton-accion:hover {
+    -fx-background-color: #3498db;
+}
