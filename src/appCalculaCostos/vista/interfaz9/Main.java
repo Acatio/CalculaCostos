@@ -14,8 +14,9 @@ public class Main extends Application
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz9/interfazCostoFijo.fxml"));
         Scene scene = new Scene(loader.load());
         scene.getStylesheets().add(getClass().getResource("estilo.css").toExternalForm());
-        stage.setTitle("Registrar Materia Prima");
+        stage.setTitle("Costo Fijo");
         stage.setScene(scene);
+        ControladorAltaCosto c= loader.getController();
         stage.show();
     }
 

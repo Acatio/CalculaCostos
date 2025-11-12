@@ -19,7 +19,7 @@
                 <Insets bottom="20" left="40" right="40" top="20" />
             </padding>
 
-            <Label prefHeight="66.0" prefWidth="203.0" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Registrar Costo Fijo" />
+            <Label fx:id="lblTitulo" prefHeight="66.0" prefWidth="203.0" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Registrar Costo Fijo" />
 
             <GridPane alignment="CENTER" hgap="15" prefWidth="260.0" vgap="15">
                 <Label text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="0" />

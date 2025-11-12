@@ -264,7 +264,7 @@ public class ControladorPf
                 ControladorCostosFijos controladorCf = loader.getController();
                 controladorCf.setControladorPrincipal(this);
                 ventanaCostosFijos = new Stage();
-                ventanaCostosFijos.setTitle("Nuevo Producto");
+                ventanaCostosFijos.setTitle("Costos Fijos");
                 ventanaCostosFijos.setScene(new Scene(root));
 
                 // Opcional: limpiar la referencia cuando se cierre

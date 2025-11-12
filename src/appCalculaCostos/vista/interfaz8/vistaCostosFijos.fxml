@@ -45,6 +45,7 @@
                           <!-- Esta columna se le asignará el texto en el controlador -->
                           <TableColumn fx:id="colNombre" editable="false" minWidth="105.0" prefWidth="155.0" sortable="false" text="Nombre" />
                           <TableColumn fx:id="colImporteMensual" editable="false" minWidth="120" prefWidth="205.0" sortable="false" text="Importe Mensual" />
+                     <TableColumn fx:id="colPorcentajeUsado" editable="false" minWidth="120" prefWidth="205.0" sortable="false" text="Porcentaje usado en produccion" />
                       </columns>
                   <columnResizePolicy>
                      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
