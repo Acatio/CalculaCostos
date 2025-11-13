@@ -55,8 +55,13 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Asignar Costo">
             <items>
+                  <Menu mnemonicParsing="false" text="Costos Fijos">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onAgregarCf" text="Ponderaciones" />
+                        <MenuItem mnemonicParsing="false" text="Calcular Costos Fijos" />
+                     </items>
+                  </Menu>
               <MenuItem mnemonicParsing="false" onAction="#onAgregarCmp" text="Materia Prima" />
-                  <MenuItem mnemonicParsing="false" text="Costos Fijos" />
                   <MenuItem mnemonicParsing="false" text="Mano Obra" />
             </items>
           </Menu>

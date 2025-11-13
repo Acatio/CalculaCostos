@@ -66,5 +66,11 @@ public class PonderacionDto
     {
         this.cantidadRecursosUsados = cantidadRecursosUsados;
     }
+
+    @Override
+    public String toString()
+    {
+        return "PonderacionDto{" + "idProducto=" + idProducto + ", tamanio=" + tamanio + ", tiempoPreparacion=" + tiempoPreparacion + ", cantidadRecursosUsados=" + cantidadRecursosUsados + '}';
+    }
     
 }

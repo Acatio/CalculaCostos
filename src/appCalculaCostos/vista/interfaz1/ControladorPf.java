@@ -1,5 +1,9 @@
 package appCalculaCostos.vista.interfaz1;
 
+import appCalculaCostos.costosFijos.Modelo.Excepciones.CostoFijoException;
+import appCalculaCostos.costosFijos.Modelo.Servicio.CostosFijosService;
+import appCalculaCostos.costosFijos.Modelo.dao.CostoFijoRepoImpl;
+import appCalculaCostos.costosFijos.Modelo.dto.PonderacionDto;
 import appCalculaCostos.costosMateriaPrima.modelo.daos.InsumoDaoImpl;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.MateriaPrimaService;
 import appCalculaCostos.costosMateriaPrima.modelo.daos.CostoMpRepoImpl;
@@ -7,10 +11,11 @@ import appCalculaCostos.productoFinal.modelo.daos.ProductoFinalDaoImpl;
 import appCalculaCostos.productoFinal.modelo.exepciones.ProductoFinalException;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalAsignarCostoDto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalDatosDto;
-import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFinal;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios.ServicioProductoFinal;
+import appCalculaCostos.vista.interfaz10.ControladorAgregarCostoF;
 import appCalculaCostos.vista.interfaz2.InterfazProductoController;
 import appCalculaCostos.vista.interfaz6.ControladorVistaInsumos;
+import appCalculaCostos.vista.interfaz7.ControladorAgregarCostoMp;
 import appCalculaCostos.vista.interfaz8.ControladorCostosFijos;
 import conexion.implementaciones.ConexionSQL;
 import conexion.interfacesLogicas.IConexion;
@@ -37,9 +42,11 @@ public class ControladorPf
     private Stage ventanaNuevoProducto;
     private Stage ventanaInsumos;
     private Stage ventanaCmp;
-    private Stage ventanaCostosFijos;
+    private Stage ventanaAltaCostosFijos;
+    private Stage ventanaAsignacionCostosFijos;
     IConexion conexion = new ConexionSQL();
     private ServicioProductoFinal productoService = new ServicioProductoFinal(new ProductoFinalDaoImpl(conexion), new CostoMpRepoImpl(conexion), new InsumoDaoImpl(conexion));
+    private CostosFijosService servicioCostoFijo = new CostosFijosService(new CostoFijoRepoImpl(conexion));
 
     @FXML
     private TableColumn<ProductoFinalDatosDto, String> colNombre;
@@ -229,7 +236,7 @@ public class ControladorPf
             // Cargar el FXML
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz7/interfazAgregarCosto.fxml"));
             Parent root = loader.load();
-            appCalculaCostos.vista.interfaz10.ControladorAgregarCostoF controladorCostoMp = loader.getController();
+            ControladorAgregarCostoMp controladorCostoMp = loader.getController();
             controladorCostoMp.setControladorP(this);
             // Obtener el controlador y pasarle el DTO
             controladorCostoMp.setProductoDto(new ProductoFinalAsignarCostoDto(
@@ -247,7 +254,7 @@ public class ControladorPf
             ventanaCmp.show();
         } catch (IOException ex)
         {
-            ex.printStackTrace();
+            mostrarMensajeError("Ocurrio un error al cargar la ventana");
         }
     }
 
@@ -256,28 +263,69 @@ public class ControladorPf
     {
         try
         {
-            if (ventanaCostosFijos == null)
+            if (ventanaAltaCostosFijos == null)
             {
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz8/vistaCostosFijos.fxml"));
                 Parent root = loader.load();
                 ControladorCostosFijos controladorCf = loader.getController();
                 controladorCf.setControladorPrincipal(this);
-                ventanaCostosFijos = new Stage();
-                ventanaCostosFijos.setTitle("Costos Fijos");
-                ventanaCostosFijos.setScene(new Scene(root));
+                ventanaAltaCostosFijos = new Stage();
+                ventanaAltaCostosFijos.setTitle("Costos Fijos");
+                ventanaAltaCostosFijos.setScene(new Scene(root));
 
                 // Opcional: limpiar la referencia cuando se cierre
-                ventanaCostosFijos.setOnHidden(event -> ventanaNuevoProducto = null);
+                ventanaAltaCostosFijos.setOnHidden(event -> ventanaNuevoProducto = null);
             }
 
-            ventanaCostosFijos.show();
-            ventanaCostosFijos.toFront(); // Si ya estaba abierta, la trae al frente
+            ventanaAltaCostosFijos.show();
+            ventanaAltaCostosFijos.toFront(); // Si ya estaba abierta, la trae al frente
         } catch (IOException e)
         {
-            e.printStackTrace();
+            mostrarMensajeError("Ocurrio un error al cargar la ventana");
         }
 
+    }
+
+    @FXML
+    public void onAgregarCf()
+    {
+        try
+        {
+            ProductoFinalDatosDto productoSeleccionado = tablaProductos.getSelectionModel().getSelectedItem();
+
+            if (productoSeleccionado == null)
+            {
+                mostrarMensajeError("No se ha seleccionado ningun producto");
+                return; // No hacer nada si no se seleccionó
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz10/interfazAgregarCostoF.fxml"));
+            Parent root = loader.load();
+            ControladorAgregarCostoF controlador = loader.getController();
+            controlador.setControladorP(this);
+            PonderacionDto ponderacion= servicioCostoFijo.cargarPonderacion(productoSeleccionado.getId());
+            controlador.setPonderacion(ponderacion);
+            controlador.setProductoDto(new ProductoFinalAsignarCostoDto(
+                    productoSeleccionado.getId(),
+                    productoSeleccionado.getNombre()
+            ));
+            
+
+            // Crear la nueva ventana
+            ventanaAsignacionCostosFijos = new Stage();
+            ventanaAsignacionCostosFijos.setTitle("Costos Fijos");
+            ventanaAsignacionCostosFijos.setScene(new Scene(root));
+
+            // Mostrar la ventana
+            ventanaAsignacionCostosFijos.show();
+        } catch (IOException ex)
+        {
+            mostrarMensajeError("Ocurrio un error al cargar la ventana");
+        } catch (CostoFijoException ex)
+        {
+            mostrarMensajeError(ex.getMessage());
+        }
     }
 
     public void mostrarMensajeError(String mensaje)
