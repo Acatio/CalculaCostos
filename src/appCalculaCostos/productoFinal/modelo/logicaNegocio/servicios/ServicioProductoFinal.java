@@ -183,7 +183,7 @@ public class ServicioProductoFinal
         }
     }
 
-    public void actualizarCostoTotal(int idProducto) throws ProductoFinalException 
+    public void actualizarCostoTotal(int idProducto) throws ProductoFinalException
     {
 
         try
@@ -194,8 +194,9 @@ public class ServicioProductoFinal
             repo.actualizarCostoTotal(idProducto, costoTotal);
         } catch (PersistenciaException ex)
         {
-            throw new ProductoFinalException("Ocurrio un error al actualizar el costo total del product: ",ex);
-           
+            ex.printStackTrace();
+            throw new ProductoFinalException("Ocurrio un error al actualizar el costo total del producto", ex);
+
         }
     }
 
@@ -350,7 +351,7 @@ public class ServicioProductoFinal
      * @param idProducto
      * @throws ProductoFinalException
      */
-    public  void actualizarPorcentajeDeGanancia(int idProducto) throws ProductoFinalException
+    public void actualizarPorcentajeDeGanancia(int idProducto) throws ProductoFinalException
     {
         try
         {

@@ -162,6 +162,8 @@ public class ControladorAgregarCostoMp
             }
             spf.modificarCostosMp(productoDto.getId(), listaDetalles);
             mostrarMensajeExito("Costos MP agregados");
+            spf.actualizarCostoTotal(productoDto.getId());
+            spf.actualizarPorcentajeDeGanancia(productoDto.getId());
             controladorP.actualizarVista();
 
         } catch (ProductoFinalException ex)

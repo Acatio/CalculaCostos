@@ -28,6 +28,13 @@ public class CalculoCostosFijosService
     IRepositorioProductoFinal productoRepo;
     ServicioProductoFinal servicioProductoFinal;
 
+    public CalculoCostosFijosService(ICostoFijoRepo repoCostoFijo, IRepositorioProductoFinal productoRepo, ServicioProductoFinal servicioProductoFinal)
+    {
+        this.repoCostoFijo = repoCostoFijo;
+        this.productoRepo = productoRepo;
+        this.servicioProductoFinal = servicioProductoFinal;
+    }
+
     public void calcularCostosFijos() throws CostoFijoException
     {
         try

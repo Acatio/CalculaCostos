@@ -1,6 +1,7 @@
 package appCalculaCostos.vista.interfaz1;
 
 import appCalculaCostos.costosFijos.Modelo.Excepciones.CostoFijoException;
+import appCalculaCostos.costosFijos.Modelo.Servicio.CalculoCostosFijosService;
 import appCalculaCostos.costosFijos.Modelo.Servicio.CostosFijosService;
 import appCalculaCostos.costosFijos.Modelo.dao.CostoFijoRepoImpl;
 import appCalculaCostos.costosFijos.Modelo.dto.PonderacionDto;
@@ -45,8 +46,10 @@ public class ControladorPf
     private Stage ventanaAltaCostosFijos;
     private Stage ventanaAsignacionCostosFijos;
     IConexion conexion = new ConexionSQL();
+
     private ServicioProductoFinal productoService = new ServicioProductoFinal(new ProductoFinalDaoImpl(conexion), new CostoMpRepoImpl(conexion), new InsumoDaoImpl(conexion));
     private CostosFijosService servicioCostoFijo = new CostosFijosService(new CostoFijoRepoImpl(conexion));
+    private CalculoCostosFijosService ServicioCalculoCostoFijo = new CalculoCostosFijosService(new CostoFijoRepoImpl(conexion), new ProductoFinalDaoImpl(conexion), productoService);
 
     @FXML
     private TableColumn<ProductoFinalDatosDto, String> colNombre;
@@ -304,13 +307,12 @@ public class ControladorPf
             Parent root = loader.load();
             ControladorAgregarCostoF controlador = loader.getController();
             controlador.setControladorP(this);
-            PonderacionDto ponderacion= servicioCostoFijo.cargarPonderacion(productoSeleccionado.getId());
+            PonderacionDto ponderacion = servicioCostoFijo.cargarPonderacion(productoSeleccionado.getId());
             controlador.setPonderacion(ponderacion);
             controlador.setProductoDto(new ProductoFinalAsignarCostoDto(
                     productoSeleccionado.getId(),
                     productoSeleccionado.getNombre()
             ));
-            
 
             // Crear la nueva ventana
             ventanaAsignacionCostosFijos = new Stage();
@@ -326,6 +328,12 @@ public class ControladorPf
         {
             mostrarMensajeError(ex.getMessage());
         }
+    }
+
+    @FXML
+    public void onCalcularCostosFijos()
+    {
+        System.out.println("calcular costos fijos");
     }
 
     public void mostrarMensajeError(String mensaje)
