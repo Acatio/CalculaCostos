@@ -62,6 +62,9 @@ public class ControladorPf
 
     @FXML
     private TableColumn<ProductoFinalDatosDto, Double> colCosto;
+    
+    @FXML
+    private TableColumn<ProductoFinalDatosDto, Double> colVentasMensuales;
 
     @FXML
     private MenuItem itmNuevo;
@@ -79,6 +82,7 @@ public class ControladorPf
         colPorcentajeGanancia.setCellValueFactory(new PropertyValueFactory<>("PorcentajeGanancia"));
         colPrecioVenta.setCellValueFactory(new PropertyValueFactory<>("PrecioVenta"));
         colCosto.setCellValueFactory(new PropertyValueFactory<>("CostoTotal"));
+        colVentasMensuales.setCellValueFactory(new PropertyValueFactory<>("CantidadVendida"));
         mostrarProductos();
 
     }
