@@ -333,13 +333,33 @@ public class ControladorPf
     @FXML
     public void onCalcularCostosFijos()
     {
-        System.out.println("calcular costos fijos");
+        try
+        {
+            if (mostrarMensajeConfirmacion("El costo fijo se asignara a todos los producto en base a su ponderacion."))
+            {
+                ServicioCalculoCostoFijo.calcularCostosFijos();
+                mostrarMensajeExito("Se asigno el costo fijo a todos los productos.");
+                actualizarVista();
+            }
+            
+        } catch (CostoFijoException ex)
+        {
+            mostrarMensajeError(ex.getMessage());
+        }
     }
 
     public void mostrarMensajeError(String mensaje)
     {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+    public void mostrarMensajeExito(String mensaje)
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Exito");
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();

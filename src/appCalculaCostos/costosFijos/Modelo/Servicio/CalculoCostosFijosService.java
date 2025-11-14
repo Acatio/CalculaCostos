@@ -11,6 +11,7 @@ import appCalculaCostos.productoFinal.modelo.interfacesLogicas.IRepositorioProdu
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.entidades.ProductoFinal;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios.ServicioProductoFinal;
 import conexion.Exepciones.PersistenciaException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -55,36 +56,65 @@ public class CalculoCostosFijosService
                 throw new CostoFijoException("Error al verificar productos sin ponderación.");
             }
 
-            // Todos tienen ponderación
-            var ponderaciones = repoCostoFijo.listarPonderaciones();
-
             // 1. Calcular la suma total de ponderaciones
-            double sumaPonderaciones = 0;
-            for (Ponderacion p : ponderaciones)
-            {
-                sumaPonderaciones += p.calcularPonderacion();
-            }
-
             // 2. Obtener el total de costos fijos
             double costosFijosTotales = repoCostoFijo.calcularTotalCostosFijos();
+            var ponderaciones = repoCostoFijo.listarPonderaciones();
+            var sumaPonderaciones = obtenerSumaTotalDePonderaciones(ponderaciones);
 
             // 3. Asignar el costo fijo proporcional por producto
             for (Ponderacion p : ponderaciones)
             {
-                double ponderacion = p.calcularPonderacion();
-                double costoAsignado = (ponderacion / sumaPonderaciones) * costosFijosTotales;
 
-                // Guardar en BD
-                repoCostoFijo.guardarCostoFijoAsignado(p.getIdProducto(), costoAsignado);
+                var costoMensualAsignado=calcularCostoFijoAsignadoMensual(p, sumaPonderaciones, costosFijosTotales);
+                // Guardar en BD    
+                var opt = productoRepo.buscarProductoFinalPorId(p.getIdProducto());
+                if (opt.isEmpty())
+                {
+                    throw new CostoFijoException("No se puede seguir asignando costos fijos ya que no se encontro un producto.");//TODO despues mejorar la logica
+                }
+                var productoFinal = opt.get();
+                var ventasMensuales = productoFinal.getCantidadVendida();
+                var costoUnitario = 0d;
+                if (ventasMensuales != 0)
+                {
+                    costoUnitario = costoMensualAsignado / ventasMensuales;
+                }
+
+                repoCostoFijo.guardarCostoFijoAsignado(p.getIdProducto(), costoUnitario);//TODO verificar si es mejor hacerlo en una sola transacccion y separar responzabilidades
                 servicioProductoFinal.actualizarCostoTotal(p.getIdProducto());
                 servicioProductoFinal.actualizarPorcentajeDeGanancia(p.getIdProducto());
-              
+
             }
 
         } catch (PersistenciaException | ProductoFinalException ex)
         {
+            ex.printStackTrace();
             throw new CostoFijoException(ex.getMessage());
         }
+    }
+
+    public double calcularCostoFijoAsignadoMensual(Ponderacion p, double sumaPonderaciones,double costosFijosTotales)
+    {
+        if (sumaPonderaciones==0)
+        {
+            return 0;
+        }
+        double ponderacionTotal = p.calcularPonderacion();
+        return (ponderacionTotal / sumaPonderaciones) * costosFijosTotales;
+    }
+
+    private double obtenerSumaTotalDePonderaciones(List<Ponderacion> ponderaciones) throws PersistenciaException
+    {
+        // Todos tienen ponderación
+
+        double sumaPonderaciones = 0;
+        for (Ponderacion p : ponderaciones)
+        {
+            sumaPonderaciones += p.calcularPonderacion();
+        }
+        return sumaPonderaciones;
+
     }
 
     public List<Integer> obtenerProductosSinPonderacion() throws PersistenciaException

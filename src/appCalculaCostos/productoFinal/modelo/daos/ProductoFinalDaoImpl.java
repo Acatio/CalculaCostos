@@ -308,7 +308,7 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
     @Override
     public List<Integer> listarIdProductosFinales() throws PersistenciaException
     {
-        String sql = "SELECT id_producto FROM producto_final";
+        String sql = "SELECT id_producto FROM productos_finales";
         List<Integer> ids = new ArrayList<>();
 
         try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery())
