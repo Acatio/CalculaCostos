@@ -40,47 +40,16 @@ public class CostoMpRepoImpl implements ICostoMpRepo
 
 // Método público que se usa cuando quieres guardar desde fuera (abre y cierra la conexión)
     @Override
-    public void guardarCotosMP(int idProductoFinal, List<DetalleReceta> costosMp, IRepositorioProductoFinal repo) throws PersistenciaException
+    public void guardarCotosMP(int idProductoFinal, List<DetalleReceta> costosMp) throws PersistenciaException
     {
-        Connection conn = null;
-        try
+
+        try (Connection conn = conexion.getConnection())
         {
-            conn = conexion.getConnection();
-            conn.setAutoCommit(false);
+            guardarCostosMPLocal(idProductoFinal, costosMp, conn);
 
-            // usa el método privado que recibe la conexión
-            guardarCostosMPLocal(idProductoFinal, costosMp, repo, conn);
-
-            conn.commit();
         } catch (SQLException | ConexionException | NoPosibleCalcularMonto ex)
         {
-            // intento de rollback si algo falló
-            if (conn != null)
-            {
-                try
-                {
-                    conn.rollback();
-                } catch (SQLException rbEx)
-                {
-                    // añadir suppressed para no perder la info original
-                    rbEx.addSuppressed(ex);
-                    throw new PersistenciaException("Error al hacer rollback al guardar costos de MP", rbEx);
-                }
-            }
             throw new PersistenciaException("Error al guardar los costos de materia prima", ex);
-        } finally
-        {
-            if (conn != null)
-            {
-                try
-                {
-                    conn.close();
-                } catch (SQLException closeEx)
-                {
-                    // opcional: loggear/printStackTrace
-                    closeEx.printStackTrace();
-                }
-            }
         }
     }
 
@@ -88,7 +57,6 @@ public class CostoMpRepoImpl implements ICostoMpRepo
 // NO hace commit/rollback ni cierra la conexión.
     private void guardarCostosMPLocal(int idProductoFinal,
             List<DetalleReceta> costosMp,
-            IRepositorioProductoFinal repo,
             Connection conn)
             throws SQLException, NoPosibleCalcularMonto, PersistenciaException
     {
@@ -103,7 +71,6 @@ public class CostoMpRepoImpl implements ICostoMpRepo
                 ps.setInt(2, detalle.getInsumo().getId());
                 ps.setDouble(3, detalle.getCantidad());
                 ps.setDouble(4, detalle.getMonto());
-                System.out.println("monto guardado: " + detalle.getMonto());
                 ps.setString(5, TipoCosto.MATERIA_PRIMA.name());
                 ps.setString(6, detalle.getUnidadMedida().getNombre());
                 ps.addBatch();
@@ -111,9 +78,6 @@ public class CostoMpRepoImpl implements ICostoMpRepo
             ps.executeBatch();
         }
 
-        // actualizar el costo calculado del producto final (usa la misma conexión)
-        // Se asume que este método del repo recibe Connection y no la cierra.
-        repo.actualizarCostoProductoFinalCalculado(conn, idProductoFinal);
     }
 
     @Override
@@ -127,9 +91,8 @@ public class CostoMpRepoImpl implements ICostoMpRepo
 
             // Se asume que este método del repo usa la connection pasada y no la cierra.
             repoPf.borrarCostotosDeProductoPorTipo(idProductoFinal, TipoCosto.MATERIA_PRIMA, conn);
-
             // usa el método privado que recibe la conexión
-            guardarCostosMPLocal(idProductoFinal, nuevosCostos, repoPf, conn);
+            guardarCostosMPLocal(idProductoFinal, nuevosCostos, conn);
 
             conn.commit();
         } catch (SQLException | ConexionException ex)

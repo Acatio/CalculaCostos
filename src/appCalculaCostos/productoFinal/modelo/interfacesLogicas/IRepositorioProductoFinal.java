@@ -4,6 +4,7 @@
  */
 package appCalculaCostos.productoFinal.modelo.interfacesLogicas;
 
+import appCalculaCostos.costosFijos.Modelo.Servicio.Ponderacion;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.TipoCosto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalDatosDto;
 import conexion.Exepciones.PersistenciaException;
@@ -23,10 +24,12 @@ public interface IRepositorioProductoFinal
     public void eliminarProductoFinal(int id)throws PersistenciaException;
     public Optional<ProductoFinal> buscarProductoFinalPorId(int id)throws PersistenciaException;
     public List<ProductoFinal>ListarProductosFinales()throws PersistenciaException;
-    public  void actualizarCostoProductoFinalCalculado(Connection conn, int idProductoFinal) throws PersistenciaException;    
     public void borrarCostotosDeProductoPorTipo(int idProductoFinal,TipoCosto tipoCosto, Connection conn) throws PersistenciaException;
     public void actualizarDatosProductoFinal(ProductoFinal productoActualizado) throws PersistenciaException;
     public void borrarProductoFinal(int idProducto) throws PersistenciaException;
     public void actualizarPorcentajeGanancia(int idProducto,double nuevoPorcentaje) throws PersistenciaException;
- 
+    public List<Integer> listarIdProductosFinales() throws PersistenciaException;
+    public void actualizarCostoTotal(int idProducto, double costoTotal) throws PersistenciaException;
+    public double obtenerCostoMateriaPrima(int idProducto) throws PersistenciaException;
+    public double obtenerCostoFijoAsignado(int idProducto) throws PersistenciaException;
 }

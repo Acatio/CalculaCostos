@@ -99,7 +99,7 @@ public class ServicioProductoFinal
     // Nivel de Abstracción 2: Orquestación de Precio/Ganancia
     /**
      * Aplica la lógica de consistencia entre Porcentaje de Ganancia y Precio de
-     * Venta.
+     * Venta
      */
     private void aplicarLogicaPrecioVenta(ProductoFinalCreacionDTO dto, ProductoFinal productoFinal)
     {
@@ -154,7 +154,7 @@ public class ServicioProductoFinal
             List<ProductoFinalDatosDto> productosDto = new ArrayList<>();
             for (ProductoFinal p : productosF)
             {
-                productosDto.add(new ProductoFinalDatosDto(p.getId(), p.getNombre(), Redondeo.redondear(p.getPorcentajeGanancia(),2),
+                productosDto.add(new ProductoFinalDatosDto(p.getId(), p.getNombre(), Redondeo.redondear(p.getPorcentajeGanancia(), 2),
                         p.getPrecioVenta(), Redondeo.redondear(p.getCostoTotal(), 1), p.getCantidadVendida()));
 
             }
@@ -172,12 +172,30 @@ public class ServicioProductoFinal
 
             validarCostosMP(costosMp);
             List<DetalleReceta> costos = construirDetalles(costosMp);
-            repoCostoMp.guardarCotosMP(idProducto, costos, repo);
+            repoCostoMp.guardarCotosMP(idProducto, costos);
+            actualizarCostoTotal(idProducto);
+            actualizarPorcentajeDeGanancia(idProducto);
 
         } catch (PersistenciaException ex)
         {
             // Reempaqueta la excepción de persistencia como una excepción de negocio
             throw new ProductoFinalException("Error al guardar los costos de materia prima: " + ex.getMessage(), ex);
+        }
+    }
+
+    public void actualizarCostoTotal(int idProducto) throws ProductoFinalException 
+    {
+
+        try
+        {
+            var costoMp = repo.obtenerCostoMateriaPrima(idProducto);
+            var costoF = repo.obtenerCostoFijoAsignado(idProducto);
+            var costoTotal = costoMp + costoF;
+            repo.actualizarCostoTotal(idProducto, costoTotal);
+        } catch (PersistenciaException ex)
+        {
+            throw new ProductoFinalException("Ocurrio un error al actualizar el costo total del product: ",ex);
+           
         }
     }
 
@@ -290,6 +308,7 @@ public class ServicioProductoFinal
 
             // Enviar la entidad al repositorio
             repo.actualizarDatosProductoFinal(productoEditado);
+            actualizarPorcentajeDeGanancia(productoEditado.getId());
 
         } catch (PersistenciaException ex)
         {
@@ -322,14 +341,16 @@ public class ServicioProductoFinal
             throw new ProductoFinalException("Ocurrio un error al intentar borrar el producto.");
         }
     }
+
     /**
-     * metodo para calcular y actualizar el porcentaje de ganancia de un producto por su id
-     * para que funcionese tiene que tener cargados los valores correctamente en la tabla
-     * productos_finales en la base de datos
+     * metodo para calcular y actualizar el porcentaje de ganancia de un
+     * producto por su id para que funcionese tiene que tener cargados los
+     * valores correctamente en la tabla productos_finales en la base de datos
+     *
      * @param idProducto
-     * @throws ProductoFinalException 
+     * @throws ProductoFinalException
      */
-    public void actualizarPorcentajeDeGanancia(int idProducto) throws ProductoFinalException
+    public  void actualizarPorcentajeDeGanancia(int idProducto) throws ProductoFinalException
     {
         try
         {

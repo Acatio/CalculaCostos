@@ -161,7 +161,6 @@ public class ControladorAgregarCostoMp
                 }
             }
             spf.modificarCostosMp(productoDto.getId(), listaDetalles);
-            spf.actualizarPorcentajeDeGanancia(productoDto.getId());
             mostrarMensajeExito("Costos MP agregados");
             controladorP.actualizarVista();
 

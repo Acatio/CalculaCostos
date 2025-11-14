@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface ICostoMpRepo 
 {
-    public void guardarCotosMP(int idProductoFinal, List<DetalleReceta> costosMp, IRepositorioProductoFinal repoPf) throws PersistenciaException;
+    public void guardarCotosMP(int idProductoFinal, List<DetalleReceta> costosMp) throws PersistenciaException;
     public void actualizarCostosMP(int idProductoFinal, List<DetalleReceta> nuevosCostos, IRepositorioProductoFinal repoPf) throws PersistenciaException;
     public List<DetalleReceta> listarCostosMp(int idProducto, IInsumoDAO insumoDao) throws PersistenciaException;
 

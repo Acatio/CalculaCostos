@@ -235,4 +235,112 @@ public class CostoFijoRepoImpl implements ICostoFijoRepo
         }
     }
 
+    @Override
+    public List<Integer> obtenerIdsProductosFinales() throws PersistenciaException
+    {
+        String sql = "SELECT id_producto FROM producto_final";
+        List<Integer> ids = new ArrayList<>();
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery())
+        {
+            while (rs.next())
+            {
+                ids.add(rs.getInt("id_producto"));
+            }
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error al obtener productos finales.", e);
+        }
+
+        return ids;
+    }
+
+    @Override
+    public List<Integer> obtenerIdsProductosConPonderacion() throws PersistenciaException
+    {
+        String sql = "SELECT id_producto FROM producto_ponderacion";
+        List<Integer> ids = new ArrayList<>();
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery())
+        {
+            while (rs.next())
+            {
+                ids.add(rs.getInt("id_producto"));
+            }
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error al obtener productos con ponderación.", e);
+        }
+
+        return ids;
+    }
+
+    @Override
+    public List<Ponderacion> listarPonderaciones() throws PersistenciaException
+    {
+        String sql = "SELECT id_producto, tamanio, tiempo_preparacion, cantidad_recursos_usados "
+                + "FROM producto_ponderacion";
+
+        List<Ponderacion> lista = new ArrayList<>();
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery())
+        {
+            while (rs.next())
+            {
+                Ponderacion p = new Ponderacion();
+                p.setIdProducto(rs.getInt("id_producto"));
+                p.setTamanio(rs.getFloat("tamanio"));
+                p.setTiempoPreparacion(rs.getFloat("tiempo_preparacion"));
+                p.setCantidadRecursosUsados(rs.getFloat("cantidad_recursos_usados"));
+
+                lista.add(p);
+            }
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error al listar ponderaciones.", e);
+        }
+
+        return lista;
+    }
+
+    @Override
+    public double calcularTotalCostosFijos() throws PersistenciaException
+    {
+        String sql = "SELECT SUM(importe_mensual * porcentaje_usado) AS total "
+                + "FROM costos_fijos";
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery())
+        {
+            if (rs.next())
+            {
+                return rs.getDouble("total");
+            }
+            return 0.0;
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error al calcular el total de costos fijos.", e);
+        }
+    }
+
+    @Override
+    public void guardarCostoFijoAsignado(int idProducto, double costoAsignado) throws PersistenciaException
+    {
+        String sql = """
+        INSERT INTO producto_costo_fijo (id_producto, costo_asignado)
+        VALUES (?, ?)
+        ON DUPLICATE KEY UPDATE costo_asignado = VALUES(costo_asignado)
+        """;
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setInt(1, idProducto);
+            stmt.setDouble(2, costoAsignado);
+
+            stmt.executeUpdate();
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error al guardar el costo fijo asignado.", e);
+        }
+    }
+
 }

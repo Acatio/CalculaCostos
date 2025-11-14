@@ -24,4 +24,10 @@ public interface ICostoFijoRepo
     public void guardarPonderacion(Ponderacion ponderacion)throws PersistenciaException;
     public void actualizarPonderacion(Ponderacion ponderacion)throws PersistenciaException;
     public Optional<Ponderacion> cargarPonderacion(int idProducto) throws PersistenciaException;
+    public List<Integer> obtenerIdsProductosFinales() throws PersistenciaException;
+    public List<Integer> obtenerIdsProductosConPonderacion() throws PersistenciaException;
+    public List<Ponderacion> listarPonderaciones() throws PersistenciaException;
+    public double calcularTotalCostosFijos()throws PersistenciaException;
+    public void guardarCostoFijoAsignado(int idProducto, double costoAsignado)throws PersistenciaException;
+    
 }

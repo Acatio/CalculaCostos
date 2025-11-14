@@ -60,29 +60,79 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
         }
     }
 
+    // Actualiza el costo total (materia prima + costos fijos) en productos_finales
     @Override
-    public void actualizarCostoProductoFinalCalculado(Connection conn, int idProductoFinal) throws PersistenciaException
+    public void actualizarCostoTotal(int idProducto, double costoTotal) throws PersistenciaException
     {
-        final String sqlUpdate = """
-        UPDATE productos_finales
-        SET costo_total = (
-            SELECT COALESCE(SUM(costo), 0)
-            FROM insumos_de_producto
-            WHERE id_producto = ?
-        )
-        WHERE id_producto = ?;
-        """;
-
-        try (PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate))
+        String sql = "UPDATE productos_finales SET costo_total = ? WHERE id_producto = ?";
+        try (Connection conn=conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(sql))
         {
-            psUpdate.setInt(1, idProductoFinal);
-            psUpdate.setInt(2, idProductoFinal);
-            psUpdate.executeUpdate();
-        } catch (SQLException ex)
+            ps.setDouble(1, costoTotal);
+            ps.setInt(2, idProducto);
+            ps.executeUpdate();
+        } catch (SQLException |ConexionException e)
         {
-            throw new PersistenciaException("No se pudo actualizar el costo del producto con id: " + idProductoFinal, ex);
+            throw new PersistenciaException("No se pudo actualizar costo total", e);
         }
+    }
 
+    @Override
+    public double obtenerCostoMateriaPrima(int idProducto) throws PersistenciaException
+    {
+        String sql = """
+        SELECT COALESCE(SUM(costo), 0) AS total_mp
+        FROM insumos_de_producto
+        WHERE id_producto = ?
+    """;
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setInt(1, idProducto);
+
+            try (ResultSet rs = stmt.executeQuery())
+            {
+                if (rs.next())
+                {
+                    return rs.getDouble("total_mp");
+                } else
+                {
+                    return 0.0;
+                }
+            }
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error al obtener costo materia prima para producto " + idProducto, e);
+        }
+    }
+
+    @Override
+    public double obtenerCostoFijoAsignado(int idProducto) throws PersistenciaException
+    {
+        String sql = """
+        SELECT costo_asignado
+        FROM producto_costo_fijo
+        WHERE id_producto = ?
+    """;
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setInt(1, idProducto);
+
+            try (ResultSet rs = stmt.executeQuery())
+            {
+                if (rs.next())
+                {
+                    return rs.getDouble("costo_asignado");
+                } else
+                {
+                    // Si no existe registro de costo fijo asignado, asumimos 0
+                    return 0.0;
+                }
+            }
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error al obtener costo fijo asignado para producto " + idProducto, e);
+        }
     }
 
     @Override
@@ -253,6 +303,26 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
         {
             throw new PersistenciaException("Error al actualizar el porcentaje de ganancia", e);
         }
+    }
+
+    @Override
+    public List<Integer> listarIdProductosFinales() throws PersistenciaException
+    {
+        String sql = "SELECT id_producto FROM producto_final";
+        List<Integer> ids = new ArrayList<>();
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery())
+        {
+            while (rs.next())
+            {
+                ids.add(rs.getInt("id_producto"));
+            }
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error al obtener productos finales.", e);
+        }
+
+        return ids;
     }
 
 }
