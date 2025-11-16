@@ -4,6 +4,7 @@
  */
 package appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios;
 
+import appCalculaCostos.costosFijos.Modelo.dto.CostoDto;
 import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.UnidadMedida;
 import appCalculaCostos.costosMateriaPrima.modelo.UnidadesMedida.UnidadMedidaFactory;
 import appCalculaCostos.costosMateriaPrima.modelo.interfacesLogicas.IInsumoDAO;
@@ -198,6 +199,23 @@ public class ServicioProductoFinal
             throw new ProductoFinalException("Ocurrio un error al actualizar el costo total del producto", ex);
 
         }
+    }
+
+    public List<CostoDto> listarTotalPorTipoCosto(int idProducto) throws ProductoFinalException
+    {
+        try
+        {
+            List<CostoDto>costosDelProdutco=new ArrayList<>();
+            var costoMp = repo.obtenerCostoMateriaPrima(idProducto);
+            var costoF = repo.obtenerCostoFijoAsignado(idProducto);
+            costosDelProdutco.add(new CostoDto("Costo de materia Prima", Redondeo.redondear(costoMp, 1)));
+            costosDelProdutco.add(new CostoDto("Costos Fijos", Redondeo.redondear(costoF, 1)));
+            return costosDelProdutco;
+        } catch (PersistenciaException ex)
+        {
+           throw new ProductoFinalException("Ocurrio un error al obtener los costos del producto");
+        }
+
     }
 
     public List<DetalleRecetaDto> listarCostosMp(int idProducto) throws ProductoFinalException

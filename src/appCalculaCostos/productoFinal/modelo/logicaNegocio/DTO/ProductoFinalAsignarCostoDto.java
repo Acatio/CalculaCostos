@@ -42,6 +42,12 @@ public class ProductoFinalAsignarCostoDto
     {
         this.nombre = nombre;
     }
+
+    @Override
+    public String toString()
+    {
+        return "ProductoFinalAsignarCostoDto{" + "id=" + id + ", nombre=" + nombre + '}';
+    }
     
 
 

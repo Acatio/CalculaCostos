@@ -14,6 +14,7 @@ import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalAsig
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalDatosDto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios.ServicioProductoFinal;
 import appCalculaCostos.vista.interfaz10.ControladorAgregarCostoF;
+import appCalculaCostos.vista.interfaz11.ControladorResumenCostos;
 import appCalculaCostos.vista.interfaz2.InterfazProductoController;
 import appCalculaCostos.vista.interfaz6.ControladorVistaInsumos;
 import appCalculaCostos.vista.interfaz7.ControladorAgregarCostoMp;
@@ -45,6 +46,7 @@ public class ControladorPf
     private Stage ventanaCmp;
     private Stage ventanaAltaCostosFijos;
     private Stage ventanaAsignacionCostosFijos;
+    private Stage ventanaResumenCostos;
     IConexion conexion = new ConexionSQL();
 
     private ServicioProductoFinal productoService = new ServicioProductoFinal(new ProductoFinalDaoImpl(conexion), new CostoMpRepoImpl(conexion), new InsumoDaoImpl(conexion));
@@ -62,7 +64,7 @@ public class ControladorPf
 
     @FXML
     private TableColumn<ProductoFinalDatosDto, Double> colCosto;
-    
+
     @FXML
     private TableColumn<ProductoFinalDatosDto, Double> colVentasMensuales;
 
@@ -335,6 +337,50 @@ public class ControladorPf
     }
 
     @FXML
+    private void onVerResumen()
+    {
+        try
+        {
+            ProductoFinalDatosDto productoSeleccionado = tablaProductos.getSelectionModel().getSelectedItem();
+
+            if (productoSeleccionado == null)
+            {
+                mostrarMensajeError("No se ha seleccionado ningún producto");
+                return;
+            }
+
+            // Siempre carga el FXML para actualizar los datos
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/appCalculaCostos/vista/interfaz11/interfazResumenCostos.fxml"
+            ));
+            Parent root = loader.load();
+
+            ControladorResumenCostos controlador = loader.getController();
+            controlador.setSpf(productoService);
+            controlador.setProductoDto(new ProductoFinalAsignarCostoDto(
+                    productoSeleccionado.getId(),
+                    productoSeleccionado.getNombre()
+            ));
+
+            // Crear o reutilizar ventana
+            if (ventanaResumenCostos == null)
+            {
+                ventanaResumenCostos = new Stage();
+                ventanaResumenCostos.setTitle("Resumen de costos");
+                ventanaResumenCostos.setOnHidden(e -> ventanaResumenCostos = null);
+            }
+
+            ventanaResumenCostos.setScene(new Scene(root));
+            ventanaResumenCostos.show();
+            ventanaResumenCostos.toFront();
+
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void onCalcularCostosFijos()
     {
         try
@@ -345,7 +391,7 @@ public class ControladorPf
                 mostrarMensajeExito("Se asigno el costo fijo a todos los productos.");
                 actualizarVista();
             }
-            
+
         } catch (CostoFijoException ex)
         {
             mostrarMensajeError(ex.getMessage());
@@ -360,6 +406,7 @@ public class ControladorPf
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
     public void mostrarMensajeExito(String mensaje)
     {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

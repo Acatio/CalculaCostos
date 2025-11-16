@@ -54,24 +54,29 @@
                   <MenuItem mnemonicParsing="false" onAction="#onActionEliminar" text="Eliminar" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Asignar Costo">
-            <items>
-                  <Menu mnemonicParsing="false" text="Costos Fijos">
-                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onAgregarCf" text="Ponderaciones" />
-                        <MenuItem mnemonicParsing="false" onAction="#onCalcularCostosFijos" text="Calcular Costos Fijos" />
-                     </items>
-                  </Menu>
-              <MenuItem mnemonicParsing="false" onAction="#onAgregarCmp" text="Materia Prima" />
-                  <MenuItem mnemonicParsing="false" text="Mano Obra" />
-            </items>
-          </Menu>
           <Menu mnemonicParsing="false" text="Inventario">
             <items>
               <MenuItem fx:id="itmInsumos" mnemonicParsing="false" onAction="#onActionInsumos" text="Insumos" />
                   <MenuItem mnemonicParsing="false" onAction="#onInventarioCostosFijos" text="Costos Fijos" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Costos">
+               <items>
+                <Menu mnemonicParsing="false" text="Asignar Costos">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#onAgregarCmp" text="Materia Prima" />
+                        <Menu mnemonicParsing="false" text="Costos Fijos">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#onAgregarCf" text="Ponderaciones" />
+                              <MenuItem mnemonicParsing="false" onAction="#onCalcularCostosFijos" text="Calcular Costos Fijos" />
+                           </items>
+                        </Menu>
+                        <MenuItem mnemonicParsing="false" text="Mano Obra" />
+                  </items>
+                </Menu>
+                  <MenuItem mnemonicParsing="false" onAction="#onVerResumen" text="Ver Resumen" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>
