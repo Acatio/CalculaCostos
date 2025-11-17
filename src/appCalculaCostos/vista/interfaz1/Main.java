@@ -1,8 +1,10 @@
 package appCalculaCostos.vista.interfaz1;
 
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application
@@ -22,7 +24,7 @@ public class Main extends Application
             // El error de "No resources specified" a menudo está aquí. 
             // Asegúrate de que existe un archivo 'estilo.css' dentro de la carpeta 'styles' 
             // en la raíz de tus fuentes.
-            String cssPath = "estilo.css";
+            String cssPath = "/appCalculaCostos/vista/interfaz1/estilo.css";
 
             // Verifica que el recurso exista antes de intentar cargarlo
             if (getClass().getResource(cssPath) != null)
@@ -33,9 +35,10 @@ public class Main extends Application
                 System.err.println("Advertencia: No se pudo encontrar el archivo CSS en la ruta: " + cssPath);
                 // Si el CSS no existe, la aplicación debe seguir cargando la interfaz.
             }
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/appCalculaCostos/vista/iconos/logo.png")));
 
             // 3. Mostrar la ventana
-            stage.setTitle("Proyecto JavaFX - Opciones");
+            stage.setTitle("Easy Cost");
             stage.setScene(scene);
             stage.show();
 

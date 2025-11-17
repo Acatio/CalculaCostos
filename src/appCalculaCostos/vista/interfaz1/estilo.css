@@ -69,6 +69,10 @@
     -fx-background-radius: 5;
 }
 
+.table-view .corner {
+    -fx-background-color: #34495e;
+    -fx-border-color: transparent;
+}
 /* Estilo para el campo de búsqueda (si tiene un estilo más específico) */
 /* Si usas fx:id="txtBuscar", puedes darle un id="#txtBuscar" y estilizarlo aquí */
 /* El estilo en tu FXML ya es bastante bueno, esto es solo un ejemplo: */

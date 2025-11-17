@@ -7,6 +7,7 @@ import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.DetalleRecet
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.InsumoDto;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.MateriaPrimaService;
 import appCalculaCostos.costosMateriaPrima.modelo.daos.CostoMpRepoImpl;
+import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.Redondeo;
 import appCalculaCostos.productoFinal.modelo.daos.ProductoFinalDaoImpl;
 import appCalculaCostos.productoFinal.modelo.exepciones.ProductoFinalException;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalAsignarCostoDto;
@@ -37,6 +38,8 @@ public class ControladorResumenCostos
 
     @FXML
     private Label lblNombre;
+    @FXML
+    private Label lblTotal;
 
     @FXML
     public void initialize()
@@ -56,6 +59,7 @@ public class ControladorResumenCostos
             {
                 total+=costo.getMontoTotal();
             }
+            lblTotal.setText(String.valueOf(Redondeo.redondear(total, 2)));
         } catch (ProductoFinalException ex)
         {
             System.out.println(ex.getMessage());

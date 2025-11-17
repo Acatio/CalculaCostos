@@ -5,6 +5,7 @@ import appCalculaCostos.costosFijos.Modelo.Servicio.CostosFijosService;
 import appCalculaCostos.costosFijos.Modelo.dao.CostoFijoRepoImpl;
 import appCalculaCostos.costosFijos.Modelo.dto.CostoFijoDto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalDatosDto;
+import appCalculaCostos.vista.Rutas;
 import appCalculaCostos.vista.interfaz1.ControladorPf;
 import appCalculaCostos.vista.interfaz2.InterfazProductoController;
 import appCalculaCostos.vista.interfaz9.ControladorAltaCosto;
@@ -22,15 +23,16 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class ControladorCostosFijos
 {
 
     private ControladorPf controladorPrincipal;
-    private CostosFijosService servicioCostosFijos = new CostosFijosService(new CostoFijoRepoImpl(new ConexionSQL()));
+    private final CostosFijosService servicioCostosFijos = new CostosFijosService(new CostoFijoRepoImpl(new ConexionSQL()));
     private Stage ventanaAltaCostoFijo;
-
+    String cssPath = "/appCalculaCostos/vista/interfaz1/estilo.css";
     @FXML
     private TableColumn<CostoFijoDto, String> colNombre;
 
@@ -95,9 +97,13 @@ public class ControladorCostosFijos
                 controladorAltaCostoFijo.setControladorPrincipal(this);
                 controladorAltaCostoFijo.setServicioCostoFijo(servicioCostosFijos);
 
+                Scene escena = new Scene(root);
+                escena.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+
                 ventanaAltaCostoFijo = new Stage();
-                ventanaAltaCostoFijo.setTitle("Nueva Ventana");
-                ventanaAltaCostoFijo.setScene(new Scene(root));
+                ventanaAltaCostoFijo.setTitle("Costos Fijos");
+                ventanaAltaCostoFijo.setScene(escena);
+                ventanaAltaCostoFijo.getIcons().add(new Image(getClass().getResourceAsStream(Rutas.RUTA_LOGO)));
 
                 // Opcional: limpiar la referencia cuando se cierre
                 ventanaAltaCostoFijo.setOnHidden(event -> ventanaAltaCostoFijo = null);
@@ -116,25 +122,27 @@ public class ControladorCostosFijos
     {
         try
         {
+            CostoFijoDto productoSeleccionado = tablaCostosFijos.getSelectionModel().getSelectedItem();
+            if (productoSeleccionado == null)
+            {
+                mostrarMensajeError("No se ha seleccionado ningun costo fijo");
+                return; // No hacer nada si no se seleccionó
+            }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz9/interfazCostoFijo.fxml"));
+            Parent root = loader.load();
+            ControladorAltaCosto controllerPF = loader.getController();
+            controllerPF.setControladorPrincipal(this);
+            controllerPF.setServicioCostoFijo(servicioCostosFijos);
+            controllerPF.setModoEdicion(productoSeleccionado);
+            Scene escena = new Scene(root);
+            escena.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
             if (ventanaAltaCostoFijo == null)
             {
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz9/interfazCostoFijo.fxml"));
-                Parent root = loader.load();
-                CostoFijoDto productoSeleccionado = tablaCostosFijos.getSelectionModel().getSelectedItem();
-                if (productoSeleccionado == null)
-                {
-                    mostrarMensajeError("No se ha seleccionado ningun costo fijo");
-                    return; // No hacer nada si no se seleccionó
-                }
-
-                ControladorAltaCosto controllerPF = loader.getController();
-                controllerPF.setControladorPrincipal(this);
-                controllerPF.setServicioCostoFijo(servicioCostosFijos);
-                controllerPF.setModoEdicion(productoSeleccionado);
                 ventanaAltaCostoFijo = new Stage();
                 ventanaAltaCostoFijo.setTitle("Editar");
-                ventanaAltaCostoFijo.setScene(new Scene(root));
+                ventanaAltaCostoFijo.setScene(escena);
+                ventanaAltaCostoFijo.getIcons().add(new Image(getClass().getResourceAsStream(Rutas.RUTA_LOGO)));
                 // Opcional: limpiar la referencia cuando se cierre
                 ventanaAltaCostoFijo.setOnHidden(event -> ventanaAltaCostoFijo = null);
             }

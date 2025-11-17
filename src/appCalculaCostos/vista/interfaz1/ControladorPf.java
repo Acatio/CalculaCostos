@@ -13,6 +13,7 @@ import appCalculaCostos.productoFinal.modelo.exepciones.ProductoFinalException;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalAsignarCostoDto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalDatosDto;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.servicios.ServicioProductoFinal;
+import appCalculaCostos.vista.Rutas;
 import appCalculaCostos.vista.interfaz10.ControladorAgregarCostoF;
 import appCalculaCostos.vista.interfaz11.ControladorResumenCostos;
 import appCalculaCostos.vista.interfaz2.InterfazProductoController;
@@ -36,6 +37,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class ControladorPf
@@ -48,10 +50,10 @@ public class ControladorPf
     private Stage ventanaAsignacionCostosFijos;
     private Stage ventanaResumenCostos;
     IConexion conexion = new ConexionSQL();
-
+    String cssPath = "/appCalculaCostos/vista/interfaz1/estilo.css";
     private ServicioProductoFinal productoService = new ServicioProductoFinal(new ProductoFinalDaoImpl(conexion), new CostoMpRepoImpl(conexion), new InsumoDaoImpl(conexion));
-    private CostosFijosService servicioCostoFijo = new CostosFijosService(new CostoFijoRepoImpl(conexion));
-    private CalculoCostosFijosService ServicioCalculoCostoFijo = new CalculoCostosFijosService(new CostoFijoRepoImpl(conexion), new ProductoFinalDaoImpl(conexion), productoService);
+    private final CostosFijosService servicioCostoFijo = new CostosFijosService(new CostoFijoRepoImpl(conexion));
+    private final CalculoCostosFijosService ServicioCalculoCostoFijo = new CalculoCostosFijosService(new CostoFijoRepoImpl(conexion), new ProductoFinalDaoImpl(conexion), productoService);
 
     @FXML
     private TableColumn<ProductoFinalDatosDto, String> colNombre;
@@ -113,18 +115,19 @@ public class ControladorPf
     {
         try
         {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz2/interfazProducto.fxml"));
+            Parent root = loader.load();
+            InterfazProductoController controllerPF = loader.getController();
+            controllerPF.setPrincipalController(this);
+            controllerPF.setProductoService(productoService);
+            Scene escena = new Scene(root);
+            escena.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
             if (ventanaNuevoProducto == null)
             {
-
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz2/interfazProducto.fxml"));
-                Parent root = loader.load();
-                InterfazProductoController controllerPF = loader.getController();
-                controllerPF.setPrincipalController(this);
-                controllerPF.setProductoService(productoService);
                 ventanaNuevoProducto = new Stage();
+                ventanaNuevoProducto.getIcons().add(new Image(getClass().getResourceAsStream(Rutas.RUTA_LOGO)));
                 ventanaNuevoProducto.setTitle("Nuevo Producto");
-                ventanaNuevoProducto.setScene(new Scene(root));
-
+                ventanaNuevoProducto.setScene(escena);
                 // Opcional: limpiar la referencia cuando se cierre
                 ventanaNuevoProducto.setOnHidden(event -> ventanaNuevoProducto = null);
             }
@@ -141,33 +144,42 @@ public class ControladorPf
     @FXML
     private void onActionEditar()
     {
+
+        ProductoFinalDatosDto productoSeleccionado = tablaProductos.getSelectionModel().getSelectedItem();
+
+        if (productoSeleccionado == null)
+        {
+            mostrarMensajeError("No se ha seleccionado ningún producto");
+            return;
+        }
+
         try
         {
+            // Siempre cargar nuevo FXML para asegurarte de limpiar datos previos
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/appCalculaCostos/vista/interfaz2/interfazProducto.fxml"
+            ));
+            Parent root = loader.load();
+            Scene escena = new Scene(root);
+            escena.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+            InterfazProductoController controller = loader.getController();
+            controller.setPrincipalController(this);
+            controller.setProductoService(productoService);
+            controller.setProducto(productoSeleccionado);
+
             if (ventanaNuevoProducto == null)
             {
-
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz2/interfazProducto.fxml"));
-                Parent root = loader.load();
-                ProductoFinalDatosDto productoSeleccionado = tablaProductos.getSelectionModel().getSelectedItem();
-                if (productoSeleccionado == null)
-                {
-                    mostrarMensajeError("No se ha seleccionado ningun producto");
-                    return; // No hacer nada si no se seleccionó
-                }
-
-                InterfazProductoController controllerPF = loader.getController();
-                controllerPF.setPrincipalController(this);
-                controllerPF.setProductoService(productoService);
-                controllerPF.setProducto(productoSeleccionado);
                 ventanaNuevoProducto = new Stage();
+                ventanaNuevoProducto.getIcons().add(new Image(getClass().getResourceAsStream(Rutas.RUTA_LOGO)));
                 ventanaNuevoProducto.setTitle("Editar");
-                ventanaNuevoProducto.setScene(new Scene(root));
-                // Opcional: limpiar la referencia cuando se cierre
-                ventanaNuevoProducto.setOnHidden(event -> ventanaNuevoProducto = null);
+                ventanaNuevoProducto.setOnHidden(e -> ventanaNuevoProducto = null);
             }
 
+            // Actualizar escena siempre
+            ventanaNuevoProducto.setScene(escena);
             ventanaNuevoProducto.show();
-            ventanaNuevoProducto.toFront(); // Si ya estaba abierta, la trae al frente
+            ventanaNuevoProducto.toFront();
+
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -204,22 +216,22 @@ public class ControladorPf
     {
         try
         {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz6/vistaInsumos.fxml"));
+            Parent root = loader.load();
+            Scene escena = new Scene(root);
+            escena.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
             if (ventanaInsumos == null)
             {
-
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz6/vistaInsumos.fxml"));
-                Parent root = loader.load();
-
                 ventanaInsumos = new Stage();
-                ventanaInsumos.setTitle("Nueva Ventana");
-                ventanaInsumos.setScene(new Scene(root));
-                ControladorVistaInsumos controlerVi = loader.getController();
-                controlerVi.actualizarVista();
-
+                ventanaInsumos.setTitle("Insumos");
+                ventanaInsumos.setScene(escena);
+                ventanaInsumos.getIcons().add(new Image(getClass().getResourceAsStream(Rutas.RUTA_LOGO)));
                 // Opcional: limpiar la referencia cuando se cierre
                 ventanaInsumos.setOnHidden(event -> ventanaNuevoProducto = null);
             }
-
+            ControladorVistaInsumos controlerVi = loader.getController();
+            controlerVi.actualizarVista();
             ventanaInsumos.show();
             ventanaInsumos.toFront(); // Si ya estaba abierta, la trae al frente
         } catch (IOException e)
@@ -238,32 +250,47 @@ public class ControladorPf
 
             if (productoSeleccionado == null)
             {
-                mostrarMensajeError("No se ha seleccionado ningun producto");
-                return; // No hacer nada si no se seleccionó
+                mostrarMensajeError("No se ha seleccionado ningún producto");
+                return;
+            }
+
+            // Si la ventana YA está abierta → solo traerla enfrente
+            if (ventanaCmp != null)
+            {
+                ventanaCmp.toFront();
+                return;
             }
 
             // Cargar el FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz7/interfazAgregarCosto.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/appCalculaCostos/vista/interfaz7/interfazAgregarCosto.fxml"
+            ));
             Parent root = loader.load();
+
+            Scene escena = new Scene(root);
+            escena.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+
+            // Configurar controlador
             ControladorAgregarCostoMp controladorCostoMp = loader.getController();
             controladorCostoMp.setControladorP(this);
-            // Obtener el controlador y pasarle el DTO
             controladorCostoMp.setProductoDto(new ProductoFinalAsignarCostoDto(
                     productoSeleccionado.getId(),
                     productoSeleccionado.getNombre()
             ));
-            System.out.println("Mandaado: " + productoSeleccionado.getNombre());
 
             // Crear la nueva ventana
             ventanaCmp = new Stage();
             ventanaCmp.setTitle("Costos de Materia Prima");
-            ventanaCmp.setScene(new Scene(root));
+            ventanaCmp.setScene(escena);
+            ventanaCmp.getIcons().add(new Image(getClass().getResourceAsStream(Rutas.RUTA_LOGO)));
+            // IMPORTANTE: limpiar referencia al cerrarse
+            ventanaCmp.setOnHidden(e -> ventanaCmp = null);
 
-            // Mostrar la ventana
             ventanaCmp.show();
+
         } catch (IOException ex)
         {
-            mostrarMensajeError("Ocurrio un error al cargar la ventana");
+            mostrarMensajeError("Ocurrió un error al cargar la ventana");
         }
     }
 
@@ -274,26 +301,31 @@ public class ControladorPf
         {
             if (ventanaAltaCostosFijos == null)
             {
-
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz8/vistaCostosFijos.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                        "/appCalculaCostos/vista/interfaz8/vistaCostosFijos.fxml"
+                ));
                 Parent root = loader.load();
+
                 ControladorCostosFijos controladorCf = loader.getController();
                 controladorCf.setControladorPrincipal(this);
+
+                Scene escena = new Scene(root);
+                escena.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+
                 ventanaAltaCostosFijos = new Stage();
                 ventanaAltaCostosFijos.setTitle("Costos Fijos");
-                ventanaAltaCostosFijos.setScene(new Scene(root));
+                ventanaAltaCostosFijos.getIcons().add(new Image(getClass().getResourceAsStream(Rutas.RUTA_LOGO)));
+                ventanaAltaCostosFijos.setScene(escena);
 
-                // Opcional: limpiar la referencia cuando se cierre
-                ventanaAltaCostosFijos.setOnHidden(event -> ventanaNuevoProducto = null);
+                ventanaAltaCostosFijos.setOnHidden(event -> ventanaAltaCostosFijos = null);
             }
 
             ventanaAltaCostosFijos.show();
-            ventanaAltaCostosFijos.toFront(); // Si ya estaba abierta, la trae al frente
+            ventanaAltaCostosFijos.toFront();
         } catch (IOException e)
         {
-            mostrarMensajeError("Ocurrio un error al cargar la ventana");
+            mostrarMensajeError("Ocurrió un error al cargar la ventana");
         }
-
     }
 
     @FXML
@@ -306,30 +338,41 @@ public class ControladorPf
             if (productoSeleccionado == null)
             {
                 mostrarMensajeError("No se ha seleccionado ningun producto");
-                return; // No hacer nada si no se seleccionó
+                return;
             }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz10/interfazAgregarCostoF.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/appCalculaCostos/vista/interfaz10/interfazAgregarCostoF.fxml"
+            ));
             Parent root = loader.load();
+
             ControladorAgregarCostoF controlador = loader.getController();
             controlador.setControladorP(this);
+
             PonderacionDto ponderacion = servicioCostoFijo.cargarPonderacion(productoSeleccionado.getId());
             controlador.setPonderacion(ponderacion);
+
             controlador.setProductoDto(new ProductoFinalAsignarCostoDto(
                     productoSeleccionado.getId(),
                     productoSeleccionado.getNombre()
             ));
 
-            // Crear la nueva ventana
+            Scene escena = new Scene(root);
+            escena.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+
             ventanaAsignacionCostosFijos = new Stage();
             ventanaAsignacionCostosFijos.setTitle("Costos Fijos");
-            ventanaAsignacionCostosFijos.setScene(new Scene(root));
+            ventanaAsignacionCostosFijos.setScene(escena);
+            ventanaAsignacionCostosFijos.getIcons().add(new Image(getClass().getResourceAsStream(Rutas.RUTA_LOGO)));
+            // ⭐ Esta línea es MUY importante
+            ventanaAsignacionCostosFijos.setOnHidden(e -> ventanaAsignacionCostosFijos = null);
 
-            // Mostrar la ventana
             ventanaAsignacionCostosFijos.show();
+
         } catch (IOException ex)
         {
             mostrarMensajeError("Ocurrio un error al cargar la ventana");
+
         } catch (CostoFijoException ex)
         {
             mostrarMensajeError(ex.getMessage());
@@ -369,8 +412,9 @@ public class ControladorPf
                 ventanaResumenCostos.setTitle("Resumen de costos");
                 ventanaResumenCostos.setOnHidden(e -> ventanaResumenCostos = null);
             }
-
-            ventanaResumenCostos.setScene(new Scene(root));
+            Scene escena = new Scene(root);
+            escena.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+            ventanaResumenCostos.setScene(escena);
             ventanaResumenCostos.show();
             ventanaResumenCostos.toFront();
 

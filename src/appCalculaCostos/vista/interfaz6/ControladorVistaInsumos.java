@@ -4,6 +4,7 @@ import appCalculaCostos.costosMateriaPrima.modelo.daos.InsumoDaoImpl;
 import appCalculaCostos.costosMateriaPrima.modelo.excepciones.InsumoException;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.DTO.InsumoDto;
 import appCalculaCostos.costosMateriaPrima.modelo.logicaNegocio.MateriaPrimaService;
+import appCalculaCostos.vista.Rutas;
 import appCalculaCostos.vista.interfaz4.ControladorAltaInsumo;
 import appCalculaCostos.vista.interfaz5.ControladorReceta;
 import appCalculaCostos.vista.interfaz10.ControladorAgregarCostoF;
@@ -20,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class ControladorVistaInsumos
@@ -28,7 +30,7 @@ public class ControladorVistaInsumos
     private ControladorAgregarCostoF controladorInsumos;
     private Stage ventanaInsumos;
     private Stage ventanaRecetas;
-
+    String cssPath = "/appCalculaCostos/vista/interfaz1/estilo.css";
     private final MateriaPrimaService mps = new MateriaPrimaService(new InsumoDaoImpl(new ConexionSQL()));
 
     @FXML
@@ -70,7 +72,6 @@ public class ControladorVistaInsumos
     public void actualizarVista()
     {
         mostrarInsumos();
-        System.out.println("vista actualizada");
     }
 
     public void mostrarInsumos()
@@ -91,19 +92,19 @@ public class ControladorVistaInsumos
     {
         try
         {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz4/interfazInsumo.fxml"));
+            Parent root = loader.load();
+            ControladorAltaInsumo controladorInsumo = loader.getController();
+            controladorInsumo.setControladorPrincipal(this);
+            Scene escena = new Scene(root);
+            escena.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
             if (ventanaInsumos == null)
             {
-
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz4/interfazInsumo.fxml"));
-                Parent root = loader.load();
-                ControladorAltaInsumo controladorInsumo = loader.getController();
-                controladorInsumo.setControladorPrincipal(this);
-//                controllerPF.setProductoService(productoService);
                 ventanaInsumos = new Stage();
-                ventanaInsumos.setTitle("Nueva Ventana");
-                ventanaInsumos.setScene(new Scene(root));
-
+                ventanaInsumos.setTitle("Materias Primas");
+                ventanaInsumos.setScene(escena);
                 // Opcional: limpiar la referencia cuando se cierre
+                ventanaInsumos.getIcons().add(new Image(getClass().getResourceAsStream(Rutas.RUTA_LOGO)));
                 ventanaInsumos.setOnHidden(event -> ventanaInsumos = null);
             }
 
@@ -130,25 +131,28 @@ public class ControladorVistaInsumos
     {
         try
         {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz5/interfazReceta.fxml"));
+            Parent root = loader.load();
+
+            ControladorReceta controlador = loader.getController();
+            controlador.setControlador(this);
+            controlador.listarInsumos();
+
+            Scene escena = new Scene(root);
+            escena.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+
             if (ventanaRecetas == null)
             {
-
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz5/interfazReceta.fxml"));
-                Parent root = loader.load();
-//                controllerPF.setProductoService(productoService);
-                
-                ControladorReceta controladorRecetas = loader.getController();
-                controladorRecetas.listarInsumos();
-                controladorRecetas.setControlador(this);
                 ventanaRecetas = new Stage();
-                ventanaRecetas.setTitle("Nueva Ventana");
-                ventanaRecetas.setScene(new Scene(root));
-                // Opcional: limpiar la referencia cuando se cierre
-                ventanaRecetas.setOnHidden(event -> ventanaInsumos = null);
+                ventanaRecetas.setTitle("Recetas");
+                ventanaRecetas.setOnHidden(e -> ventanaRecetas = null);
+                ventanaRecetas.getIcons().add(new Image(getClass().getResourceAsStream(Rutas.RUTA_LOGO)));
             }
 
+            ventanaRecetas.setScene(escena);
             ventanaRecetas.show();
-            ventanaRecetas.toFront(); // Si ya estaba abierta, la trae al frente
+            ventanaRecetas.toFront();
+
         } catch (IOException e)
         {
             e.printStackTrace();

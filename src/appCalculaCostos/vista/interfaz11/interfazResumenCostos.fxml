@@ -36,8 +36,8 @@
         </HBox>
          <TableView fx:id="tbCostos" prefHeight="222.0" prefWidth="394.0">
              <columns>
-                 <TableColumn fx:id="colTipoCosto" prefWidth="180" text="Tipo Costo" />
-                 <TableColumn fx:id="colMonto" prefWidth="100" text="Monto" />
+                 <TableColumn fx:id="colTipoCosto" editable="false" prefWidth="208.0" sortable="false" text="Tipo Costo" />
+                 <TableColumn fx:id="colMonto" prefWidth="184.0" text="Monto" />
              </columns>
              <columnResizePolicy>
                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -50,7 +50,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Label text="nombre_producto">
+            <Label fx:id="lblTotal" text="nombre_producto">
                <font>
                   <Font size="14.0" />
                </font>
