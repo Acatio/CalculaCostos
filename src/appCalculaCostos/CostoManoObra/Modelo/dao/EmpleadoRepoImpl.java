@@ -31,7 +31,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
     @Override
     public void guardarEmpleado(Empleado empleado) throws PersistenciaException
     {
-        String sql = "INSERT INTO empleados (nombre, apellido, salario_mensual, horas_semana) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO empleados (nombre, apellido, salario_semanal, horas_semana) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
@@ -52,7 +52,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
     @Override
     public void actualizarEmpleado(Empleado actualizado) throws PersistenciaException
     {
-        String sql = "UPDATE empleados SET nombre = ?, apellido = ?, salario_mensual = ?, horas_semana = ? WHERE id_empleado = ?";
+        String sql = "UPDATE empleados SET nombre = ?, apellido = ?, salario_semanal = ?, horas_semana = ? WHERE id_empleado = ?";
 
         try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
@@ -102,7 +102,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
     @Override
     public List<Empleado> listarEmpleados() throws PersistenciaException
     {
-        String sql = "SELECT id_empleado, nombre, apellido, salario_mensual, horas_semana FROM empleados";
+        String sql = "SELECT id_empleado, nombre, apellido, salario_semanal, horas_semana FROM empleados";
         List<Empleado> lista = new ArrayList<>();
 
         try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery())
@@ -114,9 +114,9 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
                 emp.setId(rs.getInt("id_empleado"));
                 emp.setNombre(rs.getString("nombre"));
                 emp.setApellido(rs.getString("apellido"));
-                emp.setSalarioMensual(rs.getDouble("salario_mensual"));
+                emp.setSalarioMensual(rs.getDouble("salario_semanal"));
                 emp.setHorasSemana(rs.getFloat("horas_semana"));
-
+                
                 lista.add(emp);
             }
 
