@@ -17,7 +17,6 @@ import java.util.List;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class EmpleadoRepoImpl implements IEmpleadoRepo
 {
@@ -32,14 +31,14 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
     @Override
     public void guardarEmpleado(Empleado empleado) throws PersistenciaException
     {
-        String sql = "INSERT INTO empleados (nombre, apellido, salario_semanal, horas_semana) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO empleados (nombre, apellido, salario_mensual, horas_semana) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
 
             stmt.setString(1, empleado.getNombre());
             stmt.setString(2, empleado.getApellido());
-            stmt.setDouble(3, empleado.getSalarioSemanal());
+            stmt.setDouble(3, empleado.getSalarioMensual());
             stmt.setDouble(4, empleado.getHorasSemana());
 
             stmt.executeUpdate();
@@ -53,14 +52,14 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
     @Override
     public void actualizarEmpleado(Empleado actualizado) throws PersistenciaException
     {
-        String sql = "UPDATE empleados SET nombre = ?, apellido = ?, salario_semanal = ?, horas_semana = ? WHERE id_empleado = ?";
+        String sql = "UPDATE empleados SET nombre = ?, apellido = ?, salario_mensual = ?, horas_semana = ? WHERE id_empleado = ?";
 
         try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
 
             stmt.setString(1, actualizado.getNombre());
             stmt.setString(2, actualizado.getApellido());
-            stmt.setDouble(3, actualizado.getSalarioSemanal());
+            stmt.setDouble(3, actualizado.getSalarioMensual());
             stmt.setFloat(4, actualizado.getHorasSemana());
             stmt.setInt(5, actualizado.getId());
 
@@ -103,7 +102,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
     @Override
     public List<Empleado> listarEmpleados() throws PersistenciaException
     {
-        String sql = "SELECT id_empleado, nombre, apellido, salario_semanal, horas_semana FROM empleados";
+        String sql = "SELECT id_empleado, nombre, apellido, salario_mensual, horas_semana FROM empleados";
         List<Empleado> lista = new ArrayList<>();
 
         try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery())
@@ -115,7 +114,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
                 emp.setId(rs.getInt("id_empleado"));
                 emp.setNombre(rs.getString("nombre"));
                 emp.setApellido(rs.getString("apellido"));
-                emp.setSalarioSemanal(rs.getDouble("salario_semanal"));
+                emp.setSalarioMensual(rs.getDouble("salario_mensual"));
                 emp.setHorasSemana(rs.getFloat("horas_semana"));
 
                 lista.add(emp);
@@ -128,39 +127,4 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
             throw new PersistenciaException("Error al listar empleados: " + e.getMessage(), e);
         }
     }
-
-    @Override
-    public Optional<Empleado> buscarEmpleado(int id) throws PersistenciaException
-    {
-        String sql = "SELECT id_empleado, nombre, apellido, salario_semanal, horas_semana "
-                + "FROM empleados WHERE id_empleado = ?";
-
-        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
-        {
-
-            stmt.setInt(1, id);
-
-            try (ResultSet rs = stmt.executeQuery())
-            {
-                if (!rs.next())
-                {
-                    return Optional.empty();
-                }
-
-                Empleado emp = new Empleado();
-                emp.setId(rs.getInt("id_empleado"));
-                emp.setNombre(rs.getString("nombre"));
-                emp.setApellido(rs.getString("apellido"));
-                emp.setSalarioSemanal(rs.getDouble("salario_semanal"));
-                emp.setHorasSemana(rs.getFloat("horas_semana"));
-
-                return Optional.of(emp);
-            }
-
-        } catch (SQLException | ConexionException e)
-        {
-            throw new PersistenciaException("Error al buscar empleado con ID " + id + ": " + e.getMessage(), e);
-        }
-    }
-
 }

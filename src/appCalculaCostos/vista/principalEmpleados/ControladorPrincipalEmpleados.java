@@ -64,7 +64,7 @@ public class ControladorPrincipalEmpleados
         );
 
         colSalario.setCellValueFactory(cellData
-                -> new SimpleDoubleProperty(cellData.getValue().getSalarioSemanal()).asObject()
+                -> new SimpleDoubleProperty(cellData.getValue().getSalarioMensual()).asObject()
         );
         colHoras.setCellValueFactory(cellData
                 -> new SimpleFloatProperty(cellData.getValue().getHorasSemana()).asObject()
