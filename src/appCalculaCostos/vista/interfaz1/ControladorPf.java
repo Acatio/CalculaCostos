@@ -49,6 +49,7 @@ public class ControladorPf
     private Stage ventanaAltaCostosFijos;
     private Stage ventanaAsignacionCostosFijos;
     private Stage ventanaResumenCostos;
+    private Stage ventanaEmpleados;
     IConexion conexion = new ConexionSQL();
     String cssPath = "/appCalculaCostos/vista/interfaz1/estilo.css";
     private ServicioProductoFinal productoService = new ServicioProductoFinal(new ProductoFinalDaoImpl(conexion), new CostoMpRepoImpl(conexion), new InsumoDaoImpl(conexion));
@@ -440,6 +441,39 @@ public class ControladorPf
         {
             mostrarMensajeError(ex.getMessage());
         }
+    }
+
+    @FXML
+    public void onEmpleados()
+    {
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/principalEmpleados/vistaPrincipalEmpleados.fxml"));
+            Parent root = loader.load();
+            Scene escena = new Scene(root);
+            escena.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+            if (ventanaEmpleados == null)
+            {
+                ventanaEmpleados = new Stage();
+                ventanaEmpleados.getIcons().add(new Image(getClass().getResourceAsStream(Rutas.RUTA_LOGO)));
+                ventanaEmpleados.setTitle("Empleados");
+                ventanaEmpleados.setScene(escena);
+                // Opcional: limpiar la referencia cuando se cierre
+                ventanaEmpleados.setOnHidden(event -> ventanaEmpleados = null);
+            }
+
+            ventanaEmpleados.show();
+            ventanaEmpleados.toFront(); // Si ya estaba abierta, la trae al frente
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onCalcularCostoMo()
+    {
+        System.out.println("calcular costo empleados");
     }
 
     public void mostrarMensajeError(String mensaje)

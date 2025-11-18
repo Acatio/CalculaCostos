@@ -57,6 +57,7 @@
           <Menu mnemonicParsing="false" text="Inventario">
             <items>
               <MenuItem fx:id="itmInsumos" mnemonicParsing="false" onAction="#onActionInsumos" text="Insumos" />
+                  <MenuItem mnemonicParsing="false" onAction="#onEmpleados" text="Empleados" />
                   <MenuItem mnemonicParsing="false" onAction="#onInventarioCostosFijos" text="Costos Fijos" />
             </items>
           </Menu>
@@ -71,7 +72,7 @@
                               <MenuItem mnemonicParsing="false" onAction="#onCalcularCostosFijos" text="Calcular Costos Fijos" />
                            </items>
                         </Menu>
-                        <MenuItem mnemonicParsing="false" text="Mano Obra" />
+                        <MenuItem mnemonicParsing="false" onAction="#onCalcularCostoMo" text="Calcular C. Mano Obra" />
                   </items>
                 </Menu>
                   <MenuItem mnemonicParsing="false" onAction="#onVerResumen" text="Ver Resumen" />
