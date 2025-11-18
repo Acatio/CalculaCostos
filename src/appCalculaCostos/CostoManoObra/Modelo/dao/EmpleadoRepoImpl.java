@@ -38,7 +38,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
 
             stmt.setString(1, empleado.getNombre());
             stmt.setString(2, empleado.getApellido());
-            stmt.setDouble(3, empleado.getSalarioMensual());
+            stmt.setDouble(3, empleado.getSalarioSemanal());
             stmt.setDouble(4, empleado.getHorasSemana());
 
             stmt.executeUpdate();
@@ -59,7 +59,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
 
             stmt.setString(1, actualizado.getNombre());
             stmt.setString(2, actualizado.getApellido());
-            stmt.setDouble(3, actualizado.getSalarioMensual());
+            stmt.setDouble(3, actualizado.getSalarioSemanal());
             stmt.setFloat(4, actualizado.getHorasSemana());
             stmt.setInt(5, actualizado.getId());
 
@@ -114,9 +114,9 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
                 emp.setId(rs.getInt("id_empleado"));
                 emp.setNombre(rs.getString("nombre"));
                 emp.setApellido(rs.getString("apellido"));
-                emp.setSalarioMensual(rs.getDouble("salario_semanal"));
+                emp.setSalarioSemanal(rs.getDouble("salario_semanal"));
                 emp.setHorasSemana(rs.getFloat("horas_semana"));
-                
+
                 lista.add(emp);
             }
 
@@ -127,4 +127,35 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
             throw new PersistenciaException("Error al listar empleados: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public Empleado buscarPorId(int id) throws PersistenciaException
+    {
+        String sql = "SELECT id_empleado, nombre, apellido, salario_semanal, horas_semana "
+                + "FROM empleado WHERE id_empleado = ?";
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next())
+            {
+                return new Empleado(
+                        rs.getInt("id_empleado"),
+                        rs.getString("nombre"),
+                        rs.getString("apellido"),
+                        rs.getDouble("salario_semanal"),
+                        rs.getFloat("horas_semana")
+                );
+            }
+
+            return null;
+
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error buscando empleado por ID: " + e.getMessage(), e);
+        }
+    }
+
 }

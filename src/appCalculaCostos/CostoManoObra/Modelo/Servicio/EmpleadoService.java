@@ -131,7 +131,7 @@ public class EmpleadoService
                 empleado.getId(),
                 empleado.getNombre(),
                 empleado.getApellido(),
-                empleado.getSalarioMensual(),
+                empleado.getSalarioSemanal(),
                 empleado.getHorasSemana()
         );
     }
