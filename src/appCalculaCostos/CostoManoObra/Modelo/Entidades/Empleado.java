@@ -15,26 +15,31 @@ public class Empleado
     private String nombre;
     private String apellido;
     private double salarioMensual;
+    private float horasSemana;
 
     public Empleado()
     {
     }
 
-    public Empleado(int id, String nombre, String apellido, double salarioMensual)
+    public Empleado(int id, String nombre, String apellido, double salarioMensual, float horasSemana)
     {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.salarioMensual = salarioMensual;
+        this.horasSemana = horasSemana;
     }
 
-    public Empleado(String nombre, String apellido, double salarioMensual)
+    public Empleado(String nombre, String apellido, double salarioMensual, float horasSemana)
     {
-
         this.nombre = nombre;
         this.apellido = apellido;
         this.salarioMensual = salarioMensual;
+        this.horasSemana = horasSemana;
     }
+
+
+    
 
     public int getId()
     {
@@ -87,5 +92,16 @@ public class Empleado
         }
         this.apellido = apellido;
     }
+
+    public float getHorasSemana()
+    {
+        return horasSemana;
+    }
+
+    public void setHorasSemana(float horasSemana)
+    {
+        this.horasSemana = horasSemana;
+    }
+    
 
 }

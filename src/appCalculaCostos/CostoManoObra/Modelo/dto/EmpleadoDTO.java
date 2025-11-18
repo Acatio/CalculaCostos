@@ -15,25 +15,30 @@ public class EmpleadoDTO
     private String nombre;
     private String apellido;
     private double salarioMensual;
+    private float horasSemana;
 
     public EmpleadoDTO()
     {
     }
 
-    public EmpleadoDTO(String nombre, String apellido, double salarioMensual)
-    {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.salarioMensual = salarioMensual;
-    }
-
-    public EmpleadoDTO(int id, String nombre, String apellido, double salarioMensual)
+    public EmpleadoDTO(int id, String nombre, String apellido, double salarioMensual, float horasSemana)
     {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.salarioMensual = salarioMensual;
+        this.horasSemana = horasSemana;
     }
+
+    public EmpleadoDTO(String nombre, String apellido, double salarioMensual, float horasSemana)
+    {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.salarioMensual = salarioMensual;
+        this.horasSemana = horasSemana;
+    }
+    
+
 
     public int getId()
     {
@@ -75,6 +80,17 @@ public class EmpleadoDTO
         this.salarioMensual = salarioMensual;
     }
 
+    public float getHorasSemana()
+    {
+        return horasSemana;
+    }
+
+    public void setHorasSemana(float horasSemana)
+    {
+        this.horasSemana = horasSemana;
+    }
+
+    
     @Override
     public String toString()
     {

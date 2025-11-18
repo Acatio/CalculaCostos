@@ -471,7 +471,7 @@ public class ControladorPf
     }
 
     @FXML
-    public void onCalcularCostoMo()
+    public void onManoObraDirecta()
     {
         System.out.println("calcular costo empleados");
     }

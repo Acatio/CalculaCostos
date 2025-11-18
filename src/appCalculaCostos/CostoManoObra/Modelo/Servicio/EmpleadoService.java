@@ -120,7 +120,8 @@ public class EmpleadoService
                 dto.getId(),
                 dto.getNombre(),
                 dto.getApellido(),
-                dto.getSalarioMensual()
+                dto.getSalarioMensual(),
+                dto.getHorasSemana()
         );
     }
 
@@ -130,7 +131,8 @@ public class EmpleadoService
                 empleado.getId(),
                 empleado.getNombre(),
                 empleado.getApellido(),
-                empleado.getSalarioMensual()
+                empleado.getSalarioMensual(),
+                empleado.getHorasSemana()
         );
     }
 }

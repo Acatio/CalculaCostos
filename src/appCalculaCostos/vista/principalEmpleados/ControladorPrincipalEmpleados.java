@@ -16,6 +16,7 @@ import conexion.implementaciones.ConexionSQL;
 import java.io.IOException;
 import java.util.List;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,6 +44,9 @@ public class ControladorPrincipalEmpleados
 
     @FXML
     private TableColumn<EmpleadoDTO, Double> colSalario;
+    
+    @FXML
+    private TableColumn<EmpleadoDTO, Float> colHoras;
 
     @FXML
     private TableView<EmpleadoDTO> tablaEmpleados;
@@ -61,6 +65,9 @@ public class ControladorPrincipalEmpleados
 
         colSalario.setCellValueFactory(cellData
                 -> new SimpleDoubleProperty(cellData.getValue().getSalarioMensual()).asObject()
+        );
+        colHoras.setCellValueFactory(cellData
+                -> new SimpleFloatProperty(cellData.getValue().getHorasSemana()).asObject()
         );
 
         // Carga los datos

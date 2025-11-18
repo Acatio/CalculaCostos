@@ -31,7 +31,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
     @Override
     public void guardarEmpleado(Empleado empleado) throws PersistenciaException
     {
-        String sql = "INSERT INTO empleados (nombre, apellido, salario_mensual) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO empleados (nombre, apellido, salario_mensual, horas_semana) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
@@ -39,6 +39,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
             stmt.setString(1, empleado.getNombre());
             stmt.setString(2, empleado.getApellido());
             stmt.setDouble(3, empleado.getSalarioMensual());
+            stmt.setDouble(4, empleado.getHorasSemana());
 
             stmt.executeUpdate();
 
@@ -51,7 +52,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
     @Override
     public void actualizarEmpleado(Empleado actualizado) throws PersistenciaException
     {
-        String sql = "UPDATE empleados SET nombre = ?, apellido = ?, salario_mensual = ? WHERE id_empleado = ?";
+        String sql = "UPDATE empleados SET nombre = ?, apellido = ?, salario_mensual = ?, horas_semana = ? WHERE id_empleado = ?";
 
         try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
@@ -59,7 +60,8 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
             stmt.setString(1, actualizado.getNombre());
             stmt.setString(2, actualizado.getApellido());
             stmt.setDouble(3, actualizado.getSalarioMensual());
-            stmt.setInt(4, actualizado.getId());
+            stmt.setFloat(4, actualizado.getHorasSemana());
+            stmt.setInt(5, actualizado.getId());
 
             int filas = stmt.executeUpdate();
             if (filas == 0)
@@ -100,7 +102,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
     @Override
     public List<Empleado> listarEmpleados() throws PersistenciaException
     {
-        String sql = "SELECT id_empleado, nombre, apellido, salario_mensual FROM empleados";
+        String sql = "SELECT id_empleado, nombre, apellido, salario_mensual, horas_semana FROM empleados";
         List<Empleado> lista = new ArrayList<>();
 
         try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery())
@@ -113,6 +115,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
                 emp.setNombre(rs.getString("nombre"));
                 emp.setApellido(rs.getString("apellido"));
                 emp.setSalarioMensual(rs.getDouble("salario_mensual"));
+                emp.setHorasSemana(rs.getFloat("horas_semana"));
 
                 lista.add(emp);
             }
