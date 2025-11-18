@@ -14,7 +14,7 @@ public class EmpleadoDTO
     private int id;
     private String nombre;
     private String apellido;
-    private double salarioMensual;
+    private double salarioSemanal;
     private float horasSemana;
 
     public EmpleadoDTO()
@@ -26,7 +26,7 @@ public class EmpleadoDTO
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.salarioMensual = salarioMensual;
+        this.salarioSemanal = salarioMensual;
         this.horasSemana = horasSemana;
     }
 
@@ -34,7 +34,7 @@ public class EmpleadoDTO
     {
         this.nombre = nombre;
         this.apellido = apellido;
-        this.salarioMensual = salarioMensual;
+        this.salarioSemanal = salarioMensual;
         this.horasSemana = horasSemana;
     }
     
@@ -70,14 +70,14 @@ public class EmpleadoDTO
         this.apellido = apellido;
     }
 
-    public double getSalarioMensual()
+    public double getSalarioSemanal()
     {
-        return salarioMensual;
+        return salarioSemanal;
     }
 
-    public void setSalarioMensual(double salarioMensual)
+    public void setSalarioSemanal(double salarioMensual)
     {
-        this.salarioMensual = salarioMensual;
+        this.salarioSemanal = salarioMensual;
     }
 
     public float getHorasSemana()
@@ -94,7 +94,7 @@ public class EmpleadoDTO
     @Override
     public String toString()
     {
-        return "EmpleadoDTO{" + "id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", salarioMensual=" + salarioMensual + '}';
+        return "EmpleadoDTO{" + "id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", salarioMensual=" + salarioSemanal + '}';
     }
 
 }

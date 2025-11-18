@@ -21,6 +21,7 @@ public interface IEmpleadoRepo
     public void actualizarEmpleado(Empleado actualizado)throws PersistenciaException;
     public void eliminarEmpleado(int id)throws PersistenciaException;
     public List<Empleado> listarEmpleados()throws PersistenciaException;
+    public Optional<Empleado> buscarEmpleado(int id)throws PersistenciaException;
    
     
 }

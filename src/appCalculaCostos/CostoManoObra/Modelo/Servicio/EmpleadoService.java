@@ -107,7 +107,7 @@ public class EmpleadoService
             throw new ManoObraException("Apellido requerido");
         }
 
-        if (dto.getSalarioMensual() <= 0)
+        if (dto.getSalarioSemanal() <= 0)
         {
             throw new ManoObraException("El salario debe ser mayor que 0");
         }
@@ -120,7 +120,7 @@ public class EmpleadoService
                 dto.getId(),
                 dto.getNombre(),
                 dto.getApellido(),
-                dto.getSalarioMensual(),
+                dto.getSalarioSemanal(),
                 dto.getHorasSemana()
         );
     }
@@ -131,7 +131,7 @@ public class EmpleadoService
                 empleado.getId(),
                 empleado.getNombre(),
                 empleado.getApellido(),
-                empleado.getSalarioMensual(),
+                empleado.getSalarioSemanal(),
                 empleado.getHorasSemana()
         );
     }

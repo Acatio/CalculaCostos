@@ -14,7 +14,7 @@ public class Empleado
     private int id;
     private String nombre;
     private String apellido;
-    private double salarioMensual;
+    private double salarioSemanal;
     private float horasSemana;
 
     public Empleado()
@@ -26,7 +26,7 @@ public class Empleado
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.salarioMensual = salarioMensual;
+        this.salarioSemanal = salarioMensual;
         this.horasSemana = horasSemana;
     }
 
@@ -34,12 +34,9 @@ public class Empleado
     {
         this.nombre = nombre;
         this.apellido = apellido;
-        this.salarioMensual = salarioMensual;
+        this.salarioSemanal = salarioMensual;
         this.horasSemana = horasSemana;
     }
-
-
-    
 
     public int getId()
     {
@@ -65,18 +62,18 @@ public class Empleado
         this.nombre = nombre;
     }
 
-    public double getSalarioMensual()
+    public double getSalarioSemanal()
     {
-        return salarioMensual;
+        return salarioSemanal;
     }
 
-    public void setSalarioMensual(double importeMensual)
+    public void setSalarioSemanal(double importeMensual)
     {
         if (importeMensual < 0)
         {
-            throw new IllegalArgumentException("importe mensual  no pude ser menor a cero");
+            throw new IllegalArgumentException("salario semanal no pude ser menor a cero");
         }
-        this.salarioMensual = importeMensual;
+        this.salarioSemanal = importeMensual;
     }
 
     public String getApellido()
@@ -88,7 +85,7 @@ public class Empleado
     {
         if (apellido == null || apellido.isBlank())
         {
-            throw new IllegalArgumentException("El nombre no es valido");
+            throw new IllegalArgumentException("El apellido no es valido");
         }
         this.apellido = apellido;
     }
@@ -102,6 +99,14 @@ public class Empleado
     {
         this.horasSemana = horasSemana;
     }
-    
+
+    public double getPrecioPorHora()
+    {
+        if (horasSemana<=0)
+        {
+            throw new IllegalStateException("las horas trabajadas a la semana no puede ser igual  o menor a cero.");
+        }
+        return (salarioSemanal/horasSemana);
+    }
 
 }
