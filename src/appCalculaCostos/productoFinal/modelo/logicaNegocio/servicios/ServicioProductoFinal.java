@@ -209,8 +209,10 @@ public class ServicioProductoFinal
             List<CostoDto> costosDelProdutco = new ArrayList<>();
             var costoMp = repo.obtenerCostoMateriaPrima(idProducto);
             var costoF = repo.obtenerCostoFijoAsignado(idProducto);
-            costosDelProdutco.add(new CostoDto("Costo de materia Prima", Redondeo.redondear(costoMp, 2)));
+            var costoMo=repo.obtenerCostosMoAsignados(idProducto);
+            costosDelProdutco.add(new CostoDto("Costo de Materia Prima", Redondeo.redondear(costoMp, 2)));
             costosDelProdutco.add(new CostoDto("Costos Fijos", Redondeo.redondear(costoF, 2)));
+            costosDelProdutco.add(new CostoDto("Costos Mano de Obra", Redondeo.redondear(costoMo, 2)));
             return costosDelProdutco;
         } catch (PersistenciaException ex)
         {
