@@ -32,4 +32,5 @@ public interface IRepositorioProductoFinal
     public void actualizarCostoTotal(int idProducto, double costoTotal) throws PersistenciaException;
     public double obtenerCostoMateriaPrima(int idProducto) throws PersistenciaException;
     public double obtenerCostoFijoAsignado(int idProducto) throws PersistenciaException;
+    public double obtenerCostosMoAsignados(int idProducto) throws PersistenciaException;
 }

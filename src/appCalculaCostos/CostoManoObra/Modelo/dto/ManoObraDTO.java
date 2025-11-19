@@ -68,4 +68,10 @@ public class ManoObraDTO
         this.tiempoAportado = tiempoAportado;
     }
 
+    @Override
+    public String toString()
+    {
+        return "ManoObraDTO{" + "idEmpleado=" + idEmpleado + ", nombreEmpleado=" + nombreEmpleado + ", apellidoEmpleado=" + apellidoEmpleado + ", tiempoAportado=" + tiempoAportado + '}';
+    }
+
 }

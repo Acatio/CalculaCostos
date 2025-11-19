@@ -28,6 +28,11 @@ public class CostoManoObraService
     private ICostosManoObraRepository repo = new CostosManoObraRepositoryImpl(new ConexionSQL());
     private IEmpleadoRepo repoEmpleados = new EmpleadoRepoImpl(new ConexionSQL());
 
+    public CostoManoObraService()
+    {
+    }
+
+    
     public CostoManoObraService(ICostosManoObraRepository repo, IEmpleadoRepo repoEmpleados)
     {
         this.repo = repo;
@@ -85,6 +90,7 @@ public class CostoManoObraService
 
             // 4. Guardar nueva mano de obra
             repo.guardarManoObraDeProducto(idProducto, entidades);
+            
 
         } catch (PersistenciaException e)
         {

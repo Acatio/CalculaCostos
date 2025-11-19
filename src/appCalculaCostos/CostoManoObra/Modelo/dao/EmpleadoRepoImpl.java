@@ -45,7 +45,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
 
         } catch (SQLException | ConexionException e)
         {
-            throw new PersistenciaException("Error al guardar empleado: " + e.getMessage(), e);
+            throw new PersistenciaException("Error al guardar empleado", e);
         }
     }
 
@@ -73,7 +73,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
 
         } catch (SQLException | ConexionException e)
         {
-            throw new PersistenciaException("Error al actualizar empleado: " + e.getMessage(), e);
+            throw new PersistenciaException("Error al actualizar empleado" , e);
         }
     }
 
@@ -95,7 +95,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
 
         } catch (SQLException | ConexionException e)
         {
-            throw new PersistenciaException("Error al eliminar empleado: " + e.getMessage(), e);
+            throw new PersistenciaException("Error al eliminar empleado", e);
         }
     }
 
@@ -124,7 +124,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
 
         } catch (SQLException | ConexionException e)
         {
-            throw new PersistenciaException("Error al listar empleados: " + e.getMessage(), e);
+            throw new PersistenciaException("Error al listar empleados", e);
         }
     }
 
@@ -132,7 +132,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
     public Empleado buscarPorId(int id) throws PersistenciaException
     {
         String sql = "SELECT id_empleado, nombre, apellido, salario_semanal, horas_semana "
-                + "FROM empleado WHERE id_empleado = ?";
+                + "FROM empleados WHERE id_empleado = ?";
 
         try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
@@ -154,7 +154,7 @@ public class EmpleadoRepoImpl implements IEmpleadoRepo
 
         } catch (SQLException | ConexionException e)
         {
-            throw new PersistenciaException("Error buscando empleado por ID: " + e.getMessage(), e);
+            throw new PersistenciaException("Error buscando empleado por ID", e);
         }
     }
 

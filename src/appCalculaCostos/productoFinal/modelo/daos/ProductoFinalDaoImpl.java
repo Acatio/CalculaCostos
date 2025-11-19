@@ -325,4 +325,10 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
         return ids;
     }
 
+    @Override
+    public double obtenerCostosMoAsignados(int idProducto) throws PersistenciaException
+    {
+        return 0;
+    }
+
 }
