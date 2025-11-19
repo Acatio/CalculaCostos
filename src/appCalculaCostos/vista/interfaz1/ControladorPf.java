@@ -520,6 +520,7 @@ public class ControladorPf
           
         } catch (IOException ex)
         {
+            ex.printStackTrace();
             mostrarMensajeError("Ocurrió un error al cargar la ventana");
         }
 

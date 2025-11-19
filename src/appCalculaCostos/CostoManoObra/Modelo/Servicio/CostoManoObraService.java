@@ -32,7 +32,6 @@ public class CostoManoObraService
     {
     }
 
-    
     public CostoManoObraService(ICostosManoObraRepository repo, IEmpleadoRepo repoEmpleados)
     {
         this.repo = repo;
@@ -55,9 +54,9 @@ public class CostoManoObraService
             int idProducto = dto.getIdProducto();
 
             // 1. Validación básica
-            if (dto.getListaManoObra() == null || dto.getListaManoObra().isEmpty())
+            if (dto.getListaManoObra() == null )
             {
-                throw new ManoObraException("Debe seleccionar al menos un empleado.");
+                throw new IllegalArgumentException("La lista no es valida.");
             }
 
             // 2. Convertir DTO → entidades
@@ -90,7 +89,6 @@ public class CostoManoObraService
 
             // 4. Guardar nueva mano de obra
             repo.guardarManoObraDeProducto(idProducto, entidades);
-            
 
         } catch (PersistenciaException e)
         {

@@ -22,6 +22,8 @@ import conexion.interfacesLogicas.IConexion;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -41,6 +43,7 @@ public class ControladorAgregarCostoMo
     private ServicioProductoFinal servicioPf;
     private ProductoFinalAsignarCostoDto productoDto;
     ControladorPf controladorP;
+
     @FXML
     private TableView<EmpleadoDTO> tbEmpleados;
     @FXML
@@ -74,7 +77,6 @@ public class ControladorAgregarCostoMo
         colApellidoMo.setCellValueFactory(new PropertyValueFactory<>("apellidoEmpleado"));
         colTiempoMo.setCellValueFactory(new PropertyValueFactory<>("tiempoAportado"));
         tbManoObra.setEditable(true);
-
         // Hacer editable la columna de tiempo
         colTiempoMo.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
 
@@ -105,6 +107,7 @@ public class ControladorAgregarCostoMo
         });
 
         listarEmpleados();
+
     }
 
     public void listarEmpleados()
@@ -174,11 +177,6 @@ public class ControladorAgregarCostoMo
             // Si quieres trabajarla como una lista normal (por ejemplo, para enviarla a un DAO)
             List<ManoObraDTO> listaManoObra = new ArrayList<>(manoObra);
 
-            if (listaManoObra.isEmpty())
-            {
-                mostrarMensajeError("Debe seleccionar al meno un empleado");
-                return;
-            }
             for (ManoObraDTO d : listaManoObra)
             {
                 if (d.getTiempoAportado() == 0)
@@ -229,8 +227,7 @@ public class ControladorAgregarCostoMo
     {
         this.productoDto = productoDto;
         lblNombre.setText(productoDto.getNombre());
-        System.out.println("Nombre " + productoDto.getNombre());
-        System.out.println("Nombre atributo " + this.productoDto.getNombre());
+        cargarDatos();
     }
 
     public ControladorPf getControladorP()
@@ -246,6 +243,23 @@ public class ControladorAgregarCostoMo
     public void setServicioPf(ServicioProductoFinal servicioPf)
     {
         this.servicioPf = servicioPf;
+    }
+
+    public void cargarDatos()
+    {
+        try
+        {
+            List<ManoObraDTO> manoObra = servicioMo.listarManoObraPorProducto(productoDto.getId());
+
+            // Convertir la lista en ObservableList
+            ObservableList<ManoObraDTO> listaObservable = FXCollections.observableArrayList(manoObra);
+            // Asignarlo a la tabla
+            tbManoObra.setItems(listaObservable);
+
+        } catch (ManoObraException ex)
+        {
+            mostrarMensajeError("Ocurrió un error al cargar los costos de mano de obra");
+        }
     }
 
 }
