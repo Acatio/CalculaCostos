@@ -65,12 +65,12 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
     public void actualizarCostoTotal(int idProducto, double costoTotal) throws PersistenciaException
     {
         String sql = "UPDATE productos_finales SET costo_total = ? WHERE id_producto = ?";
-        try (Connection conn=conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(sql))
+        try (Connection conn = conexion.getConnection(); PreparedStatement ps = conn.prepareStatement(sql))
         {
             ps.setDouble(1, costoTotal);
             ps.setInt(2, idProducto);
             ps.executeUpdate();
-        } catch (SQLException |ConexionException e)
+        } catch (SQLException | ConexionException e)
         {
             throw new PersistenciaException("No se pudo actualizar costo total", e);
         }
@@ -328,7 +328,30 @@ public class ProductoFinalDaoImpl implements IRepositorioProductoFinal
     @Override
     public double obtenerCostosMoAsignados(int idProducto) throws PersistenciaException
     {
-        return 0;
+        String sql = "SELECT SUM(costo_calculado) AS total "
+                + "FROM mano_obra_producto "
+                + "WHERE id_producto = ?";
+
+        try (Connection conn = conexion.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+
+            stmt.setInt(1, idProducto);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next())
+            {
+                double total = rs.getDouble("total");
+
+                // Si el resultado de SUM es NULL, getDouble devuelve 0.0 → correcto
+                return total;
+            }
+
+            return 0.0; // No hay registros
+
+        } catch (SQLException | ConexionException e)
+        {
+            throw new PersistenciaException("Error obteniendo costos asignados de mano de obra", e);
+        }
     }
 
 }

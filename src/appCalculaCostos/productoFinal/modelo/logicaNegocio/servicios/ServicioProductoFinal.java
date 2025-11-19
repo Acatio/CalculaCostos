@@ -186,18 +186,19 @@ public class ServicioProductoFinal
 
     public void actualizarCostoTotal(int idProducto) throws ProductoFinalException
     {
-
         try
         {
-            var costoMp = repo.obtenerCostoMateriaPrima(idProducto);
-            var costoF = repo.obtenerCostoFijoAsignado(idProducto);
-            var costoTotal = costoMp + costoF;
+            double costoMp = repo.obtenerCostoMateriaPrima(idProducto);
+            double costoF = repo.obtenerCostoFijoAsignado(idProducto);
+            double costoMo = repo.obtenerCostosMoAsignados(idProducto);
+            
+            double costoTotal = costoMp + costoF + costoMo;
+
             repo.actualizarCostoTotal(idProducto, costoTotal);
+
         } catch (PersistenciaException ex)
         {
-            ex.printStackTrace();
-            throw new ProductoFinalException("Ocurrio un error al actualizar el costo total del producto", ex);
-
+            throw new ProductoFinalException("Ocurrió un error al actualizar el costo total del producto", ex);
         }
     }
 
@@ -205,7 +206,7 @@ public class ServicioProductoFinal
     {
         try
         {
-            List<CostoDto>costosDelProdutco=new ArrayList<>();
+            List<CostoDto> costosDelProdutco = new ArrayList<>();
             var costoMp = repo.obtenerCostoMateriaPrima(idProducto);
             var costoF = repo.obtenerCostoFijoAsignado(idProducto);
             costosDelProdutco.add(new CostoDto("Costo de materia Prima", Redondeo.redondear(costoMp, 2)));
@@ -213,7 +214,7 @@ public class ServicioProductoFinal
             return costosDelProdutco;
         } catch (PersistenciaException ex)
         {
-           throw new ProductoFinalException("Ocurrio un error al obtener los costos del producto");
+            throw new ProductoFinalException("Ocurrio un error al obtener los costos del producto");
         }
 
     }

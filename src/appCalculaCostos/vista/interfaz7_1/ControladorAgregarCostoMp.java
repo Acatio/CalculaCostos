@@ -38,6 +38,7 @@ public class ControladorAgregarCostoMp
 
     private CostoManoObraService servicioMo = new CostoManoObraService();
     private EmpleadoService servicioEmpleado = new EmpleadoService();
+    private ServicioProductoFinal servicioPf;
     private ProductoFinalAsignarCostoDto productoDto;
     ControladorPf controladorP;
     @FXML
@@ -189,11 +190,11 @@ public class ControladorAgregarCostoMp
             }
             ManoObraDeProductoDTO mop = new ManoObraDeProductoDTO(productoDto.getId(), listaManoObra);
             servicioMo.guardarManoObraDeProducto(mop);
-            
+            servicioPf.actualizarCostoTotal(productoDto.getId());
             mostrarMensajeExito("Costos guardados con exito");
             controladorP.actualizarVista();
 
-        } catch (ManoObraException ex)
+        } catch (ManoObraException | ProductoFinalException ex)
         {
             mostrarMensajeError("Ocurrio un error al guardar los costos de mano de obra");
         }
