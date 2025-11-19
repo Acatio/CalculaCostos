@@ -1,4 +1,4 @@
-package appCalculaCostos.vista.interfaz7_1;
+package appCalculaCostos.vista.manoObra;
 
 import appCalculaCostos.vista.interfaz10.ControladorAgregarCostoF;
 import appCalculaCostos.productoFinal.modelo.logicaNegocio.DTO.ProductoFinalAsignarCostoDto;
@@ -13,9 +13,9 @@ public class Main extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/interfaz7_1/interfazAgregarCosto.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/appCalculaCostos/vista/manoObra/interfazAgregarCostoMo.fxml"));
         Scene scene = new Scene(loader.load());
-        ControladorAgregarCostoMp controlador=loader.getController();
+        ControladorAgregarCostoMo controlador=loader.getController();
         controlador.setProductoDto(new ProductoFinalAsignarCostoDto(32, "Pizza mediana"));
         scene.getStylesheets().add(getClass().getResource("estilo.css").toExternalForm());
         stage.setTitle("Registrar Receta");

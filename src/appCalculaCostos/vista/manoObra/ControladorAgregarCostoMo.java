@@ -1,4 +1,4 @@
-package appCalculaCostos.vista.interfaz7_1;
+package appCalculaCostos.vista.manoObra;
 
 import appCalculaCostos.CostoManoObra.Modelo.Excepciones.ManoObraException;
 import appCalculaCostos.CostoManoObra.Modelo.Servicio.CostoManoObraService;
@@ -33,7 +33,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.FloatStringConverter;
 
-public class ControladorAgregarCostoMp
+public class ControladorAgregarCostoMo
 {
 
     private CostoManoObraService servicioMo = new CostoManoObraService();
@@ -241,6 +241,11 @@ public class ControladorAgregarCostoMp
     public void setControladorP(ControladorPf controladorP)
     {
         this.controladorP = controladorP;
+    }
+
+    public void setServicioPf(ServicioProductoFinal servicioPf)
+    {
+        this.servicioPf = servicioPf;
     }
 
 }

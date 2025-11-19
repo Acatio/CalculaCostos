@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="471.0" prefWidth="907.0" style="-fx-background-color: #f5f7fa;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appCalculaCostos.vista.interfaz7_1.ControladorAgregarCostoMp">
+<AnchorPane prefHeight="471.0" prefWidth="907.0" style="-fx-background-color: #f5f7fa;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appCalculaCostos.vista.manoObra.ControladorAgregarCostoMo">
 
     <VBox alignment="CENTER" prefHeight="522.0" prefWidth="907.0" spacing="20">
         <padding>

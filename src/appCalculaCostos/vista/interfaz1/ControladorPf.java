@@ -20,6 +20,7 @@ import appCalculaCostos.vista.interfaz2.InterfazProductoController;
 import appCalculaCostos.vista.interfaz6.ControladorVistaInsumos;
 import appCalculaCostos.vista.interfaz7.ControladorAgregarCostoMp;
 import appCalculaCostos.vista.interfaz8.ControladorCostosFijos;
+import appCalculaCostos.vista.manoObra.ControladorAgregarCostoMo;
 import conexion.implementaciones.ConexionSQL;
 import conexion.interfacesLogicas.IConexion;
 import java.io.IOException;
@@ -50,6 +51,7 @@ public class ControladorPf
     private Stage ventanaAsignacionCostosFijos;
     private Stage ventanaResumenCostos;
     private Stage ventanaEmpleados;
+    private Stage ventanaCostoMo;
     IConexion conexion = new ConexionSQL();
     String cssPath = "/appCalculaCostos/vista/interfaz1/estilo.css";
     private ServicioProductoFinal productoService = new ServicioProductoFinal(new ProductoFinalDaoImpl(conexion), new CostoMpRepoImpl(conexion), new InsumoDaoImpl(conexion));
@@ -473,7 +475,54 @@ public class ControladorPf
     @FXML
     public void onManoObraDirecta()
     {
-        System.out.println("calcular costo empleados");
+        try
+        {
+            // Obtener el producto seleccionado
+            ProductoFinalDatosDto productoSeleccionado = tablaProductos.getSelectionModel().getSelectedItem();
+
+            if (productoSeleccionado == null)
+            {
+                mostrarMensajeError("No se ha seleccionado ningún producto");
+                return;
+            }
+
+            // Cargar el FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/appCalculaCostos/vista/manoObra/interfazAgregarCostoMo.fxml"
+            ));
+            Parent root = loader.load();
+
+            Scene escena = new Scene(root);
+            escena.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+
+            // Configurar controlador
+            ControladorAgregarCostoMo controladorCostoMo = loader.getController();
+            controladorCostoMo.setControladorP(this);
+            controladorCostoMo.setServicioPf(productoService);
+            controladorCostoMo.setProductoDto(new ProductoFinalAsignarCostoDto(
+                    productoSeleccionado.getId(),
+                    productoSeleccionado.getNombre()
+            ));
+            // Si la ventana YA está abierta → solo traerla enfrente
+            if (ventanaCostoMo == null)
+            {
+                // Crear la nueva ventana
+                ventanaCostoMo = new Stage();
+                ventanaCostoMo.setTitle("Costos de Materia Prima");
+                ventanaCostoMo.setScene(escena);
+                ventanaCostoMo.getIcons().add(new Image(getClass().getResourceAsStream(Rutas.RUTA_LOGO)));
+                // IMPORTANTE: limpiar referencia al cerrarse
+                ventanaCostoMo.setOnHidden(e -> ventanaCostoMo = null);
+
+            }
+            ventanaCostoMo.show();
+            ventanaCostoMo.toFront();
+          
+        } catch (IOException ex)
+        {
+            mostrarMensajeError("Ocurrió un error al cargar la ventana");
+        }
+
     }
 
     public void mostrarMensajeError(String mensaje)
