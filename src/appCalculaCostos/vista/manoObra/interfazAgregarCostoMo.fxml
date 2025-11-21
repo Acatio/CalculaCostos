@@ -46,12 +46,12 @@
                 </columnResizePolicy>
             </TableView>
 
-            <VBox alignment="CENTER" spacing="10">
-                <Button fx:id="btnAgregar" onAction="#onAgregar" styleClass="boton-accion" text="→">
+            <VBox alignment="CENTER" prefHeight="300.0" prefWidth="48.0" spacing="10">
+                <Button fx:id="btnAgregar" onAction="#onAgregar" prefHeight="25.0" prefWidth="40.0" styleClass="boton-accion" text="→">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
-                <Button fx:id="btnQuitar" onAction="#onQuitar" styleClass="boton-accion" text="←">
+                <Button fx:id="btnQuitar" onAction="#onQuitar" prefHeight="25.0" prefWidth="40.0" styleClass="boton-accion" text="←">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>

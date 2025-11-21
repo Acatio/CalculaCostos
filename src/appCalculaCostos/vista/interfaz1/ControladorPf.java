@@ -508,7 +508,7 @@ public class ControladorPf
             {
                 // Crear la nueva ventana
                 ventanaCostoMo = new Stage();
-                ventanaCostoMo.setTitle("Costos de Materia Prima");
+                ventanaCostoMo.setTitle("Costos de Mano de Obra");
                 ventanaCostoMo.setScene(escena);
                 ventanaCostoMo.getIcons().add(new Image(getClass().getResourceAsStream(Rutas.RUTA_LOGO)));
                 // IMPORTANTE: limpiar referencia al cerrarse

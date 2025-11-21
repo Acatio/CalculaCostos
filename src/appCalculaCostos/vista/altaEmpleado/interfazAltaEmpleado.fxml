@@ -27,8 +27,8 @@
 
                 <Label text="Apellido" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                 <TextField fx:id="txtApellido" promptText="Ej. Lopez" styleClass="campo-texto" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label layoutX="16.0" layoutY="54.0" prefHeight="33.0" prefWidth="137.0" text="Salario Mensual" GridPane.rowIndex="2" />
-            <TextField fx:id="txtSalario" layoutX="122.0" layoutY="50.0" promptText="Ej. 8000" styleClass="campo-texto" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label layoutX="16.0" layoutY="54.0" prefHeight="33.0" prefWidth="137.0" text="Salario Semanal" GridPane.rowIndex="2" />
+            <TextField fx:id="txtSalario" layoutX="122.0" layoutY="50.0" promptText="Ej. 2500" styleClass="campo-texto" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label layoutX="10.0" layoutY="90.0" prefHeight="33.0" prefWidth="137.0" text="Horas/Semana" GridPane.rowIndex="3" />
             <TextField fx:id="txtHoras" layoutX="145.0" layoutY="93.0" promptText="Ej. 48" styleClass="campo-texto" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <columnConstraints>
